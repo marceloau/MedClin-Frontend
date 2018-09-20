@@ -1,0 +1,542 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Pacientes
+    <small></small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a [routerLink]="['/']"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">Pacientes</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="input-group col-md-12">
+            <div class="input-group col-md-6 pull-left">
+              <input type="text" class="form-control" placeholder="Informe o nome do paciente que deseja procurar.">
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-primary btn-flat">Buscar</button>
+              </span>
+            </div>
+            <div class="input-group col-md-6 pull-right">
+              <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modal-default">
+                  Novo Paciente
+              </button>
+            </div>
+          </div>
+          <br>
+          <div class="panel box box-primary">
+            <div class="box-header with-border text-center">
+              <h4 class="box-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                  Filtros
+                </a>
+              </h4>
+            </div>
+            <!-- Filtros de pesquisa -->
+            <div id="collapseOne" class="panel-collapse collapse">
+              <div class="box-body">
+                <div class="col-md-12">
+                  <div class="form-group col-md-3">
+                    <label>Nome da Mãe</label>
+                    <input type="text" class="form-control" id="nomeMãe" placeholder="Nome da Mãe">
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>RG</label>
+                    <input type="text" class="form-control" id="rg" placeholder="RG">
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>CPF</label>
+                    <input type="text" class="form-control" id="cpf" placeholder="CPF">
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>Número Cartão</label>
+                    <input type="text" class="form-control" id="numeroCartao" placeholder="numeroCartao">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group col-md-3">
+                    <label>Convênio</label>
+                    <select class="form-control">
+                        <option>option 1</option>
+                        <option>option 2</option>
+                        <option>option 3</option>
+                        <option>option 4</option>
+                        <option>option 5</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>Plano de Saúde</label>
+                    <select class="form-control">
+                        <option>option 1</option>
+                        <option>option 2</option>
+                        <option>option 3</option>
+                        <option>option 4</option>
+                        <option>option 5</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>Telefone</label>
+                    <input type="text" class="form-control" id="cpf" placeholder="CPF">
+                  </div>
+                  <div class="form-group col-md-3">
+                    <button type="button" class="btn btn-primary btn-block btn-lg">Buscar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="modal-default">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Novo Paciente</h4>
+                </div>
+                <div class="modal-body">
+                  <form #form="ngForm" role="form">
+                    <div class="row">
+                      <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#abaDadosPessoais">Dados Pessoais</a></li>
+                        <li><a data-toggle="tab" href="#abaEndereco">Endereço</a></li>
+                        <li><a data-toggle="tab" href="#abaContato">Contato</a></li>
+                        <li><a data-toggle="tab" href="#abaPlanoSaude">Plano de Saúde</a></li>
+                        <li><a data-toggle="tab" href="#abaInformacaoAdicional">Informação Adicional</a></li>
+                      </ul>
+                      <div class="tab-content">
+                        <br>
+                        <div id="abaDadosPessoais" class="tab-pane fade in active">
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Nome Completo</label>
+                              <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="paciente.nome"
+                              #nome="ngModel" placeholder="Nome">
+                            </div>
+                            <!-- Date -->
+                            <div class="form-group col-md-6">
+                              <label>Data de Nascimento</label>
+                              <div class="input-group date">
+                                <div class="input-group-addon">
+                                  <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" [(ngModel)]="paciente.dataNascimento"
+                                #dataNascimento="ngModel" name="dataNascimento" id="datepicker">
+                              </div>
+                              <!-- /.input group -->
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <!-- radio -->
+                            <div class="form-group col-md-6">
+                              <label>Sexo</label>
+                              <select class="form-control" [(ngModel)]="paciente.sexo" #sexo="ngModel" id="sexo" name="sexo">
+                                <option value="">Selecione...</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Nome do Pai</label>
+                              <input type="text" class="form-control" id="nomePai" [(ngModel)]="paciente.nomePai" #nomePai="ngModel" name="nomePai" placeholder="Nome do Pai">
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Nome da Mãe</label>
+                              <input type="text" class="form-control" id="nomeMae" [(ngModel)]="paciente.nomeMae"
+                              #nomeMae="ngModel" name="nomeMae" placeholder="Nome da Mãe">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Estado Civil</label>
+                              <select class="form-control" [(ngModel)]="paciente.estadoCivil" #estadoCivil="ngModel" id="estadoCivil" name="estadoCivil">
+                                <option>option 1</option>
+                                <option>option 2</option>
+                                <option>option 3</option>
+                                <option>option 4</option>
+                                <option>option 5</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Naturalidade</label>
+                              <input type="text" class="form-control" id="naturalidade" [(ngModel)]="paciente.naturalidade"
+                              #naturalidade="ngModel" name="naturalidade" placeholder="Naturalidade">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Nacionalidade</label>
+                              <input type="text" class="form-control" id="nacionalidade" [(ngModel)]="paciente.nacionalidade"
+                              #nacionalidade="ngModel" name="nacionalidade" placeholder="Nacionalidade">
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Profissão</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.profissao" #profissao="ngModel" name="profissao" id="profissao" placeholder="Profissão">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>CPF</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.cpf" #cpf="ngModel" id="cpf" name="cpf" placeholder="CPF">
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>RG</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.rg" #rg="ngModel" id="rg" name="rg" placeholder="Identidade">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Órgão Emissor</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.orgaoEmissor" #orgaoEmissor="ngModel" name="orgaoEmissor" id="orgaoEmissor" placeholder="Órgão Emissor ">
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Número Cartão SUS</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.numeroCartaoSUS" #numeroCartaoSUS="ngModel" name="numeroCartaoSUS" id="numeroCartaoSUS" placeholder="Número do Cartão do SUS">
+                            </div>
+                          </div>
+                        </div>
+                        <div id="abaEndereco" class="tab-pane fade">
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Tipo Logradouro</label>
+                              <select class="form-control" [(ngModel)]="paciente.endereco.tipoLogradouro" #tipoLogradouro="ngModel" name="tipoLogradouro">
+                                <option>option 1</option>
+                                <option>option 2</option>
+                                <option>option 3</option>
+                                <option>option 4</option>
+                                <option>option 5</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Logradouro</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.endereco.logradouro" #logradouro="ngModel" name="logradouro" id="logradouro" placeholder="Logradouro">
+                            </div>
+                          </div>
+
+                          <div class="col-md-12">
+                            <div class="form-group col-md-3">
+                              <label>Número</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.endereco.numero" #numero="ngModel" name="numero" id="numero">
+                            </div>
+                            <div class="form-group col-md-9">
+                              <label>Complemento</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.endereco.complemento" #complemento="ngModel" name="complemento"  id="complemento" placeholder="Complemento">
+                            </div>
+                          </div>
+
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Bairro</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.endereco.bairro" #bairro="ngModel" name="bairro" id="bairro" placeholder="Bairro">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Cidade</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.endereco.cidade" #cidade="ngModel" name="cidade" id="cidade" placeholder="Cidade">
+                            </div>
+                          </div>
+
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Estado</label>
+                              <select class="form-control" [(ngModel)]="paciente.endereco.estado" #estado="ngModel" name="estado">
+                                <option>option 1</option>
+                                <option>option 2</option>
+                                <option>option 3</option>
+                                <option>option 4</option>
+                                <option>option 5</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>CEP</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.endereco.cep" #cep="ngModel" name="cep" id="cep" placeholder="Cep">
+                            </div>
+                          </div>
+                        </div>
+                        <div id="abaContato" class="tab-pane fade">
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Tipo Contato</label>
+                              <select class="form-control" [(ngModel)]="paciente.contato.tipoContato" #tipoContato="ngModel" name="tipoContato">
+                                <option>E-mail</option>
+                                <option>Telefone Residencial</option>
+                                <option>Telefone Celular</option>
+                                <option>Telefone Comercial</option>
+                                <option>WhatsApp</option>
+                              </select>
+                            </div>
+                            <!-- #ToDo Fazer uma regra para exibir o campo de acordo com o tipo do contato selecionado -->
+                            <div class="form-group col-md-6">
+                              <label>Contato</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.contato.textoContato" #textoContato="ngModel" name="textoContato" id="textoContato" placeholder="Contato">
+                            </div>
+                          </div>
+                        </div>
+                        <div id="abaPlanoSaude" class="tab-pane fade">
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Operadora</label>
+                              <select class="form-control" [(ngModel)]="paciente.planoSaude.operadora" #operadora="ngModel" name="operadora" id="operadora">
+                                  <option>option 1</option>
+                                  <option>option 2</option>
+                                  <option>option 3</option>
+                                  <option>option 4</option>
+                                  <option>option 5</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Tipo do Plano de Saúde</label>
+                              <select class="form-control" [(ngModel)]="paciente.planoSaude.tipoPlanoSaude" #tipoPlanoSaude="ngModel" name="tipoPlanoSaude" id="tipoPlanoSaude">
+                                  <option>option 1</option>
+                                  <option>option 2</option>
+                                  <option>option 3</option>
+                                  <option>option 4</option>
+                                  <option>option 5</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Número Cartão</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.planoSaude.numeroCartao" #numeroCartao="ngModel" name="numeroCartao" id="numeroCartao" placeholder="Número Cartão">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Validade do Cartão</label>
+                              <div class="input-group date">
+                                <div class="input-group-addon">
+                                  <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" [(ngModel)]="paciente.planoSaude.dataValidadeCartao" #dataValidadeCartao="ngModel" name="dataValidadeCartao" id="dataValidadeCartao">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Nome do Titular</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.planoSaude.nomeTitular" #nomeTitular="ngModel" name="nomeTitular" id="nomeTitular" placeholder="Nome do Titular">
+                            </div>
+                          </div>
+                        </div>
+                        <div id="abaInformacaoAdicional" class="tab-pane fade">
+                          <div class="col-md-12">
+                            <div class="box-body pad">
+                              <textarea id="informacaoAdicional" [(ngModel)]="paciente.informacaoAdicional" #informacaoAdicional="ngModel" name="informacaoAdicional" rows="10" cols="138">
+                              </textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn btn-primary" (click)="salvar()" >Salvar</button>
+                </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+          <!-- /.modal -->
+          <table id="example1" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Nome da Mãe</th>
+              <th>RG</th>
+              <th>CPF</th>
+              <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Trident</td>
+              <td>Internet
+                Explorer 4.0
+              </td>
+              <td>Win 95+</td>
+              <td> 4</td>
+              <td>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
+                </a>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-edit" title="Editar"></i>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Trident</td>
+              <td>Internet
+                Explorer 5.0
+              </td>
+              <td>Win 95+</td>
+              <td>5</td>
+              <td>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
+                </a>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-edit" title="Editar"></i>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Trident</td>
+              <td>Internet
+                Explorer 5.5
+              </td>
+              <td>Win 95+</td>
+              <td>5.5</td>
+              <td>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
+                </a>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-edit" title="Editar"></i>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Trident</td>
+              <td>Internet
+                Explorer 6
+              </td>
+              <td>Win 98+</td>
+              <td>6</td>
+              <td>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
+                </a>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-edit" title="Editar"></i>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Trident</td>
+              <td>Internet Explorer 7</td>
+              <td>Win XP SP2+</td>
+              <td>7</td>
+              <td>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
+                </a>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-edit" title="Editar"></i>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Trident</td>
+              <td>AOL browser (AOL desktop)</td>
+              <td>Win XP</td>
+              <td>6</td>
+              <td>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
+                </a>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-edit" title="Editar"></i>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Gecko</td>
+              <td>Firefox 1.0</td>
+              <td>Win 98+ / OSX.2+</td>
+              <td>1.7</td>
+              <td>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
+                </a>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-edit" title="Editar"></i>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Gecko</td>
+              <td>Firefox 1.5</td>
+              <td>Win 98+ / OSX.2+</td>
+              <td>1.8</td>
+              <td>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
+                </a>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-edit" title="Editar"></i>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Gecko</td>
+              <td>Firefox 2.0</td>
+              <td>Win 98+ / OSX.2+</td>
+              <td>1.8</td>
+              <td>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
+                </a>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-edit" title="Editar"></i>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Gecko</td>
+              <td>Firefox 3.0</td>
+              <td>Win 2k+ / OSX.3+</td>
+              <td>1.9</td>
+              <td>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
+                </a>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-edit" title="Editar"></i>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Other browsers</td>
+              <td>All others</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
+                </a>
+                <a class="btn btn-app-sm">
+                  <i class="fa fa-edit" title="Editar"></i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+              <th>Nome</th>
+              <th>Nome da Mãe</th>
+              <th>RG</th>
+              <th>CPF</th>
+              <th>Ações</th>
+            </tr>
+            </tfoot>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+</section>
+<!-- /.content -->

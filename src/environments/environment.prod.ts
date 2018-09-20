@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  enderecoBase: 'http://localhost:9081'
 };

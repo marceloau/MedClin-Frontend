@@ -1,0 +1,39 @@
+<div class="login-box">
+    <div class="login-logo">
+      <a href=""><b>Med</b>Clin</a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+
+      <p class="login-box-msg">Sistema de Gerênciamento de Clínicas</p>
+
+      <form #form="ngForm" (ngSubmit)="login()">
+        <p *ngIf="mensagem" class="login-box-msg text-red">{{mensagem}}</p>
+
+        <div class="form-group has-feedback" [ngClass]="getFromGroupClass(email.invalid, email.dirty)">
+          <input id="email" type="email" name="email" class="form-control" placeholder="E-mail" [(ngModel)]="usuario.email" #email="ngModel" email>
+          <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback" [ngClass]="getFromGroupClass(senha.invalid, senha.dirty)">
+          <input id="senha" type="password" name="senha" class="form-control" placeholder="Senha" [(ngModel)]="usuario.senha" #senha="ngModel" required>
+          <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div class="row">
+          <div class="col-xs-8">
+            <div class="checkbox icheck">
+              <label>
+                <input type="checkbox"> Lembrar
+              </label>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-xs-4">
+            <button type="submit" [disabled]="!form.valid"  class="btn btn-primary btn-block btn-flat">Entrar</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+    </div>
+    <!-- /.login-box-body -->
+  </div>
+  <!-- /.login-box -->
