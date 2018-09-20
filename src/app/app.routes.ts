@@ -7,6 +7,7 @@ import { LoginComponent } from './componentes/login/login.component';
 
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
+import { TipoPlanoSaudeComponent } from './componentes/modulos/cadastro/tipoPlanoSaude/tipoplanosaude.component';
 
 export const ROUTES: Routes = [
   {
@@ -32,7 +33,12 @@ export const ROUTES: Routes = [
   {
     path: 'configuracoes/cadastro/operadora',
     component: OperadoraComponent
+  },
+  {
+    path: 'configuracoes/cadastro/tipo-plano-saude',
+    component: TipoPlanoSaudeComponent
   }
+
 ];
 
 export const routes: ModuleWithProviders = RouterModule.forRoot(ROUTES);

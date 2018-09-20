@@ -19,6 +19,8 @@ import { PerfilComponent } from './componentes/modulos/perfil/perfil.component';
 import { EspecialidadeComponent } from './componentes/modulos/cadastro/especialidade/especialidade.component';
 import { PaginacaoComponent } from './componentes/comum/paginacao/paginacao.component';
 import { OperadoraComponent } from './componentes/modulos/cadastro/operadora/operadora.component';
+import { TipoPlanoSaudeComponent } from './componentes/modulos/cadastro/tipoPlanoSaude/tipoplanosaude.component';
+
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { OperadoraComponent } from './componentes/modulos/cadastro/operadora/ope
     PerfilComponent,
     EspecialidadeComponent,
     PaginacaoComponent,
-    OperadoraComponent
+    OperadoraComponent,
+    TipoPlanoSaudeComponent
   ],
   imports: [
     BrowserModule,
