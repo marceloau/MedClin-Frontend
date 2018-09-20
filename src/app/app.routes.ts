@@ -1,3 +1,4 @@
+import { TipoContatoComponent } from './componentes/modulos/cadastro/tipoContato/tipocontato.component';
 import { OperadoraComponent } from './componentes/modulos/cadastro/operadora/operadora.component';
 import { EspecialidadeComponent } from './componentes/modulos/cadastro/especialidade/especialidade.component';
 import { PerfilComponent } from './componentes/modulos/perfil/perfil.component';
@@ -37,6 +38,10 @@ export const ROUTES: Routes = [
   {
     path: 'configuracoes/cadastro/tipo-plano-saude',
     component: TipoPlanoSaudeComponent
+  },
+  {
+    path: 'configuracoes/cadastro/tipo-contato',
+    component: TipoContatoComponent
   }
 
 ];

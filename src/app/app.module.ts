@@ -1,3 +1,4 @@
+import { TipoContatoComponent } from './componentes/modulos/cadastro/tipoContato/tipocontato.component';
 import { routes } from './app.routes';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -36,7 +37,8 @@ import { TipoPlanoSaudeComponent } from './componentes/modulos/cadastro/tipoPlan
     EspecialidadeComponent,
     PaginacaoComponent,
     OperadoraComponent,
-    TipoPlanoSaudeComponent
+    TipoPlanoSaudeComponent,
+    TipoContatoComponent
   ],
   imports: [
     BrowserModule,

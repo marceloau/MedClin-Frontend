@@ -1,14 +1,14 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-      Tipo de Plano de Saúde
+      Tipo Contato
       <small></small>
     </h1>
     <ol class="breadcrumb">
       <li><a [routerLink]="['/']"><i class="fa fa-dashboard"></i> Home</a></li>
       <li><i class="fa fa-dashboard"></i> Configurações</li>
       <li><i class="fa fa-dashboard"></i> Cadastro</li>
-      <li class="active">Tipo de Plano de saúde</li>
+      <li class="active">Tipo Contato</li>
     </ol>
   </section>
 
@@ -28,27 +28,27 @@
               </div>
               <div class="input-group col-md-8 pull-left">
                 <div class="input-group col-md-6 pull-left">
-                  <input type="text" class="form-control" id="nome" name="nome" value="tipoPlanoSaude.nome" [(ngModel)]="tipoPlanoSaude.nome"
-                  #nome="ngModel" placeholder="Informe o nome do tipo de plano de saúde que deseja procurar.">
+                  <input type="text" class="form-control" id="nome" name="nome" value="tipoContato.nome" [(ngModel)]="tipoContato.nome"
+                  #nome="ngModel" placeholder="Informe o nome do tipo contato que deseja procurar.">
                   <span class="input-group-btn">
                     <button type="button" (click)="buscar()" class="btn btn-primary btn-flat">Buscar</button>
                   </span>
                 </div>
               </div>
               <div class="input-group col-md-3 pull-right">
-                <button id="btnNovoTipoPlanoSaude" type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modal-novo-tipo-plano-saude">
-                    Novo Tipo de Plano de Saude
+                <button id="btnNovoTipoContato" type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modal-novo-tipo-contato">
+                    Novo Tipo Contato
                 </button>
               </div>
             </div>
             <br>
-            <div class="modal fade" id="modal-novo-tipo-plano-saude">
+            <div class="modal fade" id="modal-novo-tipo-contato">
               <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
                     <button id="fecharModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">{{ tipoPlanoSaude && !tipoPlanoSaude.codigo ? 'Novo Tipo de Plano de Saúde' : habilitarEdicao ? 'Atualizar Tipo de Plano de Saúde' : 'Visualizar Tipo de Plano de Saúde' }}</h4>
+                    <h4 class="modal-title">{{ tipoContato && !tipoContato.codigo ? 'Novo Tipo Contato' : habilitarEdicao ? 'Atualizar Tipo Contato' : 'Visualizar Tipo Contato' }}</h4>
                   </div>
                   <div class="modal-body">
                     <form #form="ngForm" role="form">
@@ -62,12 +62,12 @@
                           <div class="col-md-12">
                             <div class="form-group col-md-6">
                               <label>Nome</label>
-                              <input type="text" class="form-control" id="nome" name="nome" value="tipoPlanoSaude.nome" [(ngModel)]="tipoPlanoSaude.nome"
+                              <input type="text" class="form-control" id="nome" name="nome" value="tipoContato.nome" [(ngModel)]="tipoContato.nome"
                               #nome="ngModel" placeholder="Nome" [disabled]='!habilitarEdicao'>
                             </div>
                             <div class="form-group col-md-6">
                               <label>Status</label>
-                              <select class="form-control" [(ngModel)]="tipoPlanoSaude.flagAtivo" #flagAtivo="ngModel" id="flagAtivo" name="flagAtivo" [disabled]='!habilitarEdicao'>
+                              <select class="form-control" [(ngModel)]="tipoContato.flagAtivo" #flagAtivo="ngModel" id="flagAtivo" name="flagAtivo" [disabled]='!habilitarEdicao'>
                                 <option value="">Selecione...</option>
                                 <option value="S">Ativo</option>
                                 <option value="N">Inativo</option>
@@ -76,7 +76,7 @@
                           </div>
                           <div class="col-md-12">
                             <div class="box-body pad">
-                              <textarea id="descricao" [(ngModel)]="tipoPlanoSaude.descricao" #descricao="ngModel" name="descricao" rows="10" cols="138" placeholder="Descrição do tipo de plano de saúde" [disabled]='!habilitarEdicao'>
+                              <textarea id="descricao" [(ngModel)]="tipoContato.descricao" #descricao="ngModel" name="descricao" rows="10" cols="138" placeholder="Descrição do tipo de contato" [disabled]='!habilitarEdicao'>
                               </textarea>
                             </div>
                           </div>
@@ -85,7 +85,7 @@
                     </form>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" (click)="fecharModalTipoPlanoSaude()" data-dismiss="modal" id="closeModal">Cancelar</button>
+                    <button type="button" class="btn btn-default pull-left" (click)="fecharModalTipoContato()" data-dismiss="modal" id="closeModal">Cancelar</button>
                     <button type="button" class="btn btn-primary" id="salvarModal" (hidden)= 'habilitarEdicao' (click)="salvar()" >Salvar</button>
                   </div>
                 </div>
@@ -94,7 +94,7 @@
               <!-- /.modal-dialog -->
             </div>
             <!-- /.modal -->
-            <table id="tabelaTipoPlanoSaude" class="table table-bordered table-striped">
+            <table id="tabelaTipoContato" class="table table-bordered table-striped">
               <thead>
               <tr>
                 <th>Código</th>
@@ -105,17 +105,17 @@
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let tipoPlanoSaude of listaTipoPlanoSaude">
-                <td>{{ tipoPlanoSaude.codigo }}</td>
-                <td>{{ tipoPlanoSaude.nome }}</td>
-                <td>{{ tipoPlanoSaude.descricao }}</td>
-                <td>{{ tipoPlanoSaude.flagAtivo === 'S' ? 'Ativo' : 'Inativo' }}</td>
+              <tr *ngFor="let tipoContato of listaTipoContato">
+                <td>{{ tipoContato.codigo }}</td>
+                <td>{{ tipoContato.nome }}</td>
+                <td>{{ tipoContato.descricao }}</td>
+                <td>{{ tipoContato.flagAtivo === 'S' ? 'Ativo' : 'Inativo' }}</td>
                 <td>
                   <div class="btn-group">
-                    <button type="button" (click)="visualizarRegistro(tipoPlanoSaude.codigo)" class="btn btn-default">
+                    <button type="button" (click)="visualizarRegistro(tipoContato.codigo)" class="btn btn-default">
                       <i class="fa fa-search" title="Visualizar Perfil"></i>
                     </button>
-                    <button type="button" (click)="abrirModalAtualizar(tipoPlanoSaude.codigo)" class="btn btn-default">
+                    <button type="button" (click)="abrirModalAtualizar(tipoContato.codigo)" class="btn btn-default">
                       <i class="fa fa-edit" title="Editar"></i>
                     </button>
                   </div>

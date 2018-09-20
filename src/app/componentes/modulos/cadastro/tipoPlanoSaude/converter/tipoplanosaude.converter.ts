@@ -1,5 +1,5 @@
 import { TipoPlanoSaude } from './../../../../../model/tipoplanosaude.model';
-import { TipoPlanoSaudeEBO } from '../ebo/tipoplanosaude';
+import { TipoPlanoSaudeEBO } from '../ebo/tipoplanosaudeebo';
 import { Injectable } from '@angular/core';
 
 @Injectable()

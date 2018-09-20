@@ -1,14 +1,14 @@
 import { environment } from '../../../../../../environments/environment';
-import { TipoPlanoSaudeEBO } from '../ebo/tipoplanosaudeebo';
+import { TipoContatoEBO } from '../ebo/tipocontatoebo';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TipoPlanoSaudeService {
+export class TipoContatoService {
 
-  pathBase = '/medclin/tipo-plano-saude';
+  pathBase = '/medclin/tipo-contato';
   enderecoBase = environment.enderecoBase;
 
   constructor(private http: HttpClient) {
@@ -17,17 +17,17 @@ export class TipoPlanoSaudeService {
   /**
    *
    */
-  salvar( tipoPlanoSaude: TipoPlanoSaudeEBO ) {
+  salvar( tipoContato: TipoContatoEBO ) {
     const endereco = this.enderecoBase + this.pathBase;
-    return this.http.post(endereco, tipoPlanoSaude);
+    return this.http.post(endereco, tipoContato);
   }
 
   /**
    *
    */
-  atualizar( tipoPlanoSaude: TipoPlanoSaudeEBO ) {
+  atualizar( tipoContato: TipoContatoEBO ) {
     const endereco = this.enderecoBase + this.pathBase;
-    return this.http.put(endereco, tipoPlanoSaude);
+    return this.http.put(endereco, tipoContato);
   }
 
   /**
