@@ -65,7 +65,7 @@
                   <div class="form-group col-md-3">
                     <label>Convênio</label>
                     <select class="form-control">
-                        <option>option 1</option>
+                        <option>Selecione...</option>
                         <option>option 2</option>
                         <option>option 3</option>
                         <option>option 4</option>
@@ -138,7 +138,7 @@
                             <div class="form-group col-md-6">
                               <label>Sexo</label>
                               <select class="form-control" [(ngModel)]="paciente.sexo" #sexo="ngModel" id="sexo" name="sexo">
-                                <option value="">Selecione...</option>
+                                <option>Selecione...</option>
                                 <option value="M">Masculino</option>
                                 <option value="F">Feminino</option>
                               </select>
@@ -157,11 +157,8 @@
                             <div class="form-group col-md-6">
                               <label>Estado Civil</label>
                               <select class="form-control" [(ngModel)]="paciente.estadoCivil" #estadoCivil="ngModel" id="estadoCivil" name="estadoCivil">
-                                <option>option 1</option>
-                                <option>option 2</option>
-                                <option>option 3</option>
-                                <option>option 4</option>
-                                <option>option 5</option>
+                                <option>Selecione...</option>
+                                <option *ngFor="let estadoCivil of listaComboEstadoCivil" [value]="estadoCivil.codigo" >{{ estadoCivil.nome }}</option>
                               </select>
                             </div>
                           </div>
@@ -209,11 +206,8 @@
                             <div class="form-group col-md-6">
                               <label>Tipo Logradouro</label>
                               <select class="form-control" [(ngModel)]="paciente.endereco.tipoLogradouro" #tipoLogradouro="ngModel" name="tipoLogradouro">
-                                <option>option 1</option>
-                                <option>option 2</option>
-                                <option>option 3</option>
-                                <option>option 4</option>
-                                <option>option 5</option>
+                                <option>Selecione...</option>
+                                <option *ngFor="let tipoLogradouro of listaComboTipoLogradouro" [value]="tipoLogradouro.codigo" >{{ tipoLogradouro.nome }}</option>
                               </select>
                             </div>
                             <div class="form-group col-md-6">
@@ -248,11 +242,8 @@
                             <div class="form-group col-md-6">
                               <label>Estado</label>
                               <select class="form-control" [(ngModel)]="paciente.endereco.estado" #estado="ngModel" name="estado">
-                                <option>option 1</option>
-                                <option>option 2</option>
-                                <option>option 3</option>
-                                <option>option 4</option>
-                                <option>option 5</option>
+                                <option>Selecione...</option>
+                                <option *ngFor="let estado of listaComboEstado" [value]="estado.codigo" >{{ estado.nomeEstado }}</option>
                               </select>
                             </div>
                             <div class="form-group col-md-6">
@@ -266,11 +257,8 @@
                             <div class="form-group col-md-6">
                               <label>Tipo Contato</label>
                               <select class="form-control" [(ngModel)]="paciente.contato.tipoContato" #tipoContato="ngModel" name="tipoContato">
-                                <option>E-mail</option>
-                                <option>Telefone Residencial</option>
-                                <option>Telefone Celular</option>
-                                <option>Telefone Comercial</option>
-                                <option>WhatsApp</option>
+                                <option>Selecione...</option>
+                                <option *ngFor="let tipoContato of listaComboTipoContato" [value]="tipoContato.codigo" >{{ tipoContato.nome }}</option>
                               </select>
                             </div>
                             <!-- #ToDo Fazer uma regra para exibir o campo de acordo com o tipo do contato selecionado -->
@@ -285,21 +273,15 @@
                             <div class="form-group col-md-6">
                               <label>Operadora</label>
                               <select class="form-control" [(ngModel)]="paciente.planoSaude.operadora" #operadora="ngModel" name="operadora" id="operadora">
-                                  <option>option 1</option>
-                                  <option>option 2</option>
-                                  <option>option 3</option>
-                                  <option>option 4</option>
-                                  <option>option 5</option>
+                                <option>Selecione...</option>
+                                <option *ngFor="let operadora of listaComboOperadora" [value]="operadora.codigo" >{{ operadora.nome }}</option>
                               </select>
                             </div>
                             <div class="form-group col-md-6">
                               <label>Tipo do Plano de Saúde</label>
                               <select class="form-control" [(ngModel)]="paciente.planoSaude.tipoPlanoSaude" #tipoPlanoSaude="ngModel" name="tipoPlanoSaude" id="tipoPlanoSaude">
-                                  <option>option 1</option>
-                                  <option>option 2</option>
-                                  <option>option 3</option>
-                                  <option>option 4</option>
-                                  <option>option 5</option>
+                                <option selected>Selecione...</option>
+                                <option *ngFor="let tipoPlanoSaude of listaComboTipoPlanoSaude" [value]="tipoPlanoSaude.codigo" >{{ tipoPlanoSaude.nome }}</option>
                               </select>
                             </div>
                           </div>
@@ -347,7 +329,7 @@
             <!-- /.modal-dialog -->
           </div>
           <!-- /.modal -->
-          <table id="example1" class="table table-bordered table-striped">
+          <table id="tabelaPacientes" class="table table-bordered table-striped">
             <thead>
             <tr>
               <th>Nome</th>

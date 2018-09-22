@@ -1,7 +1,7 @@
 export class Estado {
   codigo: number;
-  nomeCompleto: string;
-  nomeAbreviado: string;
+  nomeEstado: string;
+  siglaEstado: string;
   flagAtivo: string;
   usuarioUltimaAlteracao: string;
   dataUltimaAlteracao: Date;

@@ -1,3 +1,4 @@
+import { Constantes } from './../constantes.enum';
 import { Injectable } from '@angular/core';
 import { Mensagem } from '../../../model/mensagem';
 
@@ -8,7 +9,7 @@ export class Excecao {
 
   exibirExcecao(erro: any): Mensagem {
     this.mensagem = new Mensagem();
-    if (erro.status === 409) {
+    if (erro.status === Constantes.ERRO_CONFLITO) {
       this.mensagem.titulo = erro.msg;
       this.mensagem.codigoTipo = 1;
       erro.erros.forEach(error => {

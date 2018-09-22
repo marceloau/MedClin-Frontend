@@ -1,39 +1,175 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { PacienteService } from './service/tipoplanosaude.service';
+import { PacienteEBO } from './ebo/pacienteebo';
+import { TipoPlanoSaude } from './../../../model/tipoplanosaude.model';
+import { TipoPlanoSaudeService } from './../cadastro/tipoPlanoSaude/service/tipoplanosaude.service';
+import { OperadoraConverter } from './../cadastro/operadora/converter/operadora.converter';
+import { OperadoraService } from './../cadastro/operadora/service/operadora.service';
+import { TipoContato } from './../../../model/tipo-contato.model';
+import { Excecao } from './../../comum/excecao/excecao';
+import { DominioConverter } from './../../comum/converter/dominio.converter';
+import { Constantes } from './../../comum/constantes.enum';
+import { DominioService } from './../../comum/services/dominio.service';
+import { EstadoCivil } from './../../../model/estadocivil.model';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Paciente } from '../../../model/paciente.model';
 import { NgForm } from '@angular/forms';
+import { Pagina } from '../../../model/comum/pagina.model';
+import { Mensagem } from '../../../model/mensagem';
+import { Estado } from '../../../model/estado.model';
+import { TipoLogradouro } from '../../../model/tipologradouro.model';
+import { TipoContatoService } from '../cadastro/tipoContato/service/tipocontato.service';
+import { TipoContatoConverter } from '../cadastro/tipoContato/converter/tipocontato.converter';
+import { Operadora } from '../../../model/operadora.model';
+import { TipoPlanoSaudeConverter } from '../cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
+import { PacienteConverter } from './converter/paciente.converter';
 
 @Component({
   selector: 'app-pacientes',
   templateUrl: './pacientes.component.html',
-  styleUrls: ['./pacientes.component.css']
+  styleUrls: ['./pacientes.component.css'],
+  providers: [PacienteConverter, DominioConverter, Excecao, TipoContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter]
 })
 export class PacientesComponent implements OnInit {
 
-  constructor() { }
+  constructor(private pacienteService: PacienteService, private pacienteConverter: PacienteConverter,
+    private dominioService: DominioService, private dominioConverter: DominioConverter,
+    private excecao: Excecao, private tipoContatoService: TipoContatoService, private tipoContatoConverter: TipoContatoConverter,
+    private operadoraService: OperadoraService, private operadoraConverter: OperadoraConverter,
+    private tipoPlanoSaudeService: TipoPlanoSaudeService, private tipoPlanoSaudeConverter: TipoPlanoSaudeConverter) { }
 
   @ViewChild('form')
   form: NgForm;
 
   paciente = new Paciente();
+  listaPacientes = new Array<Paciente>();
+
+  mensagem = new Mensagem();
+
+  // Inicio lista de atributos dos compbos de paciente
+  listaComboEstadoCivil = new Array<EstadoCivil>();
+  listaComboEstado = new Array<Estado>();
+  listaComboTipoLogradouro = new Array<TipoLogradouro>();
+  listaComboTipoContato = new Array<TipoContato>();
+  listaComboOperadora = new Array<Operadora>();
+  listaComboTipoPlanoSaude = new Array<TipoPlanoSaude>();
+// Fim lista de atributos dos compbos de paciente
+
+  pagina: Pagina;
 
   ngOnInit() {
+
+    this.inicializarCombos();
+    this.inicializarTable();
+
   }
 
-  onChange($event: any): void {
-    console.log('onChange');
+  inicializarCombos() {
+    // Combo de estado civil
+    this.dominioService.listarDominio(Constantes.DOMINIO_ESTADO_CIVIL).subscribe((retorno: Array<any>) => {
+      this.listaComboEstadoCivil = this.dominioConverter.converterListaParaFrontend(retorno, Constantes.DOMINIO_ESTADO_CIVIL);
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+
+    // Combo de estado
+    this.dominioService.listarDominio(Constantes.DOMINIO_ESTADO).subscribe((retorno: Array<any>) => {
+      this.listaComboEstado = this.dominioConverter.converterListaParaFrontend(retorno, Constantes.DOMINIO_ESTADO);
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+
+    // Combo de tipo logradouro
+    this.dominioService.listarDominio(Constantes.DOMINIO_TIPO_LOGRADOURO).subscribe((retorno: Array<any>) => {
+      this.listaComboTipoLogradouro = this.dominioConverter.converterListaParaFrontend(retorno, Constantes.DOMINIO_TIPO_LOGRADOURO);
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+
+    // Combo de Tipo Contato
+    this.tipoContatoService.listarRegistros(0, 100).subscribe((retorno: Pagina) => {
+      this.listaComboTipoContato = this.tipoContatoConverter.converterListaParaFrontend(retorno.content);
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+
+    // Combo de Operadora
+    this.operadoraService.listarRegistros(0, 100).subscribe((retorno: Pagina) => {
+      this.listaComboOperadora = this.operadoraConverter.converterListaParaFrontend(retorno.content);
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+
+    // Combo de Tipo Plano Saúde
+    this.tipoPlanoSaudeService.listarRegistros(0, 100).subscribe((retorno: Pagina) => {
+      this.listaComboTipoPlanoSaude = this.tipoPlanoSaudeConverter.converterListaParaFrontend(retorno.content);
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+  }
+
+  inicializarTable() {
+    const table: any = $('#tabelaPacientes');
+    table.DataTable().destroy();
+    setTimeout(() =>
+      table.DataTable({
+        'paging'      : true,
+        'lengthChange': false,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : false
+      }), 0
+    );
   }
 
   salvar() {
-    // TODO fazer o método para salvar o paciente.
     console.log(this.paciente);
+    const objetoSalvar: PacienteEBO = this.pacienteConverter.converterParaBackend(this.paciente);
+
+    if (this.paciente && !this.paciente.codigo) {
+      this.pacienteService.salvar(objetoSalvar).subscribe(( objetoSalvo: PacienteEBO) => {
+        this.mensagem.codigoTipo = 0;
+        this.mensagem.titulo = 'Sucesso';
+        this.mensagem.texto = 'Paciente salvo com sucesso.';
+        const modal: any = $('#fecharModal');
+        modal.click();
+        this.limparCampos();
+        this.inicializarTable();
+        this.listarRegistros(0, 10);
+      }, err => {
+        this.mensagem = this.excecao.exibirExcecao(err.error);
+      });
+    } else {
+      this.atualizar();
+    }
   }
 
-  onSelectionChangeSexo(sexo: string) {
-    this.paciente.sexo = sexo;
+  atualizar() {
+    const objetoAtualizado: PacienteEBO = this.pacienteConverter.converterParaBackend(this.paciente);
+    this.pacienteService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: PacienteEBO) => {
+      this.mensagem.codigoTipo = 0;
+      this.mensagem.titulo = 'Sucesso';
+      this.mensagem.texto = 'Paciente atualizado com sucesso.';
+      const modal: any = $('#fecharModal');
+      modal.click();
+      this.listarRegistros(0, 10);
+      this.limparCampos();
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
   }
 
-  dosomething(data) {
-    this.paciente.informacaoAdicional = data;
+  listarRegistros(pagina, total) {
+    this.tipoPlanoSaudeService.listarRegistros(pagina, total).subscribe((retorno: Pagina) => {
+      this.pagina = retorno;
+      this.listaPacientes = this.pacienteConverter.converterListaParaFrontend(retorno.content);
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+  }
+
+  limparCampos() {
+    this.paciente = new Paciente();
   }
 
 }
