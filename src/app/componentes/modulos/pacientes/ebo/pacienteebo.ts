@@ -1,7 +1,7 @@
-import { EstadoCivil } from './../../../../model/estadocivil.model';
-import { Endereco } from '../../../../model/endereco.model';
-import { Contato } from '../../../../model/contato.model';
-import { PlanoSaude } from '../../../../model/planosaude.model';
+import { ContatoEBO } from './../../../comum/ebo/contatoebo';
+import { EstadoCivilEBO } from './../../../comum/ebo/estadocivilebo';
+import { EnderecoEBO } from './../../../comum/ebo/enderecoebo';
+import { PlanoSaudeEBO } from '../../../comum/ebo/planosaudeEBO';
 export class PacienteEBO {
 
   codigoPessoa: number;
@@ -14,14 +14,14 @@ export class PacienteEBO {
   sexo: string;
   dataNascimento: Date;
   informacaoAdicional: string;
-  estadoCivil = new EstadoCivil();
-  enderecos = new Array<Endereco>();
-  contatos = new Array<Contato>();
+  estadoCivil = new EstadoCivilEBO();
+  enderecos = new Array<EnderecoEBO>();
+  contatos = new Array<ContatoEBO>();
   numeroCartaoSus: string;
   nomeProfissao: string;
   nomePai: string;
   nomeMae: string;
-  listaPlanoSaudePaciente = new Array<PlanoSaude>();
+  listaPlanoSaudePaciente = new Array<PlanoSaudeEBO>();
   flagAtivo: string;
   usuarioUltimaAlteracao: string;
   dataUltimaAlteracao: Date;

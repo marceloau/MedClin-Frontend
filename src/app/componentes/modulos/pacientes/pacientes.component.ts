@@ -57,10 +57,24 @@ export class PacientesComponent implements OnInit {
   pagina: Pagina;
 
   ngOnInit() {
-
+    this.pacienteService.listarRegistros(0, 10).subscribe((retorno: Pagina) => {
+      this.listaPacientes = this.pacienteConverter.converterListaParaFrontend(retorno.content);
+      this.pagina = retorno;
+      const table: any = $('#tabelaPacientes');
+      setTimeout(() =>
+      table.DataTable({
+        'paging'      : false,
+        'lengthChange': false,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : false
+      }), 0
+      );
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
     this.inicializarCombos();
-    this.inicializarTable();
-
   }
 
   inicializarCombos() {
@@ -160,7 +174,7 @@ export class PacientesComponent implements OnInit {
   }
 
   listarRegistros(pagina, total) {
-    this.tipoPlanoSaudeService.listarRegistros(pagina, total).subscribe((retorno: Pagina) => {
+    this.pacienteService.listarRegistros(pagina, total).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       this.listaPacientes = this.pacienteConverter.converterListaParaFrontend(retorno.content);
     }, err => {

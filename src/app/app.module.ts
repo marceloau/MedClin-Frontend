@@ -1,3 +1,4 @@
+import { DominioConverter } from './componentes/comum/converter/dominio.converter';
 import { TipoContatoComponent } from './componentes/modulos/cadastro/tipoContato/tipocontato.component';
 import { routes } from './app.routes';
 import { BrowserModule } from '@angular/platform-browser';
@@ -21,6 +22,11 @@ import { EspecialidadeComponent } from './componentes/modulos/cadastro/especiali
 import { PaginacaoComponent } from './componentes/comum/paginacao/paginacao.component';
 import { OperadoraComponent } from './componentes/modulos/cadastro/operadora/operadora.component';
 import { TipoPlanoSaudeComponent } from './componentes/modulos/cadastro/tipoPlanoSaude/tipoplanosaude.component';
+import { EnderecoConverter } from './componentes/comum/converter/endereco.converter';
+import { TipoContatoConverter } from './componentes/modulos/cadastro/tipoContato/converter/tipocontato.converter';
+import { ContatoConverter } from './componentes/comum/converter/contato.converter';
+import { OperadoraConverter } from './componentes/modulos/cadastro/operadora/converter/operadora.converter';
+import { TipoPlanoSaudeConverter } from './componentes/modulos/cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
 
 
 @NgModule({
@@ -46,7 +52,8 @@ import { TipoPlanoSaudeComponent } from './componentes/modulos/cadastro/tipoPlan
     HttpClientModule,
     routes
   ],
-  providers: [SegurancaService, UsuarioService],
+  providers: [SegurancaService, UsuarioService, DominioConverter, EnderecoConverter,
+    TipoContatoConverter, ContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

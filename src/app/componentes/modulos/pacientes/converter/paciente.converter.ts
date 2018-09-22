@@ -1,9 +1,19 @@
+import { EnderecoConverter } from './../../../comum/converter/endereco.converter';
+import { DominioConverter } from './../../../comum/converter/dominio.converter';
 import { Paciente } from './../../../../model/paciente.model';
 import { PacienteEBO } from '../ebo/pacienteebo';
 import { Injectable } from '@angular/core';
+import { Constantes } from '../../../comum/constantes.enum';
+import { ContatoConverter } from '../../../comum/converter/contato.converter';
+import { PlanoSaudeConverter } from '../../../comum/converter/planosaude.converter';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class PacienteConverter {
+
+  constructor(private dominioConverter: DominioConverter, private enderecoConverter: EnderecoConverter,
+    private contatoConverter: ContatoConverter, private planoSaudeConverter: PlanoSaudeConverter) { }
 
   converterParaBackend(paciente: Paciente): PacienteEBO {
 
@@ -18,13 +28,13 @@ export class PacienteConverter {
     pacienteEBO.sexo = paciente.sexo;
     pacienteEBO.dataNascimento = paciente.dataNascimento;
     pacienteEBO.informacaoAdicional = paciente.informacaoAdicional;
-    pacienteEBO.estadoCivil = paciente.estadoCivil;
+    pacienteEBO.estadoCivil = this.dominioConverter.converterParaBackend(paciente.estadoCivil, Constantes.DOMINIO_ESTADO_CIVIL);
     pacienteEBO.nomePai = paciente.nomePai;
     pacienteEBO.nomeMae = paciente.nomeMae;
     pacienteEBO.nomeProfissao = paciente.profissao;
-    pacienteEBO.enderecos.push(paciente.endereco);
-    pacienteEBO.contatos.push(paciente.contato);
-    pacienteEBO.listaPlanoSaudePaciente.push(paciente.planoSaude);
+    pacienteEBO.enderecos.push(this.enderecoConverter.converterParaBackend(paciente.endereco));
+    pacienteEBO.contatos.push(this.contatoConverter.converterParaBackend(paciente.contato));
+    pacienteEBO.listaPlanoSaudePaciente.push(this.planoSaudeConverter.converterParaBackend(paciente.planoSaude));
     pacienteEBO.numeroCartaoSus = paciente.numeroCartaoSUS;
     pacienteEBO.flagAtivo = paciente.flagAtivo;
     pacienteEBO.dataCriacao = paciente.dataCriacao;
@@ -55,13 +65,19 @@ export class PacienteConverter {
     pacienteRetorno.sexo = pacienteEBO.sexo;
     pacienteRetorno.dataNascimento = pacienteEBO.dataNascimento;
     pacienteRetorno.informacaoAdicional = pacienteEBO.informacaoAdicional;
-    pacienteRetorno.estadoCivil = pacienteEBO.estadoCivil;
+    pacienteRetorno.estadoCivil = this.dominioConverter.converterParaFrontend(pacienteEBO.estadoCivil, Constantes.DOMINIO_ESTADO_CIVIL);
     pacienteRetorno.nomePai = pacienteEBO.nomePai;
     pacienteRetorno.nomeMae = pacienteEBO.nomeMae;
     pacienteRetorno.profissao = pacienteEBO.nomeProfissao;
-    pacienteRetorno.endereco = pacienteEBO.enderecos[0];
-    pacienteRetorno.contato = pacienteEBO.contatos[0];
-    pacienteRetorno.planoSaude = pacienteEBO.listaPlanoSaudePaciente[0];
+    if (pacienteEBO.enderecos) {
+      pacienteRetorno.endereco = this.enderecoConverter.converterParaFrontend(pacienteEBO.enderecos[0]);
+    }
+    if (pacienteEBO.contatos) {
+      pacienteRetorno.contato = this.contatoConverter.converterParaFrontend(pacienteEBO.contatos[0]);
+    }
+    if (pacienteEBO.listaPlanoSaudePaciente) {
+      pacienteRetorno.planoSaude = this.planoSaudeConverter.converterParaFrontend(pacienteEBO.listaPlanoSaudePaciente[0]);
+    }
     pacienteRetorno.numeroCartaoSUS = pacienteEBO.numeroCartaoSus;
     pacienteRetorno.flagAtivo = pacienteEBO.flagAtivo;
     pacienteRetorno.dataCriacao = pacienteEBO.dataCriacao;

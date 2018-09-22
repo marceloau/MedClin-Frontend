@@ -156,7 +156,7 @@
                             </div>
                             <div class="form-group col-md-6">
                               <label>Estado Civil</label>
-                              <select class="form-control" [(ngModel)]="paciente.estadoCivil" #estadoCivil="ngModel" id="estadoCivil" name="estadoCivil">
+                              <select class="form-control" [(ngModel)]="paciente.estadoCivil.codigo" #codigo="ngModel" id="estadoCivil" name="estadoCivil">
                                 <option>Selecione...</option>
                                 <option *ngFor="let estadoCivil of listaComboEstadoCivil" [value]="estadoCivil.codigo" >{{ estadoCivil.nome }}</option>
                               </select>
@@ -205,7 +205,7 @@
                           <div class="col-md-12">
                             <div class="form-group col-md-6">
                               <label>Tipo Logradouro</label>
-                              <select class="form-control" [(ngModel)]="paciente.endereco.tipoLogradouro" #tipoLogradouro="ngModel" name="tipoLogradouro">
+                              <select class="form-control" [(ngModel)]="paciente.endereco.tipoLogradouro.codigo" #codigo="ngModel" name="tipoLogradouro">
                                 <option>Selecione...</option>
                                 <option *ngFor="let tipoLogradouro of listaComboTipoLogradouro" [value]="tipoLogradouro.codigo" >{{ tipoLogradouro.nome }}</option>
                               </select>
@@ -241,7 +241,7 @@
                           <div class="col-md-12">
                             <div class="form-group col-md-6">
                               <label>Estado</label>
-                              <select class="form-control" [(ngModel)]="paciente.endereco.estado" #estado="ngModel" name="estado">
+                              <select class="form-control" [(ngModel)]="paciente.endereco.estado.codigo" #codigo="ngModel" name="estado">
                                 <option>Selecione...</option>
                                 <option *ngFor="let estado of listaComboEstado" [value]="estado.codigo" >{{ estado.nomeEstado }}</option>
                               </select>
@@ -256,7 +256,7 @@
                           <div class="col-md-12">
                             <div class="form-group col-md-6">
                               <label>Tipo Contato</label>
-                              <select class="form-control" [(ngModel)]="paciente.contato.tipoContato" #tipoContato="ngModel" name="tipoContato">
+                              <select class="form-control" [(ngModel)]="paciente.contato.tipoContato.codigo" #codigo="ngModel" name="tipoContato">
                                 <option>Selecione...</option>
                                 <option *ngFor="let tipoContato of listaComboTipoContato" [value]="tipoContato.codigo" >{{ tipoContato.nome }}</option>
                               </select>
@@ -272,14 +272,14 @@
                           <div class="col-md-12">
                             <div class="form-group col-md-6">
                               <label>Operadora</label>
-                              <select class="form-control" [(ngModel)]="paciente.planoSaude.operadora" #operadora="ngModel" name="operadora" id="operadora">
+                              <select class="form-control" [(ngModel)]="paciente.planoSaude.operadora.codigo" #codigo="ngModel" name="operadora" id="operadora">
                                 <option>Selecione...</option>
                                 <option *ngFor="let operadora of listaComboOperadora" [value]="operadora.codigo" >{{ operadora.nome }}</option>
                               </select>
                             </div>
                             <div class="form-group col-md-6">
                               <label>Tipo do Plano de Saúde</label>
-                              <select class="form-control" [(ngModel)]="paciente.planoSaude.tipoPlanoSaude" #tipoPlanoSaude="ngModel" name="tipoPlanoSaude" id="tipoPlanoSaude">
+                              <select class="form-control" [(ngModel)]="paciente.planoSaude.tipoPlanoSaude.codigo" #codigo="ngModel" name="tipoPlanoSaude" id="tipoPlanoSaude">
                                 <option selected>Selecione...</option>
                                 <option *ngFor="let tipoPlanoSaude of listaComboTipoPlanoSaude" [value]="tipoPlanoSaude.codigo" >{{ tipoPlanoSaude.nome }}</option>
                               </select>
@@ -332,6 +332,7 @@
           <table id="tabelaPacientes" class="table table-bordered table-striped">
             <thead>
             <tr>
+              <th>Código</th>
               <th>Nome</th>
               <th>Nome da Mãe</th>
               <th>RG</th>
@@ -340,159 +341,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>Trident</td>
-              <td>Internet
-                Explorer 4.0
-              </td>
-              <td>Win 95+</td>
-              <td> 4</td>
-              <td>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
-                </a>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-edit" title="Editar"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Trident</td>
-              <td>Internet
-                Explorer 5.0
-              </td>
-              <td>Win 95+</td>
-              <td>5</td>
-              <td>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
-                </a>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-edit" title="Editar"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Trident</td>
-              <td>Internet
-                Explorer 5.5
-              </td>
-              <td>Win 95+</td>
-              <td>5.5</td>
-              <td>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
-                </a>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-edit" title="Editar"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Trident</td>
-              <td>Internet
-                Explorer 6
-              </td>
-              <td>Win 98+</td>
-              <td>6</td>
-              <td>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
-                </a>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-edit" title="Editar"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Trident</td>
-              <td>Internet Explorer 7</td>
-              <td>Win XP SP2+</td>
-              <td>7</td>
-              <td>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
-                </a>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-edit" title="Editar"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Trident</td>
-              <td>AOL browser (AOL desktop)</td>
-              <td>Win XP</td>
-              <td>6</td>
-              <td>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
-                </a>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-edit" title="Editar"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Gecko</td>
-              <td>Firefox 1.0</td>
-              <td>Win 98+ / OSX.2+</td>
-              <td>1.7</td>
-              <td>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
-                </a>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-edit" title="Editar"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Gecko</td>
-              <td>Firefox 1.5</td>
-              <td>Win 98+ / OSX.2+</td>
-              <td>1.8</td>
-              <td>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
-                </a>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-edit" title="Editar"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Gecko</td>
-              <td>Firefox 2.0</td>
-              <td>Win 98+ / OSX.2+</td>
-              <td>1.8</td>
-              <td>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
-                </a>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-edit" title="Editar"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Gecko</td>
-              <td>Firefox 3.0</td>
-              <td>Win 2k+ / OSX.3+</td>
-              <td>1.9</td>
-              <td>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
-                </a>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-edit" title="Editar"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Other browsers</td>
-              <td>All others</td>
-              <td>-</td>
-              <td>-</td>
+              <tr *ngFor="let paciente of listaPacientes">
+              <td>{{ paciente.codigo }}</td>
+              <td>{{ paciente.nome }}</td>
+              <td>{{ paciente.nomeMae }}</td>
+              <td>{{ paciente.rg }}</td>
+              <td>{{ paciente.cpf }}</td>
               <td>
                 <a class="btn btn-app-sm">
                   <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
@@ -505,6 +359,7 @@
             </tbody>
             <tfoot>
             <tr>
+              <th>Código</th>
               <th>Nome</th>
               <th>Nome da Mãe</th>
               <th>RG</th>
