@@ -1,4 +1,4 @@
-import { PacienteService } from './service/tipoplanosaude.service';
+import { PacienteService } from './service/paciente.service';
 import { PacienteEBO } from './ebo/pacienteebo';
 import { TipoPlanoSaude } from './../../../model/tipoplanosaude.model';
 import { TipoPlanoSaudeService } from './../cadastro/tipoPlanoSaude/service/tipoplanosaude.service';
