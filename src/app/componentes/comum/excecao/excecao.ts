@@ -1,4 +1,4 @@
-import { Constantes } from './../constantes.enum';
+import { Constantes } from '../constantes';
 import { Injectable } from '@angular/core';
 import { Mensagem } from '../../../model/mensagem';
 
@@ -19,6 +19,10 @@ export class Excecao {
           this.mensagem.texto = error.mensagem + '\n';
         }
       });
+    } else if (erro.status === Constantes.ERRO_INTERNAL_SERVER) {
+      this.mensagem.titulo = 'Erro interno do Servidor';
+      this.mensagem.codigoTipo = 1;
+      this.mensagem.texto = 'Não foi possível salvar o registro.';
     }
     return this.mensagem;
   }

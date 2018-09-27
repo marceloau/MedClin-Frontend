@@ -6,7 +6,7 @@ export class PlanoSaudeEBO {
   codigoPlanoSaudePaciente: number;
   numeroCartao: string;
   nomeTitular: string;
-  validadeCartao: Date;
+  validadeCartao: any;
   operadora = new OperadoraEBO();
   tipoPlanoSaude = new TipoPlanoSaudeEBO();
   flagAtivo: string;

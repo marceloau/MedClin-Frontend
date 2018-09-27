@@ -12,12 +12,12 @@ export class PacienteEBO {
   naturalidade: string;
   nacionalidade: string;
   sexo: string;
-  dataNascimento: Date;
+  dataNascimento: any;
   informacaoAdicional: string;
   estadoCivil = new EstadoCivilEBO();
   enderecos = new Array<EnderecoEBO>();
   contatos = new Array<ContatoEBO>();
-  numeroCartaoSus: string;
+  numeroCartaoSUS: string;
   nomeProfissao: string;
   nomePai: string;
   nomeMae: string;

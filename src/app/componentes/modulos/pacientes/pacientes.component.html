@@ -18,15 +18,21 @@
       <div class="box">
         <!-- /.box-header -->
         <div class="box-body">
+            <div *ngIf="mensagem && mensagem.codigoTipo === 0" class="alert alert-success alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+              {{mensagem.texto}}
+            </div>
           <div class="input-group col-md-12">
             <div class="input-group col-md-6 pull-left">
-              <input type="text" class="form-control" placeholder="Informe o nome do paciente que deseja procurar.">
+              <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="paciente.nome"
+              #nome="ngModel" placeholder="Informe o nome do paciente que deseja procurar.">
               <span class="input-group-btn">
-                <button type="button" class="btn btn-primary btn-flat">Buscar</button>
+                <button type="button" (click)="buscar()" class="btn btn-primary btn-flat">Buscar</button>
               </span>
             </div>
             <div class="input-group col-md-6 pull-right">
-              <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modal-default">
+              <button type="button" id="btnNovoPaciente" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modal-paciente">
                   Novo Paciente
               </button>
             </div>
@@ -93,16 +99,21 @@
               </div>
             </div>
           </div>
-          <div class="modal fade" id="modal-default">
+          <div class="modal fade" id="modal-paciente">
             <div class="modal-dialog modal-lg">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <button type="button" id="fecharModal" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title">Novo Paciente</h4>
+                  <h4 class="modal-title">{{ paciente && !paciente.codigo ? 'Novo Paciente' : 'Atualizar Paciente' }}</h4>
                 </div>
                 <div class="modal-body">
                   <form #form="ngForm" role="form">
+                    <div *ngIf="mensagem && mensagem.codigoTipo === 1" class="alert alert-danger alert-dismissible">
+                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+                      {{mensagem.texto}}
+                    </div>
                     <div class="row">
                       <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#abaDadosPessoais">Dados Pessoais</a></li>
@@ -123,13 +134,9 @@
                             <!-- Date -->
                             <div class="form-group col-md-6">
                               <label>Data de Nascimento</label>
-                              <div class="input-group date">
-                                <div class="input-group-addon">
-                                  <i class="fa fa-calendar"></i>
-                                </div>
-                                <input type="text" class="form-control pull-right" [(ngModel)]="paciente.dataNascimento"
-                                #dataNascimento="ngModel" name="dataNascimento" id="datepicker">
-                              </div>
+                              <input type="date" class="form-control pull-right" [(ngModel)]="paciente.dataNascimento"
+                              #dataNascimento="ngModel"
+                              (ngModelChange)="paciente.dataNascimento = $event" name="dataNascimento" id="dataNascimento">
                               <!-- /.input group -->
                             </div>
                           </div>
@@ -296,7 +303,7 @@
                                 <div class="input-group-addon">
                                   <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control pull-right" [(ngModel)]="paciente.planoSaude.dataValidadeCartao" #dataValidadeCartao="ngModel" name="dataValidadeCartao" id="dataValidadeCartao">
+                                <input type="date" class="form-control pull-right" [(ngModel)]="paciente.planoSaude.dataValidadeCartao" #dataValidadeCartao="ngModel" name="dataValidadeCartao">
                               </div>
                             </div>
                           </div>
@@ -320,8 +327,8 @@
                   </form>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
-                  <button type="button" class="btn btn-primary" (click)="salvar()" >Salvar</button>
+                    <button type="button" class="btn btn-default pull-left" (click)="fecharModalPaciente()" data-dismiss="modal" id="closeModal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="salvarModal" (hidden)= 'habilitarEdicao' (click)="salvar()" >Salvar</button>
                 </div>
               </div>
               <!-- /.modal-content -->
@@ -348,12 +355,12 @@
               <td>{{ paciente.rg }}</td>
               <td>{{ paciente.cpf }}</td>
               <td>
-                <a class="btn btn-app-sm">
-                  <i class="fa fa-search" [routerLink]="['/perfil']" title="Visualizar Perfil"></i>
-                </a>
-                <a class="btn btn-app-sm">
+                <button type="button" (click)="verPerfil(paciente.codigo)" class="btn btn-default">
+                  <i class="fa fa-search" title="Visualizar Perfil"></i>
+                </button>
+                <button type="button" (click)="abrirModalAtualizar(paciente.codigo)" class="btn btn-default">
                   <i class="fa fa-edit" title="Editar"></i>
-                </a>
+                </button>
               </td>
             </tr>
             </tbody>
@@ -368,6 +375,7 @@
             </tr>
             </tfoot>
           </table>
+          <app-paginacao [page]="pagina" (paginationEvent)=changePage($event)></app-paginacao>
         </div>
         <!-- /.box-body -->
       </div>

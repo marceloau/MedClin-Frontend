@@ -24,7 +24,7 @@ export const ROUTES: Routes = [
     component: PacientesComponent
   },
   {
-    path: 'perfil',
+    path: 'perfil/:codigo',
     component: PerfilComponent
   },
   {

@@ -1,7 +1,7 @@
 import { Endereco } from './../../../model/endereco.model';
 import { DominioConverter } from './dominio.converter';
 import { EnderecoEBO } from './../ebo/enderecoebo';
-import { Constantes } from '../constantes.enum';
+import { Constantes } from '../constantes';
 import { Injectable } from '@angular/core';
 
 @Injectable({

@@ -27,6 +27,7 @@ import { TipoContatoConverter } from './componentes/modulos/cadastro/tipoContato
 import { ContatoConverter } from './componentes/comum/converter/contato.converter';
 import { OperadoraConverter } from './componentes/modulos/cadastro/operadora/converter/operadora.converter';
 import { TipoPlanoSaudeConverter } from './componentes/modulos/cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
+import { DatePipe } from '@angular/common';
 
 
 @NgModule({
@@ -53,7 +54,7 @@ import { TipoPlanoSaudeConverter } from './componentes/modulos/cadastro/tipoPlan
     routes
   ],
   providers: [SegurancaService, UsuarioService, DominioConverter, EnderecoConverter,
-    TipoContatoConverter, ContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter],
+    TipoContatoConverter, ContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,11 +1,13 @@
+import { DatePipe } from '@angular/common';
 import { EnderecoConverter } from './../../../comum/converter/endereco.converter';
 import { DominioConverter } from './../../../comum/converter/dominio.converter';
 import { Paciente } from './../../../../model/paciente.model';
 import { PacienteEBO } from '../ebo/pacienteebo';
 import { Injectable } from '@angular/core';
-import { Constantes } from '../../../comum/constantes.enum';
+import { Constantes } from '../../../comum/constantes';
 import { ContatoConverter } from '../../../comum/converter/contato.converter';
 import { PlanoSaudeConverter } from '../../../comum/converter/planosaude.converter';
+import { DataPipe } from '../../../comum/pipe/data.pipe';
 
 @Injectable({
   providedIn: 'root',
@@ -13,10 +15,10 @@ import { PlanoSaudeConverter } from '../../../comum/converter/planosaude.convert
 export class PacienteConverter {
 
   constructor(private dominioConverter: DominioConverter, private enderecoConverter: EnderecoConverter,
-    private contatoConverter: ContatoConverter, private planoSaudeConverter: PlanoSaudeConverter) { }
+    private contatoConverter: ContatoConverter, private planoSaudeConverter: PlanoSaudeConverter,
+    private datePipe: DatePipe) { }
 
   converterParaBackend(paciente: Paciente): PacienteEBO {
-
     const pacienteEBO = new PacienteEBO();
     pacienteEBO.codigoPessoa = paciente.codigo;
     pacienteEBO.nomePessoa = paciente.nome;
@@ -26,16 +28,27 @@ export class PacienteConverter {
     pacienteEBO.naturalidade = paciente.naturalidade;
     pacienteEBO.nacionalidade = paciente.nacionalidade;
     pacienteEBO.sexo = paciente.sexo;
-    pacienteEBO.dataNascimento = paciente.dataNascimento;
+    if (paciente.dataNascimento) {
+      pacienteEBO.dataNascimento = this.datePipe.transform(paciente.dataNascimento, Constantes.FORMATO_DATA_BACKEND);
+    }
     pacienteEBO.informacaoAdicional = paciente.informacaoAdicional;
-    pacienteEBO.estadoCivil = this.dominioConverter.converterParaBackend(paciente.estadoCivil, Constantes.DOMINIO_ESTADO_CIVIL);
+    if (paciente.estadoCivil && paciente.estadoCivil.codigo) {
+      pacienteEBO.estadoCivil = this.dominioConverter.converterParaBackend(paciente.estadoCivil, Constantes.DOMINIO_ESTADO_CIVIL);
+    }
     pacienteEBO.nomePai = paciente.nomePai;
     pacienteEBO.nomeMae = paciente.nomeMae;
     pacienteEBO.nomeProfissao = paciente.profissao;
-    pacienteEBO.enderecos.push(this.enderecoConverter.converterParaBackend(paciente.endereco));
-    pacienteEBO.contatos.push(this.contatoConverter.converterParaBackend(paciente.contato));
-    pacienteEBO.listaPlanoSaudePaciente.push(this.planoSaudeConverter.converterParaBackend(paciente.planoSaude));
-    pacienteEBO.numeroCartaoSus = paciente.numeroCartaoSUS;
+    if (paciente.endereco) {
+      pacienteEBO.enderecos.push(this.enderecoConverter.converterParaBackend(paciente.endereco));
+    }
+    if (paciente.contato && (paciente.contato.textoContato ||
+      (paciente.contato.tipoContato && paciente.contato.tipoContato.codigo))) {
+      pacienteEBO.contatos.push(this.contatoConverter.converterParaBackend(paciente.contato));
+    }
+    if (paciente.planoSaude) {
+      pacienteEBO.listaPlanoSaudePaciente.push(this.planoSaudeConverter.converterParaBackend(paciente.planoSaude));
+    }
+    pacienteEBO.numeroCartaoSUS = paciente.numeroCartaoSUS;
     pacienteEBO.flagAtivo = paciente.flagAtivo;
     pacienteEBO.dataCriacao = paciente.dataCriacao;
     pacienteEBO.dataUltimaAlteracao = paciente.dataUltimaAlteracao;
@@ -63,7 +76,9 @@ export class PacienteConverter {
     pacienteRetorno.naturalidade = pacienteEBO.naturalidade;
     pacienteRetorno.nacionalidade = pacienteEBO.nacionalidade;
     pacienteRetorno.sexo = pacienteEBO.sexo;
-    pacienteRetorno.dataNascimento = pacienteEBO.dataNascimento;
+    if (pacienteEBO.dataNascimento) {
+      pacienteRetorno.dataNascimento = this.datePipe.transform(pacienteEBO.dataNascimento, Constantes.FORMATO_DATA_FRONTEND);
+    }
     pacienteRetorno.informacaoAdicional = pacienteEBO.informacaoAdicional;
     pacienteRetorno.estadoCivil = this.dominioConverter.converterParaFrontend(pacienteEBO.estadoCivil, Constantes.DOMINIO_ESTADO_CIVIL);
     pacienteRetorno.nomePai = pacienteEBO.nomePai;
@@ -78,7 +93,7 @@ export class PacienteConverter {
     if (pacienteEBO.listaPlanoSaudePaciente) {
       pacienteRetorno.planoSaude = this.planoSaudeConverter.converterParaFrontend(pacienteEBO.listaPlanoSaudePaciente[0]);
     }
-    pacienteRetorno.numeroCartaoSUS = pacienteEBO.numeroCartaoSus;
+    pacienteRetorno.numeroCartaoSUS = pacienteEBO.numeroCartaoSUS;
     pacienteRetorno.flagAtivo = pacienteEBO.flagAtivo;
     pacienteRetorno.dataCriacao = pacienteEBO.dataCriacao;
     pacienteRetorno.dataUltimaAlteracao = pacienteEBO.dataUltimaAlteracao;

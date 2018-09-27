@@ -13,7 +13,7 @@ export class Paciente {
   naturalidade: string;
   nacionalidade: string;
   sexo: string;
-  dataNascimento: Date;
+  dataNascimento: any;
   informacaoAdicional: string;
   estadoCivil = new EstadoCivil();
   nomePai: string;

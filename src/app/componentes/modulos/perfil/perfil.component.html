@@ -21,9 +21,9 @@
         <div class="box-body box-profile">
           <img class="profile-user-img img-responsive img-circle" src="assets/dist/img/user4-128x128.jpg" alt="User profile picture">
 
-          <h3 class="profile-username text-center">Greysielle Nobrega</h3>
+          <h3 class="profile-username text-center">{{paciente.nome}}</h3>
 
-          <p class="text-muted text-center">Fisioterapeuta</p>
+          <p class="text-muted text-center">{{paciente.profissao}}</p>
 
           <ul class="list-group list-group-unbordered">
             <li class="list-group-item">
@@ -37,7 +37,7 @@
             </li>
           </ul>
 
-          <a class="btn btn-primary btn-block"><b>Editar Perfil</b></a>
+          <a class="btn btn-primary btn-block" (click)="modoEdicao()"><b>{{habilitarEdicao ? 'Salvar Alteração' : 'Editar Perfil'}}</b></a>
         </div>
         <!-- /.box-body -->
       </div>
@@ -99,7 +99,29 @@
         </ul>
         <div class="tab-content">
           <div id="abaDadosPessoais" class="tab-pane fade in active">
-            <div class="row">
+            <!-- Inicio Exibição das informações -->
+            <div class="row" [hidden]="habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Nome</label><p class="text-muted">{{paciente.nome}}</p>
+                  <label>Data de Nascimento</label><p class="text-muted">{{paciente.dataNascimento}}</p>
+                  <label>Sexo</label><p class="text-muted">{{paciente.sexo === 'M' ? 'Masculino' : 'Feminino'}}</p>
+                  <label>Nome do Pai</label><p class="text-muted">{{paciente.nomePai}}</p>
+                  <label>Nome da Mãe</label><p class="text-muted">{{paciente.nomeMae}}</p>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Estado Civil: </label><p class="text-muted">{{paciente.estadoCivil ? paciente.estadoCivil.nome : 'Não Informado'}}</p>
+                    <label>Profissão: </label><p class="text-muted">{{' ' + paciente.profissao}}</p>
+                    <label>RG: </label><p class="text-muted">{{paciente.rg}}</p>
+                    <label>Órgão Emissor: </label><p class="text-muted">{{paciente.orgaoEmissor}}</p>
+                    <label>Número Cartão SUS: </label><p class="text-muted">{{paciente.numeroCartaoSUS}}</p>
+                  </div>
+              </div>
+            </div>
+            <!-- Fim Exibição das informações -->
+
+            <!-- Inicio Edição das informações -->
+            <div class="row" [hidden]="!habilitarEdicao">
               <div class="col-md-12">
                 <div class="form-group col-md-6">
                   <label>Nome Completo</label>
@@ -180,6 +202,7 @@
                 </div>
               </div>
             </div>
+            <!-- Fim Edição das informações -->
           </div>
           <div id="abaEndereco" class="tab-pane fade">
             <div class="row">

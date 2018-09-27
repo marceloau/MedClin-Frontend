@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { PacienteService } from './service/paciente.service';
 import { PacienteEBO } from './ebo/pacienteebo';
 import { TipoPlanoSaude } from './../../../model/tipoplanosaude.model';
@@ -7,7 +8,7 @@ import { OperadoraService } from './../cadastro/operadora/service/operadora.serv
 import { TipoContato } from './../../../model/tipo-contato.model';
 import { Excecao } from './../../comum/excecao/excecao';
 import { DominioConverter } from './../../comum/converter/dominio.converter';
-import { Constantes } from './../../comum/constantes.enum';
+import { Constantes } from '../../comum/constantes';
 import { DominioService } from './../../comum/services/dominio.service';
 import { EstadoCivil } from './../../../model/estadocivil.model';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -35,10 +36,13 @@ export class PacientesComponent implements OnInit {
     private dominioService: DominioService, private dominioConverter: DominioConverter,
     private excecao: Excecao, private tipoContatoService: TipoContatoService, private tipoContatoConverter: TipoContatoConverter,
     private operadoraService: OperadoraService, private operadoraConverter: OperadoraConverter,
-    private tipoPlanoSaudeService: TipoPlanoSaudeService, private tipoPlanoSaudeConverter: TipoPlanoSaudeConverter) { }
+    private tipoPlanoSaudeService: TipoPlanoSaudeService, private tipoPlanoSaudeConverter: TipoPlanoSaudeConverter,
+    private router: Router) { }
 
   @ViewChild('form')
   form: NgForm;
+
+  habilitarEdicao = true;
 
   paciente = new Paciente();
   listaPacientes = new Array<Paciente>();
@@ -75,6 +79,7 @@ export class PacientesComponent implements OnInit {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
     this.inicializarCombos();
+    // this.inicializarCamposDate();
   }
 
   inicializarCombos() {
@@ -136,8 +141,15 @@ export class PacientesComponent implements OnInit {
     );
   }
 
+  inicializarCamposDate() {
+    const dataNascimento: any = $('#dataNascimento');
+    dataNascimento.datepicker({
+      autoclose: true,
+      format: 'dd/mm/yyyy',
+    });
+  }
+
   salvar() {
-    console.log(this.paciente);
     const objetoSalvar: PacienteEBO = this.pacienteConverter.converterParaBackend(this.paciente);
 
     if (this.paciente && !this.paciente.codigo) {
@@ -184,6 +196,61 @@ export class PacientesComponent implements OnInit {
 
   limparCampos() {
     this.paciente = new Paciente();
+  }
+
+  abrirModalAtualizar(codigo: number) {
+    this.habilitarEdicao = true;
+    this.buscarPorCodigo(codigo);
+    const modal: any = $('#btnNovoPaciente');
+    modal.click();
+  }
+
+  buscarPorCodigo(codigo: number) {
+    this.pacienteService.buscarPorCodigo(codigo).subscribe((paciente: PacienteEBO) => {
+      this.paciente = this.pacienteConverter.converterParaFrontend(paciente);
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+  }
+
+  fecharModalPaciente() {
+    this.limparCampos();
+    this.mensagem = new Mensagem();
+    const modal: any = $('#fecharModal');
+    modal.click();
+    this.habilitarEdicao = true;
+  }
+
+  verPerfil(codigo: number) {
+    this.router.navigate(['perfil', codigo]);
+  }
+
+  buscar() {
+    if (this.paciente.nome) {
+      this.pacienteService.buscarPorNome(0, 10, this.paciente.nome).subscribe((retorno: Pagina) => {
+        this.pagina = retorno;
+        this.listaPacientes = this.pacienteConverter.converterListaParaFrontend(retorno.content);
+      }, err => {
+        this.mensagem = this.excecao.exibirExcecao(err.error);
+      });
+    }
+  }
+
+  buscarPorNomePaginacao(pagina: number, total: number, nome: string) {
+    this.pacienteService.buscarPorNome(pagina, total, nome).subscribe((retorno: Pagina) => {
+      this.pagina = retorno;
+      this.listaPacientes = this.pacienteConverter.converterListaParaFrontend(retorno.content);
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+  }
+
+  changePage(event) {
+    if (this.paciente.nome) {
+      this.buscarPorNomePaginacao(event.page, event.size, this.paciente.nome);
+    } else {
+      this.listarRegistros(event.page, event.size);
+    }
   }
 
 }

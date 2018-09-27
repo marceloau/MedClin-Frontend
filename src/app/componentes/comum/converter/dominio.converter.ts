@@ -2,7 +2,7 @@ import { EstadoCivilEBO } from './../ebo/estadocivilebo';
 import { TipoLogradouro } from './../../../model/tipologradouro.model';
 import { Estado } from '../../../model/estado.model';
 import { EstadoCivil } from '../../../model/estadocivil.model';
-import { Constantes } from '../constantes.enum';
+import { Constantes } from '../constantes';
 import { Injectable } from '@angular/core';
 import { EstadoEBO } from '../ebo/estadoebo';
 import { TipoLogradouroEBO } from '../ebo/tipologradouroebo';
