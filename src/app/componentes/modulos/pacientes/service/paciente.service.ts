@@ -33,9 +33,33 @@ export class PacienteService {
   /**
    *
    */
-  buscarPorNome( pagina: number, total: number, nome: string ) {
-    const endereco = this.enderecoBase + this.pathBase + '/' + pagina + '/' + total + '/' + nome;
-    return this.http.get(endereco);
+  buscar( pagina: number, total: number, nome: string, nomeMae: string, numeroRg: string,
+    numeroCpf: string, numeroCartaoSUS: string, codigoTipoPlano: string, textoContato: string ) {
+    const endereco = this.enderecoBase + this.pathBase + '/buscarPaciente/' + pagina + '/' + total;
+    let params: any;
+    params = {};
+    if (nome) {
+      params.nomePaciente = nome;
+    }
+    if (nomeMae) {
+      params.nomeMae = nomeMae;
+    }
+    if (numeroRg) {
+      params.numeroRg = numeroRg;
+    }
+    if (numeroCpf) {
+      params.numeroCpf = numeroCpf;
+    }
+    if (numeroCartaoSUS) {
+      params.numeroCartaoSUS = numeroCartaoSUS;
+    }
+    if (codigoTipoPlano) {
+      params.codigoTipoPlano = codigoTipoPlano;
+    }
+    if (textoContato) {
+      params.textoContato = textoContato;
+    }
+    return this.http.get(endereco, {params});
   }
 
   /**

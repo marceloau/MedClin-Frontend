@@ -52,48 +52,40 @@
                 <div class="col-md-12">
                   <div class="form-group col-md-3">
                     <label>Nome da Mãe</label>
-                    <input type="text" class="form-control" id="nomeMãe" placeholder="Nome da Mãe">
+                    <input type="text" class="form-control" id="nomeMae" [(ngModel)]="paciente.nomeMae"
+                      #nomeMae="ngModel" name="nomeMae" placeholder="Nome da Mãe">
                   </div>
                   <div class="form-group col-md-3">
                     <label>RG</label>
-                    <input type="text" class="form-control" id="rg" placeholder="RG">
+                    <input type="text" class="form-control" [(ngModel)]="paciente.rg" #rg="ngModel" id="rg" name="rg" placeholder="Identidade">
                   </div>
                   <div class="form-group col-md-3">
                     <label>CPF</label>
-                    <input type="text" class="form-control" id="cpf" placeholder="CPF">
+                    <input type="text" class="form-control" [(ngModel)]="paciente.cpf" #cpf="ngModel" id="cpf" name="cpf" placeholder="CPF">
                   </div>
                   <div class="form-group col-md-3">
                     <label>Número Cartão</label>
-                    <input type="text" class="form-control" id="numeroCartao" placeholder="numeroCartao">
+                    <input type="text" class="form-control" [(ngModel)]="paciente.planoSaude.numeroCartao" #numeroCartao="ngModel" name="numeroCartao" id="numeroCartao" placeholder="Número Cartão">
                   </div>
                 </div>
                 <div class="col-md-12">
                   <div class="form-group col-md-3">
-                    <label>Convênio</label>
-                    <select class="form-control">
-                        <option>Selecione...</option>
-                        <option>option 2</option>
-                        <option>option 3</option>
-                        <option>option 4</option>
-                        <option>option 5</option>
+                    <label>Operadora</label>
+                    <select class="form-control" [(ngModel)]="paciente.planoSaude.operadora.codigo" #codigo="ngModel" name="operadora" id="operadora">
+                      <option>Selecione...</option>
+                      <option *ngFor="let operadora of listaComboOperadora" [value]="operadora.codigo" >{{ operadora.nome }}</option>
                     </select>
                   </div>
                   <div class="form-group col-md-3">
-                    <label>Plano de Saúde</label>
-                    <select class="form-control">
-                        <option>option 1</option>
-                        <option>option 2</option>
-                        <option>option 3</option>
-                        <option>option 4</option>
-                        <option>option 5</option>
+                    <label>Tipo do Plano de Saúde</label>
+                    <select class="form-control" [(ngModel)]="paciente.planoSaude.tipoPlanoSaude.codigo" #codigo="ngModel" name="tipoPlanoSaude" id="tipoPlanoSaude">
+                      <option selected>Selecione...</option>
+                      <option *ngFor="let tipoPlanoSaude of listaComboTipoPlanoSaude" [value]="tipoPlanoSaude.codigo" >{{ tipoPlanoSaude.nome }}</option>
                     </select>
                   </div>
                   <div class="form-group col-md-3">
-                    <label>Telefone</label>
-                    <input type="text" class="form-control" id="cpf" placeholder="CPF">
-                  </div>
-                  <div class="form-group col-md-3">
-                    <button type="button" class="btn btn-primary btn-block btn-lg">Buscar</button>
+                    <label>Contato</label>
+                    <input type="text" class="form-control" [(ngModel)]="paciente.contato.textoContato" #textoContato="ngModel" name="textoContato" id="textoContato" placeholder="Contato">
                   </div>
                 </div>
               </div>

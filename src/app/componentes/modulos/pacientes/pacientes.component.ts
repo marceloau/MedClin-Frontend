@@ -56,7 +56,7 @@ export class PacientesComponent implements OnInit {
   listaComboTipoContato = new Array<TipoContato>();
   listaComboOperadora = new Array<Operadora>();
   listaComboTipoPlanoSaude = new Array<TipoPlanoSaude>();
-// Fim lista de atributos dos compbos de paciente
+  // Fim lista de atributos dos compbos de paciente
 
   pagina: Pagina;
 
@@ -79,7 +79,6 @@ export class PacientesComponent implements OnInit {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
     this.inicializarCombos();
-    // this.inicializarCamposDate();
   }
 
   inicializarCombos() {
@@ -139,14 +138,6 @@ export class PacientesComponent implements OnInit {
         'autoWidth'   : false
       }), 0
     );
-  }
-
-  inicializarCamposDate() {
-    const dataNascimento: any = $('#dataNascimento');
-    dataNascimento.datepicker({
-      autoclose: true,
-      format: 'dd/mm/yyyy',
-    });
   }
 
   salvar() {
@@ -226,18 +217,24 @@ export class PacientesComponent implements OnInit {
   }
 
   buscar() {
-    if (this.paciente.nome) {
-      this.pacienteService.buscarPorNome(0, 10, this.paciente.nome).subscribe((retorno: Pagina) => {
-        this.pagina = retorno;
-        this.listaPacientes = this.pacienteConverter.converterListaParaFrontend(retorno.content);
-      }, err => {
-        this.mensagem = this.excecao.exibirExcecao(err.error);
-      });
-    }
+    const codigoTipoPlanoSaude = (this.paciente.planoSaude.tipoPlanoSaude.codigo ?
+      this.paciente.planoSaude.tipoPlanoSaude.codigo.toString() : undefined);
+    this.pacienteService.buscar(0, 10, this.paciente.nome, this.paciente.nomeMae, this.paciente.rg, this.paciente.cpf,
+      this.paciente.numeroCartaoSUS, codigoTipoPlanoSaude, this.paciente.contato.textoContato
+      ).subscribe((retorno: Pagina) => {
+      this.pagina = retorno;
+      this.listaPacientes = this.pacienteConverter.converterListaParaFrontend(retorno.content);
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
   }
 
   buscarPorNomePaginacao(pagina: number, total: number, nome: string) {
-    this.pacienteService.buscarPorNome(pagina, total, nome).subscribe((retorno: Pagina) => {
+    const codigoTipoPlanoSaude = (this.paciente.planoSaude.tipoPlanoSaude.codigo ?
+      this.paciente.planoSaude.tipoPlanoSaude.codigo.toString() : null);
+    this.pacienteService.buscar(0, 10, this.paciente.nome, this.paciente.nomeMae, this.paciente.rg, this.paciente.cpf,
+      this.paciente.numeroCartaoSUS, codigoTipoPlanoSaude, this.paciente.contato.textoContato
+      ).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       this.listaPacientes = this.pacienteConverter.converterListaParaFrontend(retorno.content);
     }, err => {

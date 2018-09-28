@@ -42,50 +42,19 @@
         <!-- /.box-body -->
       </div>
       <!-- /.box -->
-
-      <!-- About Me Box -->
-      <div class="box box-primary">
-        <div class="box-header with-border">
-          <h3 class="box-title">Informações do Paciente</h3>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body">
-          <strong><i class="fa fa-book margin-r-5"></i> Education</strong>
-
-          <p class="text-muted">
-            B.S. in Computer Science from the University of Tennessee at Knoxville
-          </p>
-
-          <hr>
-
-          <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
-
-          <p class="text-muted">Malibu, California</p>
-
-          <hr>
-
-          <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
-
-          <p>
-            <span class="label label-danger">UI Design</span>
-            <span class="label label-success">Coding</span>
-            <span class="label label-info">Javascript</span>
-            <span class="label label-warning">PHP</span>
-            <span class="label label-primary">Node.js</span>
-          </p>
-
-          <hr>
-
-          <strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
-
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
-        </div>
-        <!-- /.box-body -->
-      </div>
-      <!-- /.box -->
     </div>
     <!-- /.col -->
     <div class="col-md-9">
+      <div *ngIf="mensagem && mensagem.codigoTipo === 1" class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+        {{mensagem.texto}}
+      </div>
+      <div *ngIf="mensagem && mensagem.codigoTipo === 0" class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+        {{mensagem.texto}}
+      </div>
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
           <li class="active"><a data-toggle="tab" href="#abaDadosPessoais">Dados Pessoais</a></li>
@@ -100,7 +69,7 @@
         <div class="tab-content">
           <div id="abaDadosPessoais" class="tab-pane fade in active">
             <!-- Inicio Exibição das informações -->
-            <div class="row" [hidden]="habilitarEdicao">
+            <div class="row" *ngIf="!habilitarEdicao">
               <div class="col-md-12">
                 <div class="form-group col-md-6">
                   <label>Nome</label><p class="text-muted">{{paciente.nome}}</p>
@@ -110,236 +79,311 @@
                   <label>Nome da Mãe</label><p class="text-muted">{{paciente.nomeMae}}</p>
                 </div>
                 <div class="form-group col-md-6">
-                    <label>Estado Civil: </label><p class="text-muted">{{paciente.estadoCivil ? paciente.estadoCivil.nome : 'Não Informado'}}</p>
-                    <label>Profissão: </label><p class="text-muted">{{' ' + paciente.profissao}}</p>
-                    <label>RG: </label><p class="text-muted">{{paciente.rg}}</p>
-                    <label>Órgão Emissor: </label><p class="text-muted">{{paciente.orgaoEmissor}}</p>
-                    <label>Número Cartão SUS: </label><p class="text-muted">{{paciente.numeroCartaoSUS}}</p>
-                  </div>
+                  <label>Estado Civil: </label><p class="text-muted">{{paciente.estadoCivil ? paciente.estadoCivil.nome : 'Não Informado'}}</p>
+                  <label>Profissão: </label><p class="text-muted">{{' ' + paciente.profissao}}</p>
+                  <label>RG: </label><p class="text-muted">{{paciente.rg}}</p>
+                  <label>Órgão Emissor: </label><p class="text-muted">{{paciente.orgaoEmissor}}</p>
+                  <label>Número Cartão SUS: </label><p class="text-muted">{{paciente.numeroCartaoSUS}}</p>
+                </div>
               </div>
             </div>
             <!-- Fim Exibição das informações -->
 
             <!-- Inicio Edição das informações -->
-            <div class="row" [hidden]="!habilitarEdicao">
-              <div class="col-md-12">
-                <div class="form-group col-md-6">
-                  <label>Nome Completo</label>
-                  <input type="text" class="form-control" id="nome" placeholder="Nome">
-                </div>
-                <!-- Date -->
-                <div class="form-group col-md-6">
-                  <label>Data de Nascimento</label>
-                  <div class="input-group date">
-                    <div class="input-group-addon">
-                      <i class="fa fa-calendar"></i>
-                    </div>
-                    <input type="text" class="form-control pull-right" id="datepicker">
+            <div class="row" *ngIf="habilitarEdicao">
+                <div class="col-md-12">
+                  <div class="form-group col-md-6">
+                    <label>Nome Completo</label>
+                    <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="paciente.nome"
+                    #nome="ngModel" placeholder="Nome">
                   </div>
-                  <!-- /.input group -->
-                </div>
-              </div>
-              <div class="col-md-12">
-                <!-- radio -->
-                <div class="form-group col-md-6">
-                  <label>Sexo</label>
-                  <div class="radio">
-                    <label>
-                      <input type="radio" name="optionsRadios" id="optionsRadios1" id="sexo" value="M">
-                      Masculino
-                    </label>
-                    <label>
-                      <input type="radio" name="optionsRadios" id="optionsRadios2" id="sexo" value="f">
-                      Feminino
-                    </label>
+                  <!-- Date -->
+                  <div class="form-group col-md-6">
+                    <label>Data de Nascimento</label>
+                    <input type="date" class="form-control pull-right" [(ngModel)]="paciente.dataNascimento"
+                    #dataNascimento="ngModel"
+                    (ngModelChange)="paciente.dataNascimento = $event" name="dataNascimento" id="dataNascimento">
+                    <!-- /.input group -->
                   </div>
                 </div>
-                <div class="form-group col-md-6">
-                  <label>Nome do Pai</label>
-                  <input type="text" class="form-control" id="nomePai" placeholder="Nome do Pai">
+                <div class="col-md-12">
+                  <!-- radio -->
+                  <div class="form-group col-md-6">
+                    <label>Sexo</label>
+                    <select class="form-control" [(ngModel)]="paciente.sexo" #sexo="ngModel" id="sexo" name="sexo">
+                      <option>Selecione...</option>
+                      <option value="M">Masculino</option>
+                      <option value="F">Feminino</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Nome do Pai</label>
+                    <input type="text" class="form-control" id="nomePai" [(ngModel)]="paciente.nomePai" #nomePai="ngModel" name="nomePai" placeholder="Nome do Pai">
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-12">
-                <div class="form-group col-md-6">
-                  <label>Nome da Mãe</label>
-                  <input type="text" class="form-control" id="nomeMãe" placeholder="Nome da Mãe">
+                <div class="col-md-12">
+                  <div class="form-group col-md-6">
+                    <label>Nome da Mãe</label>
+                    <input type="text" class="form-control" id="nomeMae" [(ngModel)]="paciente.nomeMae"
+                    #nomeMae="ngModel" name="nomeMae" placeholder="Nome da Mãe">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Estado Civil</label>
+                    <select class="form-control" [(ngModel)]="paciente.estadoCivil.codigo" #codigo="ngModel" id="estadoCivil" name="estadoCivil">
+                      <option>Selecione...</option>
+                      <option *ngFor="let estadoCivil of listaComboEstadoCivil" [value]="estadoCivil.codigo" >{{ estadoCivil.nome }}</option>
+                    </select>
+                  </div>
                 </div>
-                <div class="form-group col-md-6">
-                  <label>Estado Civil</label>
-                  <select class="form-control">
-                    <option>option 1</option>
-                    <option>option 2</option>
-                    <option>option 3</option>
-                    <option>option 4</option>
-                    <option>option 5</option>
-                  </select>
+                <div class="col-md-12">
+                  <div class="form-group col-md-6">
+                    <label>Naturalidade</label>
+                    <input type="text" class="form-control" id="naturalidade" [(ngModel)]="paciente.naturalidade"
+                    #naturalidade="ngModel" name="naturalidade" placeholder="Naturalidade">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Nacionalidade</label>
+                    <input type="text" class="form-control" id="nacionalidade" [(ngModel)]="paciente.nacionalidade"
+                    #nacionalidade="ngModel" name="nacionalidade" placeholder="Nacionalidade">
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-12">
-                <div class="form-group col-md-6">
-                  <label>Profissão</label>
-                  <input type="text" class="form-control" id="profissao" placeholder="Profissão">
+                <div class="col-md-12">
+                  <div class="form-group col-md-6">
+                    <label>Profissão</label>
+                    <input type="text" class="form-control" [(ngModel)]="paciente.profissao" #profissao="ngModel" name="profissao" id="profissao" placeholder="Profissão">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>CPF</label>
+                    <input type="text" class="form-control" [(ngModel)]="paciente.cpf" #cpf="ngModel" id="cpf" name="cpf" placeholder="CPF">
+                  </div>
                 </div>
-                <div class="form-group col-md-6">
-                  <label>CPF</label>
-                  <input type="text" class="form-control" id="cpf" placeholder="CPF">
+                <div class="col-md-12">
+                  <div class="form-group col-md-6">
+                    <label>RG</label>
+                    <input type="text" class="form-control" [(ngModel)]="paciente.rg" #rg="ngModel" id="rg" name="rg" placeholder="Identidade">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Órgão Emissor</label>
+                    <input type="text" class="form-control" [(ngModel)]="paciente.orgaoEmissor" #orgaoEmissor="ngModel" name="orgaoEmissor" id="orgaoEmissor" placeholder="Órgão Emissor ">
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-12">
-                <div class="form-group col-md-6">
-                  <label>RG</label>
-                  <input type="text" class="form-control" id="rg" placeholder="Identidade">
+                <div class="col-md-12">
+                  <div class="form-group col-md-6">
+                    <label>Número Cartão SUS</label>
+                    <input type="text" class="form-control" [(ngModel)]="paciente.numeroCartaoSUS" #numeroCartaoSUS="ngModel" name="numeroCartaoSUS" id="numeroCartaoSUS" placeholder="Número do Cartão do SUS">
+                  </div>
                 </div>
-                <div class="form-group col-md-6">
-                  <label>Órgão Emissor</label>
-                  <input type="text" class="form-control" id="orgaoEmissor" placeholder="Órgão Emissor ">
-                </div>
-              </div>
-              <div class="col-md-12">
-                <div class="form-group col-md-6">
-                  <label>Número Cartão SUS</label>
-                  <input type="text" class="form-control" name="numeroCartaoSUS" id="numeroCartaoSUS" placeholder="Número do Cartão do SUS">
-                </div>
-              </div>
             </div>
             <!-- Fim Edição das informações -->
           </div>
           <div id="abaEndereco" class="tab-pane fade">
-            <div class="row">
+            <!-- Inicio Exibição das informações -->
+            <div class="row" *ngIf="!habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Tipo Logradouro</label><p class="text-muted">{{paciente.endereco && paciente.endereco.tipoLogradouro
+                    && paciente.endereco.tipoLogradouro.nome ? paciente.endereco.tipoLogradouro.nome : 'Não Informado'}}</p>
+
+                  <label>Número</label><p class="text-muted">{{paciente.endereco && paciente.endereco.numero ?
+                    paciente.endereco.numero : 'Não Informado'}}</p>
+
+                  <label>Bairro</label><p class="text-muted">{{paciente.endereco && paciente.endereco.bairro ?
+                    paciente.endereco.bairro : 'Não Informado'}}</p>
+
+                  <label>Estado</label><p class="text-muted">{{paciente.endereco && paciente.endereco.estado
+                    && paciente.endereco.estado.nomeEstado ? paciente.endereco.estado.nomeEstado : 'Não Informado'}}</p>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Logradouro</label><p class="text-muted">{{paciente.endereco && paciente.endereco.logradouro ?
+                    paciente.endereco.logradouro : 'Não Informado'}}</p>
+
+                  <label>Complemento</label><p class="text-muted">{{paciente.endereco && paciente.endereco.complemento ?
+                    paciente.endereco.complemento : 'Não Informado'}}</p>
+
+                  <label>Complemento</label><p class="text-muted">{{paciente.endereco && paciente.endereco.cidade ?
+                    paciente.endereco.cidade : 'Não Informado'}}</p>
+
+                  <label>Complemento</label><p class="text-muted">{{paciente.endereco && paciente.endereco.cep ?
+                    paciente.endereco.cep : 'Não Informado'}}</p>
+                </div>
+              </div>
+            </div>
+            <!-- Fim Exibição das informações -->
+
+            <!-- Inicio Edição das informações -->
+            <div class="row" *ngIf="habilitarEdicao">
               <div class="col-md-12">
                 <div class="form-group col-md-6">
                   <label>Tipo Logradouro</label>
-                  <select class="form-control">
-                    <option>option 1</option>
-                    <option>option 2</option>
-                    <option>option 3</option>
-                    <option>option 4</option>
-                    <option>option 5</option>
+                  <select class="form-control" [(ngModel)]="paciente.endereco.tipoLogradouro.codigo" #codigo="ngModel" name="tipoLogradouro">
+                    <option>Selecione...</option>
+                    <option *ngFor="let tipoLogradouro of listaComboTipoLogradouro" [value]="tipoLogradouro.codigo" >{{ tipoLogradouro.nome }}</option>
                   </select>
                 </div>
                 <div class="form-group col-md-6">
                   <label>Logradouro</label>
-                  <input type="text" class="form-control" id="logradouro" placeholder="Logradouro">
+                  <input type="text" class="form-control" [(ngModel)]="paciente.endereco.logradouro" #logradouro="ngModel" name="logradouro" id="logradouro" placeholder="Logradouro">
                 </div>
               </div>
 
               <div class="col-md-12">
                 <div class="form-group col-md-3">
                   <label>Número</label>
-                  <input type="text" class="form-control" id="numero">
+                  <input type="text" class="form-control" [(ngModel)]="paciente.endereco.numero" #numero="ngModel" name="numero" id="numero">
                 </div>
                 <div class="form-group col-md-9">
                   <label>Complemento</label>
-                  <input type="text" class="form-control" id="complemento" placeholder="Complemento">
+                  <input type="text" class="form-control" [(ngModel)]="paciente.endereco.complemento" #complemento="ngModel" name="complemento"  id="complemento" placeholder="Complemento">
                 </div>
               </div>
 
               <div class="col-md-12">
                 <div class="form-group col-md-6">
                   <label>Bairro</label>
-                  <input type="text" class="form-control" id="bairro" placeholder="Bairro">
+                  <input type="text" class="form-control" [(ngModel)]="paciente.endereco.bairro" #bairro="ngModel" name="bairro" id="bairro" placeholder="Bairro">
                 </div>
                 <div class="form-group col-md-6">
                   <label>Cidade</label>
-                  <input type="text" class="form-control" id="cidade" placeholder="Cidade">
+                  <input type="text" class="form-control" [(ngModel)]="paciente.endereco.cidade" #cidade="ngModel" name="cidade" id="cidade" placeholder="Cidade">
                 </div>
               </div>
 
               <div class="col-md-12">
                 <div class="form-group col-md-6">
                   <label>Estado</label>
-                  <select class="form-control">
-                    <option>option 1</option>
-                    <option>option 2</option>
-                    <option>option 3</option>
-                    <option>option 4</option>
-                    <option>option 5</option>
+                  <select class="form-control" [(ngModel)]="paciente.endereco.estado.codigo" #codigo="ngModel" name="estado">
+                    <option>Selecione...</option>
+                    <option *ngFor="let estado of listaComboEstado" [value]="estado.codigo" >{{ estado.nomeEstado }}</option>
                   </select>
                 </div>
                 <div class="form-group col-md-6">
                   <label>CEP</label>
-                  <input type="text" class="form-control" id="cep" placeholder="Cep">
+                  <input type="text" class="form-control" [(ngModel)]="paciente.endereco.cep" #cep="ngModel" name="cep" id="cep" placeholder="Cep">
                 </div>
               </div>
             </div>
+            <!-- Fim Edição das informações -->
           </div>
           <div id="abaContato" class="tab-pane fade">
-            <div class="row">
+            <!-- Inicio Exibição das informações -->
+            <div class="row" *ngIf="!habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Tipo Contato</label><p class="text-muted">{{paciente.contato && paciente.contato.tipoContato
+                    && paciente.contato.tipoContato.nome ? paciente.contato.tipoContato.nome : 'Não Informado'}}</p>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Contato</label><p class="text-muted">{{paciente.contato && paciente.contato.textoContato ?
+                    paciente.contato.textoContato : 'Não Informado'}}</p>
+                </div>
+              </div>
+            </div>
+            <!-- Fim Exibição das informações -->
+
+            <!-- Inicio Edição das informações -->
+            <div class="row" *ngIf="habilitarEdicao">
               <div class="col-md-12">
                 <div class="form-group col-md-6">
                   <label>Tipo Contato</label>
-                  <select class="form-control">
-                    <option>E-mail</option>
-                    <option>Telefone Residencial</option>
-                    <option>Telefone Celular</option>
-                    <option>Telefone Comercial</option>
-                    <option>WhatsApp</option>
+                  <select class="form-control" [(ngModel)]="paciente.contato.tipoContato.codigo" #codigo="ngModel" name="tipoContato">
+                    <option>Selecione...</option>
+                    <option *ngFor="let tipoContato of listaComboTipoContato" [value]="tipoContato.codigo" >{{ tipoContato.nome }}</option>
                   </select>
                 </div>
                 <!-- #ToDo Fazer uma regra para exibir o campo de acordo com o tipo do contato selecionado -->
                 <div class="form-group col-md-6">
                   <label>Contato</label>
-                  <input type="text" class="form-control" id="email" placeholder="E-mail">
+                  <input type="text" class="form-control" [(ngModel)]="paciente.contato.textoContato" #textoContato="ngModel" name="textoContato" id="textoContato" placeholder="Contato">
                 </div>
               </div>
             </div>
+            <!-- Fim Edição das informações -->
           </div>
           <div id="abaPlanoSaude" class="tab-pane fade">
-            <div class="row">
+            <!-- Inicio Exibição das informações -->
+            <div class="row" *ngIf="!habilitarEdicao">
               <div class="col-md-12">
                 <div class="form-group col-md-6">
-                  <label>Plano de Saúde</label>
-                  <select class="form-control">
-                      <option>option 1</option>
-                      <option>option 2</option>
-                      <option>option 3</option>
-                      <option>option 4</option>
-                      <option>option 5</option>
+                  <label>Plano de Saúde</label><p class="text-muted">{{paciente.planoSaude && paciente.planoSaude.operadora
+                    && paciente.planoSaude.operadora.nome ? paciente.planoSaude.operadora.nome : 'Não Informado'}}</p>
+                  <label>Validade do Cartão</label><p class="text-muted">{{paciente.planoSaude && paciente.planoSaude.dataValidadeCartao ?
+                    paciente.planoSaude.dataValidadeCartao : 'Não Informado'}}</p>
+                  <label>Nome do Titular</label><p class="text-muted">{{paciente.planoSaude && paciente.planoSaude.nomeTitular ?
+                    paciente.planoSaude.nomeTitular : 'Não Informado'}}</p>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Tipo</label><p class="text-muted">{{paciente.contato && paciente.planoSaude.tipoPlanoSaude
+                    &&  paciente.planoSaude.tipoPlanoSaude.nome ? paciente.planoSaude.tipoPlanoSaude.nome : 'Não Informado'}}</p>
+                    <label>Número Cartão</label><p class="text-muted">{{paciente.contato && paciente.planoSaude.numeroCartao ?
+                      paciente.planoSaude.numeroCartao : 'Não Informado'}}</p>
+                </div>
+              </div>
+            </div>
+            <!-- Fim Exibição das informações -->
+
+            <!-- Inicio Edição das informações -->
+            <div class="row" *ngIf="habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Operadora</label>
+                  <select class="form-control" [(ngModel)]="paciente.planoSaude.operadora.codigo" #codigo="ngModel" name="operadora" id="operadora">
+                    <option>Selecione...</option>
+                    <option *ngFor="let operadora of listaComboOperadora" [value]="operadora.codigo" >{{ operadora.nome }}</option>
                   </select>
                 </div>
                 <div class="form-group col-md-6">
-                  <label>Tipo</label>
-                  <select class="form-control">
-                      <option>option 1</option>
-                      <option>option 2</option>
-                      <option>option 3</option>
-                      <option>option 4</option>
-                      <option>option 5</option>
+                  <label>Tipo do Plano de Saúde</label>
+                  <select class="form-control" [(ngModel)]="paciente.planoSaude.tipoPlanoSaude.codigo" #codigo="ngModel" name="tipoPlanoSaude" id="tipoPlanoSaude">
+                    <option selected>Selecione...</option>
+                    <option *ngFor="let tipoPlanoSaude of listaComboTipoPlanoSaude" [value]="tipoPlanoSaude.codigo" >{{ tipoPlanoSaude.nome }}</option>
                   </select>
                 </div>
               </div>
               <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Número Cartão</label>
+                  <input type="text" class="form-control" [(ngModel)]="paciente.planoSaude.numeroCartao" #numeroCartao="ngModel" name="numeroCartao" id="numeroCartao" placeholder="Número Cartão">
+                </div>
                 <div class="form-group col-md-6">
                   <label>Validade do Cartão</label>
                   <div class="input-group date">
                     <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control pull-right" id="datepicker">
+                    <input type="date" class="form-control pull-right" [(ngModel)]="paciente.planoSaude.dataValidadeCartao" #dataValidadeCartao="ngModel" name="dataValidadeCartao">
                   </div>
-                </div>
-                <div class="form-group col-md-6">
-                  <label>Número Cartão</label>
-                  <input type="text" class="form-control" id="numeroCartao" placeholder="Número Cartão">
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="form-group col-md-6">
                   <label>Nome do Titular</label>
-                  <input type="text" class="form-control" id="email" placeholder="E-mail">
+                  <input type="text" class="form-control" [(ngModel)]="paciente.planoSaude.nomeTitular" #nomeTitular="ngModel" name="nomeTitular" id="nomeTitular" placeholder="Nome do Titular">
                 </div>
               </div>
             </div>
+            <!-- Fim Edição das informações -->
           </div>
           <div id="abaInformacaoAdicional" class="tab-pane fade">
-            <div class="row">
+            <!-- Inicio Exibição das informações -->
+            <div class="row" *ngIf="!habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-12">
+                  <p class="text-muted">{{paciente.informacaoAdicional ? paciente.informacaoAdicional : 'Não Informado'}}</p>
+                </div>
+              </div>
+            </div>
+            <!-- Fim Exibição das informações -->
+
+            <!-- Inicio Edição das informações -->
+            <div class="row" *ngIf="habilitarEdicao">
               <div class="col-md-12">
                 <div class="box-body pad">
-                  <textarea id="editor1" name="editor1" rows="10" cols="80">
+                  <textarea id="informacaoAdicional" [(ngModel)]="paciente.informacaoAdicional" #informacaoAdicional="ngModel" name="informacaoAdicional" rows="10" cols="138">
                   </textarea>
                 </div>
               </div>
             </div>
+            <!-- Fim Edição das informações -->
           </div>
           <div id="historicoClinico" class="tab-pane fade">
             <!-- The timeline -->
