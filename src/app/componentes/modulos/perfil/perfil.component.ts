@@ -135,6 +135,7 @@ export class PerfilComponent implements OnInit {
       this.mensagem.titulo = 'Sucesso';
       this.mensagem.texto = 'Paciente atualizado com sucesso.';
       this.habilitarEdicao = false;
+      this.paciente = this.pacienteConverter.converterParaFrontend(objetoSalvo);
     }, err => {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });

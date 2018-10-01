@@ -1,8 +1,9 @@
+import { EnderecoPessoaPK } from './enderecopessoapk';
 import { Estado } from './estado.model';
 import { TipoLogradouro } from './tipologradouro.model';
 
 export class Endereco {
-  codigo: number;
+  enderecoPessoaPK = new EnderecoPessoaPK;
   bairro: string;
   cep: string;
   cidade: string;

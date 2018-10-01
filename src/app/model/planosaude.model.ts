@@ -1,11 +1,12 @@
+import { PlanoSaudePK } from './planosaudepk';
 import { Operadora } from './operadora.model';
 import { TipoPlanoSaude } from './tipoplanosaude.model';
 
 
 export class PlanoSaude {
-  codigo: number;
+  planoSaudePacientePK = new PlanoSaudePK();
   numeroCartao: string;
-  dataValidadeCartao: Date;
+  dataValidadeCartao: any;
   nomeTitular: string;
   operadora = new Operadora();
   tipoPlanoSaude = new TipoPlanoSaude();

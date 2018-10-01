@@ -1,7 +1,8 @@
 import { TipoContatoEBO } from '../../modulos/cadastro/tipoContato/ebo/tipocontatoebo';
+import { ContatoEBOPK } from './contatoebopk';
 export class ContatoEBO {
 
-  codigoContatoPessoa: number;
+  contatoPessoaPK = new ContatoEBOPK;
   textoContato: string;
   tipoContato = new TipoContatoEBO();
   flagAtivo: string;

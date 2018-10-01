@@ -34,18 +34,24 @@ export class PacienteConverter {
     pacienteEBO.informacaoAdicional = paciente.informacaoAdicional;
     if (paciente.estadoCivil && paciente.estadoCivil.codigo) {
       pacienteEBO.estadoCivil = this.dominioConverter.converterParaBackend(paciente.estadoCivil, Constantes.DOMINIO_ESTADO_CIVIL);
+    } else {
+      pacienteEBO.estadoCivil = undefined;
     }
     pacienteEBO.nomePai = paciente.nomePai;
     pacienteEBO.nomeMae = paciente.nomeMae;
     pacienteEBO.nomeProfissao = paciente.profissao;
-    if (paciente.endereco) {
+    if (paciente.endereco && ((paciente.endereco.enderecoPessoaPK && paciente.endereco.enderecoPessoaPK.codigoPessoa)
+    || paciente.endereco.bairro || paciente.endereco.cep
+      || paciente.endereco.logradouro)) {
       pacienteEBO.enderecos.push(this.enderecoConverter.converterParaBackend(paciente.endereco));
     }
     if (paciente.contato && (paciente.contato.textoContato ||
       (paciente.contato.tipoContato && paciente.contato.tipoContato.codigo))) {
       pacienteEBO.contatos.push(this.contatoConverter.converterParaBackend(paciente.contato));
     }
-    if (paciente.planoSaude) {
+    if (paciente.planoSaude && ((paciente.planoSaude.planoSaudePacientePK && paciente.planoSaude.planoSaudePacientePK.codigoPessoa)
+      || paciente.planoSaude.nomeTitular || paciente.planoSaude.numeroCartao ||
+      (paciente.planoSaude.operadora && paciente.planoSaude.operadora.codigo))) {
       pacienteEBO.listaPlanoSaudePaciente.push(this.planoSaudeConverter.converterParaBackend(paciente.planoSaude));
     }
     pacienteEBO.numeroCartaoSUS = paciente.numeroCartaoSUS;

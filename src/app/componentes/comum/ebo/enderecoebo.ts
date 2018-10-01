@@ -1,8 +1,9 @@
+import { EnderecoPessoaPK } from './../../../model/enderecopessoapk';
 import { EstadoEBO } from './estadoebo';
 import { TipoLogradouroEBO } from './tipologradouroebo';
 
 export class EnderecoEBO {
-  codigoEnderecoPessoa: number;
+  enderecoPessoaPK = new EnderecoPessoaPK;
   nomeBairro: string;
   numeroCep: string;
   nomeCidade: string;

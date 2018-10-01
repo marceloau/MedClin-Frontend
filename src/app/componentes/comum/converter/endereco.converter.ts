@@ -22,7 +22,8 @@ export class EnderecoConverter {
   converterParaFrontend(objetoEBO: EnderecoEBO): Endereco {
 
     const objetoRetorno = new Endereco();
-    objetoRetorno.codigo = objetoEBO.codigoEnderecoPessoa;
+    objetoRetorno.enderecoPessoaPK.codigoEnderecoPessoa = objetoEBO.enderecoPessoaPK.codigoEnderecoPessoa;
+    objetoRetorno.enderecoPessoaPK.codigoPessoa = objetoEBO.enderecoPessoaPK.codigoPessoa;
     objetoRetorno.bairro = objetoEBO.nomeBairro;
     objetoRetorno.cep = objetoEBO.numeroCep;
     objetoRetorno.cidade = objetoEBO.nomeCidade;
@@ -43,7 +44,12 @@ export class EnderecoConverter {
   converterParaBackend(objeto: Endereco): EnderecoEBO {
 
     const objetoRetornoEBO = new EnderecoEBO();
-    objetoRetornoEBO.codigoEnderecoPessoa = objeto.codigo;
+    if (objetoRetornoEBO.enderecoPessoaPK.codigoEnderecoPessoa || objetoRetornoEBO.enderecoPessoaPK.codigoPessoa) {
+      objetoRetornoEBO.enderecoPessoaPK.codigoEnderecoPessoa = objeto.enderecoPessoaPK.codigoEnderecoPessoa;
+      objetoRetornoEBO.enderecoPessoaPK.codigoPessoa = objeto.enderecoPessoaPK.codigoPessoa;
+    } else {
+      objetoRetornoEBO.enderecoPessoaPK = undefined;
+    }
     objetoRetornoEBO.nomeBairro = objeto.bairro;
     objetoRetornoEBO.numeroCep = objeto.cep;
     objetoRetornoEBO.nomeCidade = objeto.cidade;

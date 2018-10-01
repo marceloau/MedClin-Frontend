@@ -1,7 +1,8 @@
+import { ContatoPessoaPK } from './contatopessoapk';
 import { TipoContato } from './tipo-contato.model';
 export class Contato {
 
-  codigo: number;
+  contatoPessoaPK = new ContatoPessoaPK;
   tipoContato = new TipoContato();
   textoContato: string;
   flagAtivo: string;

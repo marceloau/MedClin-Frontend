@@ -1,7 +1,7 @@
 import { ContatoEBO } from './../../../comum/ebo/contatoebo';
 import { EstadoCivilEBO } from './../../../comum/ebo/estadocivilebo';
 import { EnderecoEBO } from './../../../comum/ebo/enderecoebo';
-import { PlanoSaudeEBO } from '../../../comum/ebo/planosaudeEBO';
+import { PlanoSaudeEBO } from '../../../comum/ebo/planosaudeebo';
 export class PacienteEBO {
 
   codigoPessoa: number;

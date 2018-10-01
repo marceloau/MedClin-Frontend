@@ -3,6 +3,7 @@ import { DominioConverter } from './dominio.converter';
 import { Injectable } from '@angular/core';
 import { ContatoEBO } from '../ebo/contatoebo';
 import { Contato } from '../../../model/contato.model';
+import { ContatoEBOPK } from '../ebo/contatoebopk';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,12 @@ export class ContatoConverter {
   converterParaBackend(contato: Contato): ContatoEBO {
     const contatoEBO = new ContatoEBO();
 
-    contatoEBO.codigoContatoPessoa = contato.codigo;
+    if (contato.contatoPessoaPK.codigoContatoPessoa || contato.contatoPessoaPK.codigoPessoa) {
+      contatoEBO.contatoPessoaPK.codigoContatoPessoa = contato.contatoPessoaPK.codigoContatoPessoa;
+      contatoEBO.contatoPessoaPK.codigoPessoa = contato.contatoPessoaPK.codigoPessoa;
+    } else {
+      contatoEBO.contatoPessoaPK = undefined;
+    }
     contatoEBO.tipoContato = this.tipoContatoConverter.converterParaBackend(contato.tipoContato);
     contatoEBO.textoContato = contato.textoContato;
     contatoEBO.flagAtivo = contato.flagAtivo;
@@ -34,7 +40,8 @@ export class ContatoConverter {
   converterParaFrontend(objetoEBO: ContatoEBO): Contato {
 
     const objetoRetorno = new Contato();
-    objetoRetorno.codigo = objetoEBO.codigoContatoPessoa;
+    objetoRetorno.contatoPessoaPK.codigoContatoPessoa = objetoEBO.contatoPessoaPK.codigoContatoPessoa;
+    objetoRetorno.contatoPessoaPK.codigoPessoa = objetoEBO.contatoPessoaPK.codigoPessoa;
     objetoRetorno.tipoContato = this.tipoContatoConverter.converterParaFrontend(objetoEBO.tipoContato);
     objetoRetorno.textoContato = objetoEBO.textoContato;
     objetoRetorno.flagAtivo = objetoEBO.flagAtivo;
