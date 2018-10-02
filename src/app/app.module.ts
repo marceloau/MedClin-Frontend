@@ -1,3 +1,4 @@
+import { PerfilMedicoComponent } from './componentes/modulos/medicos/perfil/perfilmedico.component';
 import { EspecialidadeConverter } from './componentes/modulos/cadastro/especialidade/converter/especialidade.converter';
 import { DominioConverter } from './componentes/comum/converter/dominio.converter';
 import { TipoContatoComponent } from './componentes/modulos/cadastro/tipoContato/tipocontato.component';
@@ -48,7 +49,8 @@ import { MedicoComponent } from './componentes/modulos/medicos/medico.component'
     OperadoraComponent,
     TipoPlanoSaudeComponent,
     TipoContatoComponent,
-    MedicoComponent
+    MedicoComponent,
+    PerfilMedicoComponent
   ],
   imports: [
     BrowserModule,

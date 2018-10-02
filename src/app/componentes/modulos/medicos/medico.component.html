@@ -140,18 +140,18 @@
                           </div>
                           <div class="col-md-12">
                             <div class="form-group col-md-6">
-                              <label>CPF</label>
-                              <input type="text" class="form-control" [(ngModel)]="medico.cpf" #cpf="ngModel" id="cpf" name="cpf" placeholder="CPF">
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group col-md-6">
                               <label>RG</label>
                               <input type="text" class="form-control" [(ngModel)]="medico.rg" #rg="ngModel" id="rg" name="rg" placeholder="Identidade">
                             </div>
                             <div class="form-group col-md-6">
                               <label>Órgão Emissor</label>
                               <input type="text" class="form-control" [(ngModel)]="medico.orgaoEmissor" #orgaoEmissor="ngModel" name="orgaoEmissor" id="orgaoEmissor" placeholder="Órgão Emissor ">
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>CPF</label>
+                              <input type="text" class="form-control" [(ngModel)]="medico.cpf" #cpf="ngModel" id="cpf" name="cpf" placeholder="CPF">
                             </div>
                           </div>
                         </div>
@@ -259,7 +259,7 @@
               <tr *ngFor="let medico of listaMedicos">
               <td>{{ medico.codigo }}</td>
               <td>{{ medico.nome }}</td>
-              <td>{{ medico.estadoCivil }}</td>
+              <td>{{ medico.estadoCivil.nome }}</td>
               <td>{{ medico.rg }}</td>
               <td>{{ medico.cpf }}</td>
               <td>

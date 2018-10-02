@@ -213,7 +213,7 @@ export class PacientesComponent implements OnInit {
   }
 
   verPerfil(codigo: number) {
-    this.router.navigate(['perfil', codigo]);
+    this.router.navigate(['paciente/perfil', codigo]);
   }
 
   buscar() {

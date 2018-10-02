@@ -1,0 +1,588 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Perfil do Médico
+  </h1>
+  <ol class="breadcrumb">
+    <li><a [routerLink]="['/']"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a [routerLink]="['/configuracoes/medicos']">Médicos</a></li>
+    <li class="active">Perfil</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+  <div class="row">
+    <div class="col-md-3">
+
+      <!-- Profile Image -->
+      <div class="box box-primary">
+        <div class="box-body box-profile">
+          <img class="profile-user-img img-responsive img-circle" src="assets/dist/img/user4-128x128.jpg" alt="User profile picture">
+
+          <h3 class="profile-username text-center">{{medico.nome}}</h3>
+
+          <p class="text-muted text-center">{{medico.numeroCRM}}</p>
+
+          <ul class="list-group list-group-unbordered">
+            <li class="list-group-item">
+              <b>Consultas</b> <a class="pull-right">1,322</a>
+            </li>
+            <li class="list-group-item">
+              <b>Exames</b> <a class="pull-right">543</a>
+            </li>
+            <li class="list-group-item">
+              <b>Medicamentos</b> <a class="pull-right">13,287</a>
+            </li>
+          </ul>
+
+          <a class="btn btn-primary btn-block" (click)="modoEdicao()"><b>{{habilitarEdicao ? 'Salvar Alteração' : 'Editar Perfil'}}</b></a>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+      <div *ngIf="mensagem && mensagem.codigoTipo === 1" class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+        {{mensagem.texto}}
+      </div>
+      <div *ngIf="mensagem && mensagem.codigoTipo === 0" class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+        {{mensagem.texto}}
+      </div>
+      <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#abaDadosPessoais">Dados Pessoais</a></li>
+          <li><a data-toggle="tab" href="#abaEndereco">Endereço</a></li>
+          <li><a data-toggle="tab" href="#abaContato">Contato</a></li>
+          <li><a data-toggle="tab" href="#abaInformacaoAdicional">Informação Adicional</a></li>
+        </ul>
+        <div class="tab-content">
+          <div id="abaDadosPessoais" class="tab-pane fade in active">
+            <!-- Inicio Exibição das informações -->
+            <div class="row" *ngIf="!habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Nome</label><p class="text-muted">{{medico.nome}}</p>
+                  <label>Data de Nascimento</label><p class="text-muted">{{medico.dataNascimento}}</p>
+                  <label>Sexo</label><p class="text-muted">{{medico.sexo === 'M' ? 'Masculino' : 'Feminino'}}</p>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Estado Civil: </label><p class="text-muted">{{medico.estadoCivil ? medico.estadoCivil.nome : 'Não Informado'}}</p>
+                  <label>RG: </label><p class="text-muted">{{medico.rg}}</p>
+                  <label>Órgão Emissor: </label><p class="text-muted">{{medico.orgaoEmissor}}</p>
+                </div>
+              </div>
+            </div>
+            <!-- Fim Exibição das informações -->
+
+            <!-- Inicio Edição das informações -->
+            <div class="row" *ngIf="habilitarEdicao">
+                <div class="col-md-12">
+                  <div class="form-group col-md-6">
+                    <label>Nome Completo</label>
+                    <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="medico.nome"
+                    #nome="ngModel" placeholder="Nome">
+                  </div>
+                  <!-- Date -->
+                  <div class="form-group col-md-6">
+                    <label>Data de Nascimento</label>
+                    <input type="date" class="form-control pull-right" [(ngModel)]="medico.dataNascimento"
+                    #dataNascimento="ngModel"
+                    (ngModelChange)="medico.dataNascimento = $event" name="dataNascimento" id="dataNascimento">
+                    <!-- /.input group -->
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <!-- radio -->
+                  <div class="form-group col-md-6">
+                    <label>Sexo</label>
+                    <select class="form-control" [(ngModel)]="medico.sexo" #sexo="ngModel" id="sexo" name="sexo">
+                      <option>Selecione...</option>
+                      <option value="M">Masculino</option>
+                      <option value="F">Feminino</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Estado Civil</label>
+                    <select class="form-control" [(ngModel)]="medico.estadoCivil.codigo" #codigo="ngModel" id="estadoCivil" name="estadoCivil">
+                      <option>Selecione...</option>
+                      <option *ngFor="let estadoCivil of listaComboEstadoCivil" [value]="estadoCivil.codigo" >{{ estadoCivil.nome }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group col-md-6">
+                    <label>Naturalidade</label>
+                    <input type="text" class="form-control" id="naturalidade" [(ngModel)]="medico.naturalidade"
+                    #naturalidade="ngModel" name="naturalidade" placeholder="Naturalidade">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Nacionalidade</label>
+                    <input type="text" class="form-control" id="nacionalidade" [(ngModel)]="medico.nacionalidade"
+                    #nacionalidade="ngModel" name="nacionalidade" placeholder="Nacionalidade">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group col-md-6">
+                    <label>RG</label>
+                    <input type="text" class="form-control" [(ngModel)]="medico.rg" #rg="ngModel" id="rg" name="rg" placeholder="Identidade">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Órgão Emissor</label>
+                    <input type="text" class="form-control" [(ngModel)]="medico.orgaoEmissor" #orgaoEmissor="ngModel" name="orgaoEmissor" id="orgaoEmissor" placeholder="Órgão Emissor ">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group col-md-6">
+                    <label>CPF</label>
+                    <input type="text" class="form-control" [(ngModel)]="medico.cpf" #cpf="ngModel" id="cpf" name="cpf" placeholder="CPF">
+                  </div>
+                </div>
+            </div>
+            <!-- Fim Edição das informações -->
+          </div>
+          <div id="abaEndereco" class="tab-pane fade">
+            <!-- Inicio Exibição das informações -->
+            <div class="row" *ngIf="!habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Tipo Logradouro</label><p class="text-muted">{{medico.endereco && medico.endereco.tipoLogradouro
+                    && medico.endereco.tipoLogradouro.nome ? medico.endereco.tipoLogradouro.nome : 'Não Informado'}}</p>
+
+                  <label>Número</label><p class="text-muted">{{medico.endereco && medico.endereco.numero ?
+                    medico.endereco.numero : 'Não Informado'}}</p>
+
+                  <label>Bairro</label><p class="text-muted">{{medico.endereco && medico.endereco.bairro ?
+                    medico.endereco.bairro : 'Não Informado'}}</p>
+
+                  <label>Estado</label><p class="text-muted">{{medico.endereco && medico.endereco.estado
+                    && medico.endereco.estado.nomeEstado ? medico.endereco.estado.nomeEstado : 'Não Informado'}}</p>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Logradouro</label><p class="text-muted">{{medico.endereco && medico.endereco.logradouro ?
+                    medico.endereco.logradouro : 'Não Informado'}}</p>
+
+                  <label>Complemento</label><p class="text-muted">{{medico.endereco && medico.endereco.complemento ?
+                    medico.endereco.complemento : 'Não Informado'}}</p>
+
+                  <label>Complemento</label><p class="text-muted">{{medico.endereco && medico.endereco.cidade ?
+                    medico.endereco.cidade : 'Não Informado'}}</p>
+
+                  <label>Complemento</label><p class="text-muted">{{medico.endereco && medico.endereco.cep ?
+                    medico.endereco.cep : 'Não Informado'}}</p>
+                </div>
+              </div>
+            </div>
+            <!-- Fim Exibição das informações -->
+
+            <!-- Inicio Edição das informações -->
+            <div class="row" *ngIf="habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Tipo Logradouro</label>
+                  <select class="form-control" [(ngModel)]="medico.endereco.tipoLogradouro.codigo" #codigo="ngModel" name="tipoLogradouro">
+                    <option>Selecione...</option>
+                    <option *ngFor="let tipoLogradouro of listaComboTipoLogradouro" [value]="tipoLogradouro.codigo" >{{ tipoLogradouro.nome }}</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Logradouro</label>
+                  <input type="text" class="form-control" [(ngModel)]="medico.endereco.logradouro" #logradouro="ngModel" name="logradouro" id="logradouro" placeholder="Logradouro">
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="form-group col-md-3">
+                  <label>Número</label>
+                  <input type="text" class="form-control" [(ngModel)]="medico.endereco.numero" #numero="ngModel" name="numero" id="numero">
+                </div>
+                <div class="form-group col-md-9">
+                  <label>Complemento</label>
+                  <input type="text" class="form-control" [(ngModel)]="medico.endereco.complemento" #complemento="ngModel" name="complemento"  id="complemento" placeholder="Complemento">
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Bairro</label>
+                  <input type="text" class="form-control" [(ngModel)]="medico.endereco.bairro" #bairro="ngModel" name="bairro" id="bairro" placeholder="Bairro">
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Cidade</label>
+                  <input type="text" class="form-control" [(ngModel)]="medico.endereco.cidade" #cidade="ngModel" name="cidade" id="cidade" placeholder="Cidade">
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Estado</label>
+                  <select class="form-control" [(ngModel)]="medico.endereco.estado.codigo" #codigo="ngModel" name="estado">
+                    <option>Selecione...</option>
+                    <option *ngFor="let estado of listaComboEstado" [value]="estado.codigo" >{{ estado.nomeEstado }}</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>CEP</label>
+                  <input type="text" class="form-control" [(ngModel)]="medico.endereco.cep" #cep="ngModel" name="cep" id="cep" placeholder="Cep">
+                </div>
+              </div>
+            </div>
+            <!-- Fim Edição das informações -->
+          </div>
+          <div id="abaContato" class="tab-pane fade">
+            <!-- Inicio Exibição das informações -->
+            <div class="row" *ngIf="!habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Tipo Contato</label><p class="text-muted">{{medico.contato && medico.contato.tipoContato
+                    && medico.contato.tipoContato.nome ? medico.contato.tipoContato.nome : 'Não Informado'}}</p>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Contato</label><p class="text-muted">{{medico.contato && medico.contato.textoContato ?
+                    medico.contato.textoContato : 'Não Informado'}}</p>
+                </div>
+              </div>
+            </div>
+            <!-- Fim Exibição das informações -->
+
+            <!-- Inicio Edição das informações -->
+            <div class="row" *ngIf="habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Tipo Contato</label>
+                  <select class="form-control" [(ngModel)]="medico.contato.tipoContato.codigo" #codigo="ngModel" name="tipoContato">
+                    <option>Selecione...</option>
+                    <option *ngFor="let tipoContato of listaComboTipoContato" [value]="tipoContato.codigo" >{{ tipoContato.nome }}</option>
+                  </select>
+                </div>
+                <!-- #ToDo Fazer uma regra para exibir o campo de acordo com o tipo do contato selecionado -->
+                <div class="form-group col-md-6">
+                  <label>Contato</label>
+                  <input type="text" class="form-control" [(ngModel)]="medico.contato.textoContato" #textoContato="ngModel" name="textoContato" id="textoContato" placeholder="Contato">
+                </div>
+              </div>
+            </div>
+            <!-- Fim Edição das informações -->
+          </div>
+          <div id="abaInformacaoAdicional" class="tab-pane fade">
+            <!-- Inicio Exibição das informações -->
+            <div class="row" *ngIf="!habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-12">
+                  <p class="text-muted">{{medico.informacaoAdicional ? medico.informacaoAdicional : 'Não Informado'}}</p>
+                </div>
+              </div>
+            </div>
+            <!-- Fim Exibição das informações -->
+
+            <!-- Inicio Edição das informações -->
+            <div class="row" *ngIf="habilitarEdicao">
+              <div class="col-md-12">
+                <div class="box-body pad">
+                  <textarea id="informacaoAdicional" [(ngModel)]="medico.informacaoAdicional" #informacaoAdicional="ngModel" name="informacaoAdicional" rows="10" cols="138">
+                  </textarea>
+                </div>
+              </div>
+            </div>
+            <!-- Fim Edição das informações -->
+          </div>
+          <div id="historicoClinico" class="tab-pane fade">
+            <!-- The timeline -->
+            <ul class="timeline timeline-inverse">
+              <!-- timeline time label -->
+              <li class="time-label">
+                    <span class="bg-red">
+                      10 Feb. 2014
+                    </span>
+              </li>
+              <!-- /.timeline-label -->
+              <!-- timeline item -->
+              <li>
+                <i class="fa fa-envelope bg-blue"></i>
+
+                <div class="timeline-item">
+                  <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+
+                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+
+                  <div class="timeline-body">
+                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
+                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
+                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
+                    quora plaxo ideeli hulu weebly balihoo...
+                  </div>
+                  <div class="timeline-footer">
+                    <a class="btn btn-primary btn-xs">Read more</a>
+                    <a class="btn btn-danger btn-xs">Delete</a>
+                  </div>
+                </div>
+              </li>
+              <!-- END timeline item -->
+              <!-- timeline item -->
+              <li>
+                <i class="fa fa-user bg-aqua"></i>
+
+                <div class="timeline-item">
+                  <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
+
+                  <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
+                  </h3>
+                </div>
+              </li>
+              <!-- END timeline item -->
+              <!-- timeline item -->
+              <li>
+                <i class="fa fa-comments bg-yellow"></i>
+
+                <div class="timeline-item">
+                  <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
+
+                  <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
+
+                  <div class="timeline-body">
+                    Take me to your leader!
+                    Switzerland is small and neutral!
+                    We are more like Germany, ambitious and misunderstood!
+                  </div>
+                  <div class="timeline-footer">
+                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
+                  </div>
+                </div>
+              </li>
+              <!-- END timeline item -->
+              <!-- timeline time label -->
+              <li class="time-label">
+                    <span class="bg-green">
+                      3 Jan. 2014
+                    </span>
+              </li>
+              <!-- /.timeline-label -->
+              <!-- timeline item -->
+              <li>
+                <i class="fa fa-camera bg-purple"></i>
+
+                <div class="timeline-item">
+                  <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
+
+                  <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
+
+                  <div class="timeline-body">
+                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                  </div>
+                </div>
+              </li>
+              <!-- END timeline item -->
+              <li>
+                <i class="fa fa-clock-o bg-gray"></i>
+              </li>
+            </ul>
+          </div>
+          <div id="exames" class="tab-pane fade">
+            <!-- The timeline -->
+            <ul class="timeline timeline-inverse">
+              <!-- timeline time label -->
+              <li class="time-label">
+                    <span class="bg-red">
+                      10 Feb. 2014
+                    </span>
+              </li>
+              <!-- /.timeline-label -->
+              <!-- timeline item -->
+              <li>
+                <i class="fa fa-envelope bg-blue"></i>
+
+                <div class="timeline-item">
+                  <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+
+                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+
+                  <div class="timeline-body">
+                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
+                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
+                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
+                    quora plaxo ideeli hulu weebly balihoo...
+                  </div>
+                  <div class="timeline-footer">
+                    <a class="btn btn-primary btn-xs">Read more</a>
+                    <a class="btn btn-danger btn-xs">Delete</a>
+                  </div>
+                </div>
+              </li>
+              <!-- END timeline item -->
+              <!-- timeline item -->
+              <li>
+                <i class="fa fa-user bg-aqua"></i>
+
+                <div class="timeline-item">
+                  <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
+
+                  <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
+                  </h3>
+                </div>
+              </li>
+              <!-- END timeline item -->
+              <!-- timeline item -->
+              <li>
+                <i class="fa fa-comments bg-yellow"></i>
+
+                <div class="timeline-item">
+                  <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
+
+                  <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
+
+                  <div class="timeline-body">
+                    Take me to your leader!
+                    Switzerland is small and neutral!
+                    We are more like Germany, ambitious and misunderstood!
+                  </div>
+                  <div class="timeline-footer">
+                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
+                  </div>
+                </div>
+              </li>
+              <!-- END timeline item -->
+              <!-- timeline time label -->
+              <li class="time-label">
+                    <span class="bg-green">
+                      3 Jan. 2014
+                    </span>
+              </li>
+              <!-- /.timeline-label -->
+              <!-- timeline item -->
+              <li>
+                <i class="fa fa-camera bg-purple"></i>
+
+                <div class="timeline-item">
+                  <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
+
+                  <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
+
+                  <div class="timeline-body">
+                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                  </div>
+                </div>
+              </li>
+              <!-- END timeline item -->
+              <li>
+                <i class="fa fa-clock-o bg-gray"></i>
+              </li>
+            </ul>
+          </div>
+          <div id="medicamentos" class="tab-pane fade">
+            <!-- The timeline -->
+            <ul class="timeline timeline-inverse">
+              <!-- timeline time label -->
+              <li class="time-label">
+                    <span class="bg-red">
+                      10 Feb. 2014
+                    </span>
+              </li>
+              <!-- /.timeline-label -->
+              <!-- timeline item -->
+              <li>
+                <i class="fa fa-envelope bg-blue"></i>
+
+                <div class="timeline-item">
+                  <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+
+                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+
+                  <div class="timeline-body">
+                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
+                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
+                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
+                    quora plaxo ideeli hulu weebly balihoo...
+                  </div>
+                  <div class="timeline-footer">
+                    <a class="btn btn-primary btn-xs">Read more</a>
+                    <a class="btn btn-danger btn-xs">Delete</a>
+                  </div>
+                </div>
+              </li>
+              <!-- END timeline item -->
+              <!-- timeline item -->
+              <li>
+                <i class="fa fa-user bg-aqua"></i>
+
+                <div class="timeline-item">
+                  <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
+
+                  <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
+                  </h3>
+                </div>
+              </li>
+              <!-- END timeline item -->
+              <!-- timeline item -->
+              <li>
+                <i class="fa fa-comments bg-yellow"></i>
+
+                <div class="timeline-item">
+                  <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
+
+                  <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
+
+                  <div class="timeline-body">
+                    Take me to your leader!
+                    Switzerland is small and neutral!
+                    We are more like Germany, ambitious and misunderstood!
+                  </div>
+                  <div class="timeline-footer">
+                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
+                  </div>
+                </div>
+              </li>
+              <!-- END timeline item -->
+              <!-- timeline time label -->
+              <li class="time-label">
+                    <span class="bg-green">
+                      3 Jan. 2014
+                    </span>
+              </li>
+              <!-- /.timeline-label -->
+              <!-- timeline item -->
+              <li>
+                <i class="fa fa-camera bg-purple"></i>
+
+                <div class="timeline-item">
+                  <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
+
+                  <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
+
+                  <div class="timeline-body">
+                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                  </div>
+                </div>
+              </li>
+              <!-- END timeline item -->
+              <li>
+                <i class="fa fa-clock-o bg-gray"></i>
+              </li>
+            </ul>
+          </div>
+          <!-- /.tab-pane -->
+        </div>
+        <!-- /.tab-content -->
+      </div>
+      <!-- /.nav-tabs-custom -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+
+</section>
+<!-- /.content -->

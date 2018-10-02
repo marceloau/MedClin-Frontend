@@ -28,15 +28,13 @@ import { MedicoConverter } from './converter/medico.converter';
   selector: 'app-medico',
   templateUrl: './medico.component.html',
   styleUrls: ['./medico.component.css'],
-  providers: [MedicoConverter, DominioConverter, Excecao, TipoContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter]
+  providers: [MedicoConverter, DominioConverter, Excecao, TipoContatoConverter]
 })
 export class MedicoComponent implements OnInit {
 
   constructor(private medicoService: MedicoService, private medicoConverter: MedicoConverter,
     private dominioService: DominioService, private dominioConverter: DominioConverter,
     private excecao: Excecao, private tipoContatoService: TipoContatoService, private tipoContatoConverter: TipoContatoConverter,
-    private operadoraService: OperadoraService, private operadoraConverter: OperadoraConverter,
-    private tipoPlanoSaudeService: TipoPlanoSaudeService, private tipoPlanoSaudeConverter: TipoPlanoSaudeConverter,
     private router: Router) { }
 
   @ViewChild('form')
@@ -54,8 +52,6 @@ export class MedicoComponent implements OnInit {
   listaComboEstado = new Array<Estado>();
   listaComboTipoLogradouro = new Array<TipoLogradouro>();
   listaComboTipoContato = new Array<TipoContato>();
-  listaComboOperadora = new Array<Operadora>();
-  listaComboTipoPlanoSaude = new Array<TipoPlanoSaude>();
   // Fim lista de atributos dos compbos de medico
 
   pagina: Pagina;
@@ -106,20 +102,6 @@ export class MedicoComponent implements OnInit {
     // Combo de Tipo Contato
     this.tipoContatoService.listarRegistros(0, 100).subscribe((retorno: Pagina) => {
       this.listaComboTipoContato = this.tipoContatoConverter.converterListaParaFrontend(retorno.content);
-    }, err => {
-      this.mensagem = this.excecao.exibirExcecao(err.error);
-    });
-
-    // Combo de Operadora
-    this.operadoraService.listarRegistros(0, 100).subscribe((retorno: Pagina) => {
-      this.listaComboOperadora = this.operadoraConverter.converterListaParaFrontend(retorno.content);
-    }, err => {
-      this.mensagem = this.excecao.exibirExcecao(err.error);
-    });
-
-    // Combo de Tipo Plano Saúde
-    this.tipoPlanoSaudeService.listarRegistros(0, 100).subscribe((retorno: Pagina) => {
-      this.listaComboTipoPlanoSaude = this.tipoPlanoSaudeConverter.converterListaParaFrontend(retorno.content);
     }, err => {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
@@ -213,7 +195,7 @@ export class MedicoComponent implements OnInit {
   }
 
   verPerfil(codigo: number) {
-    this.router.navigate(['perfil', codigo]);
+    this.router.navigate(['medico/perfil', codigo]);
   }
 
   buscar() {
