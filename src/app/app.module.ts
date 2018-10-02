@@ -1,3 +1,4 @@
+import { EspecialidadeConverter } from './componentes/modulos/cadastro/especialidade/converter/especialidade.converter';
 import { DominioConverter } from './componentes/comum/converter/dominio.converter';
 import { TipoContatoComponent } from './componentes/modulos/cadastro/tipoContato/tipocontato.component';
 import { routes } from './app.routes';
@@ -28,6 +29,7 @@ import { ContatoConverter } from './componentes/comum/converter/contato.converte
 import { OperadoraConverter } from './componentes/modulos/cadastro/operadora/converter/operadora.converter';
 import { TipoPlanoSaudeConverter } from './componentes/modulos/cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
 import { DatePipe } from '@angular/common';
+import { MedicoComponent } from './componentes/modulos/medicos/medico.component';
 
 
 @NgModule({
@@ -45,7 +47,8 @@ import { DatePipe } from '@angular/common';
     PaginacaoComponent,
     OperadoraComponent,
     TipoPlanoSaudeComponent,
-    TipoContatoComponent
+    TipoContatoComponent,
+    MedicoComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +57,8 @@ import { DatePipe } from '@angular/common';
     routes
   ],
   providers: [SegurancaService, UsuarioService, DominioConverter, EnderecoConverter,
-    TipoContatoConverter, ContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter, DatePipe],
+    TipoContatoConverter, ContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter, DatePipe,
+    EspecialidadeConverter],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

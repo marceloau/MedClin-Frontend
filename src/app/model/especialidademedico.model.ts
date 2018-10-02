@@ -1,6 +1,6 @@
 import { EspecialidademedicoPK } from './especialidademedicopk';
 import { Especialidade } from './dominio/especialidade.model';
-export class Especialidademedico {
+export class EspecialidadeMedico {
   especialidadeMedicoPK = new EspecialidademedicoPK();
   dataInicioAtuacao: Date;
   flagAtivo: string;

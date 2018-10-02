@@ -1,0 +1,295 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Médicos
+    <small></small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a [routerLink]="['/']"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">Médico</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div *ngIf="mensagem && mensagem.codigoTipo === 0" class="alert alert-success alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+              {{mensagem.texto}}
+            </div>
+          <div class="input-group col-md-12">
+            <div class="input-group col-md-6 pull-left">
+              <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="medico.nome"
+              #nome="ngModel" placeholder="Informe o nome do médico que deseja procurar.">
+              <span class="input-group-btn">
+                <button type="button" (click)="buscar()" class="btn btn-primary btn-flat">Buscar</button>
+              </span>
+            </div>
+            <div class="input-group col-md-6 pull-right">
+              <button type="button" id="btnNovoMedico" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modal-medico">
+                  Novo Médico
+              </button>
+            </div>
+          </div>
+          <br>
+          <div class="panel box box-primary">
+            <div class="box-header with-border text-center">
+              <h4 class="box-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                  Filtros
+                </a>
+              </h4>
+            </div>
+            <!-- Filtros de pesquisa -->
+            <div id="collapseOne" class="panel-collapse collapse">
+              <div class="box-body">
+                <div class="col-md-12">
+                  <div class="form-group col-md-3">
+                    <label>RG</label>
+                    <input type="text" class="form-control" [(ngModel)]="medico.rg" #rg="ngModel" id="rg" name="rg" placeholder="Identidade">
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label>CPF</label>
+                    <input type="text" class="form-control" [(ngModel)]="medico.cpf" #cpf="ngModel" id="cpf" name="cpf" placeholder="CPF">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group col-md-3">
+                    <label>Contato</label>
+                    <input type="text" class="form-control" [(ngModel)]="medico.contato.textoContato" #textoContato="ngModel" name="textoContato" id="textoContato" placeholder="Contato">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="modal-medico">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" id="fecharModal" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">{{ medico && !medico.codigo ? 'Novo Médico' : 'Atualizar Médico' }}</h4>
+                </div>
+                <div class="modal-body">
+                  <form #form="ngForm" role="form">
+                    <div *ngIf="mensagem && mensagem.codigoTipo === 1" class="alert alert-danger alert-dismissible">
+                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+                      {{mensagem.texto}}
+                    </div>
+                    <div class="row">
+                      <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#abaDadosPessoais">Dados Pessoais</a></li>
+                        <li><a data-toggle="tab" href="#abaEndereco">Endereço</a></li>
+                        <li><a data-toggle="tab" href="#abaContato">Contato</a></li>
+                        <li><a data-toggle="tab" href="#abaInformacaoAdicional">Informação Adicional</a></li>
+                      </ul>
+                      <div class="tab-content">
+                        <br>
+                        <div id="abaDadosPessoais" class="tab-pane fade in active">
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Nome Completo</label>
+                              <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="medico.nome"
+                              #nome="ngModel" placeholder="Nome">
+                            </div>
+                            <!-- Date -->
+                            <div class="form-group col-md-6">
+                              <label>Data de Nascimento</label>
+                              <input type="date" class="form-control pull-right" [(ngModel)]="medico.dataNascimento"
+                              #dataNascimento="ngModel"
+                              (ngModelChange)="medico.dataNascimento = $event" name="dataNascimento" id="dataNascimento">
+                              <!-- /.input group -->
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <!-- radio -->
+                            <div class="form-group col-md-6">
+                              <label>Sexo</label>
+                              <select class="form-control" [(ngModel)]="medico.sexo" #sexo="ngModel" id="sexo" name="sexo">
+                                <option>Selecione...</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Estado Civil</label>
+                              <select class="form-control" [(ngModel)]="medico.estadoCivil.codigo" #codigo="ngModel" id="estadoCivil" name="estadoCivil">
+                                <option>Selecione...</option>
+                                <option *ngFor="let estadoCivil of listaComboEstadoCivil" [value]="estadoCivil.codigo" >{{ estadoCivil.nome }}</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Naturalidade</label>
+                              <input type="text" class="form-control" id="naturalidade" [(ngModel)]="medico.naturalidade"
+                              #naturalidade="ngModel" name="naturalidade" placeholder="Naturalidade">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Nacionalidade</label>
+                              <input type="text" class="form-control" id="nacionalidade" [(ngModel)]="medico.nacionalidade"
+                              #nacionalidade="ngModel" name="nacionalidade" placeholder="Nacionalidade">
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>CPF</label>
+                              <input type="text" class="form-control" [(ngModel)]="medico.cpf" #cpf="ngModel" id="cpf" name="cpf" placeholder="CPF">
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>RG</label>
+                              <input type="text" class="form-control" [(ngModel)]="medico.rg" #rg="ngModel" id="rg" name="rg" placeholder="Identidade">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Órgão Emissor</label>
+                              <input type="text" class="form-control" [(ngModel)]="medico.orgaoEmissor" #orgaoEmissor="ngModel" name="orgaoEmissor" id="orgaoEmissor" placeholder="Órgão Emissor ">
+                            </div>
+                          </div>
+                        </div>
+                        <div id="abaEndereco" class="tab-pane fade">
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Tipo Logradouro</label>
+                              <select class="form-control" [(ngModel)]="medico.endereco.tipoLogradouro.codigo" #codigo="ngModel" name="tipoLogradouro">
+                                <option>Selecione...</option>
+                                <option *ngFor="let tipoLogradouro of listaComboTipoLogradouro" [value]="tipoLogradouro.codigo" >{{ tipoLogradouro.nome }}</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Logradouro</label>
+                              <input type="text" class="form-control" [(ngModel)]="medico.endereco.logradouro" #logradouro="ngModel" name="logradouro" id="logradouro" placeholder="Logradouro">
+                            </div>
+                          </div>
+
+                          <div class="col-md-12">
+                            <div class="form-group col-md-3">
+                              <label>Número</label>
+                              <input type="text" class="form-control" [(ngModel)]="medico.endereco.numero" #numero="ngModel" name="numero" id="numero">
+                            </div>
+                            <div class="form-group col-md-9">
+                              <label>Complemento</label>
+                              <input type="text" class="form-control" [(ngModel)]="medico.endereco.complemento" #complemento="ngModel" name="complemento"  id="complemento" placeholder="Complemento">
+                            </div>
+                          </div>
+
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Bairro</label>
+                              <input type="text" class="form-control" [(ngModel)]="medico.endereco.bairro" #bairro="ngModel" name="bairro" id="bairro" placeholder="Bairro">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Cidade</label>
+                              <input type="text" class="form-control" [(ngModel)]="medico.endereco.cidade" #cidade="ngModel" name="cidade" id="cidade" placeholder="Cidade">
+                            </div>
+                          </div>
+
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Estado</label>
+                              <select class="form-control" [(ngModel)]="medico.endereco.estado.codigo" #codigo="ngModel" name="estado">
+                                <option>Selecione...</option>
+                                <option *ngFor="let estado of listaComboEstado" [value]="estado.codigo" >{{ estado.nomeEstado }}</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>CEP</label>
+                              <input type="text" class="form-control" [(ngModel)]="medico.endereco.cep" #cep="ngModel" name="cep" id="cep" placeholder="Cep">
+                            </div>
+                          </div>
+                        </div>
+                        <div id="abaContato" class="tab-pane fade">
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Tipo Contato</label>
+                              <select class="form-control" [(ngModel)]="medico.contato.tipoContato.codigo" #codigo="ngModel" name="tipoContato">
+                                <option>Selecione...</option>
+                                <option *ngFor="let tipoContato of listaComboTipoContato" [value]="tipoContato.codigo" >{{ tipoContato.nome }}</option>
+                              </select>
+                            </div>
+                            <!-- #ToDo Fazer uma regra para exibir o campo de acordo com o tipo do contato selecionado -->
+                            <div class="form-group col-md-6">
+                              <label>Contato</label>
+                              <input type="text" class="form-control" [(ngModel)]="medico.contato.textoContato" #textoContato="ngModel" name="textoContato" id="textoContato" placeholder="Contato">
+                            </div>
+                          </div>
+                        </div>
+                        <div id="abaInformacaoAdicional" class="tab-pane fade">
+                          <div class="col-md-12">
+                            <div class="box-body pad">
+                              <textarea id="informacaoAdicional" [(ngModel)]="medico.informacaoAdicional" #informacaoAdicional="ngModel" name="informacaoAdicional" rows="10" cols="138">
+                              </textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" (click)="fecharModalMedico()" data-dismiss="modal" id="closeModal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="salvarModal" (hidden)= 'habilitarEdicao' (click)="salvar()" >Salvar</button>
+                </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+          <!-- /.modal -->
+          <table id="tabelaMedicos" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th>Código</th>
+              <th>Nome</th>
+              <th>Estado Civil</th>
+              <th>RG</th>
+              <th>CPF</th>
+              <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let medico of listaMedicos">
+              <td>{{ medico.codigo }}</td>
+              <td>{{ medico.nome }}</td>
+              <td>{{ medico.estadoCivil }}</td>
+              <td>{{ medico.rg }}</td>
+              <td>{{ medico.cpf }}</td>
+              <td>
+                <button type="button" (click)="verPerfil(medico.codigo)" class="btn btn-default">
+                  <i class="fa fa-search" title="Visualizar Perfil"></i>
+                </button>
+                <button type="button" (click)="abrirModalAtualizar(medico.codigo)" class="btn btn-default">
+                  <i class="fa fa-edit" title="Editar"></i>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+              <th>Código</th>
+              <th>Nome</th>
+              <th>Estado Civil</th>
+              <th>RG</th>
+              <th>CPF</th>
+              <th>Ações</th>
+            </tr>
+            </tfoot>
+          </table>
+          <app-paginacao [page]="pagina" (paginationEvent)=changePage($event)></app-paginacao>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+</section>
+<!-- /.content -->

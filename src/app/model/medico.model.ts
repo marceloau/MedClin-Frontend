@@ -1,5 +1,4 @@
 import { AgendaMedico } from './agendamedico.model';
-import { Especialidademedico } from './especialidademedico.model';
 import { Especialidade } from './dominio/especialidade.model';
 import { Endereco } from './endereco.model';
 import { Contato } from './contato.model';
@@ -20,7 +19,7 @@ export class Medico {
   estadoCivil = new EstadoCivil();
   endereco = new Endereco();
   contato = new Contato();
-  listaEspecialidade = new Array<Especialidademedico>();
+  listaEspecialidade = new Array<Especialidade>();
   listaAgendaMedico = new Array<AgendaMedico>();
   numeroCRM: string;
   flagAtivo: string;
