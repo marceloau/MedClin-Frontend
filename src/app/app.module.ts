@@ -29,9 +29,18 @@ import { TipoContatoConverter } from './componentes/modulos/cadastro/tipoContato
 import { ContatoConverter } from './componentes/comum/converter/contato.converter';
 import { OperadoraConverter } from './componentes/modulos/cadastro/operadora/converter/operadora.converter';
 import { TipoPlanoSaudeConverter } from './componentes/modulos/cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
-import { DatePipe } from '@angular/common';
+import { DatePipe, CommonModule } from '@angular/common';
 import { MedicoComponent } from './componentes/modulos/medicos/medico.component';
 
+// Inicio import calendário.
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+// Fim import calendário.
+
+registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
@@ -56,6 +65,14 @@ import { MedicoComponent } from './componentes/modulos/medicos/medico.component'
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    // Inicio imports do calendario
+    CommonModule,
+    BrowserAnimationsModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
+    // Fim imports do calendario
     routes
   ],
   providers: [SegurancaService, UsuarioService, DominioConverter, EnderecoConverter,

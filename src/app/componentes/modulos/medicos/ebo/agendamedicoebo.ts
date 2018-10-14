@@ -1,7 +1,7 @@
 import { AgendaMedicoEBOPK } from './agendamedicoebopk';
 export class AgendaMedicoEBO {
   agendaMedicoPK = new AgendaMedicoEBOPK();
-  dataAtendimento: any;
+  diaSemana: number;
   horaInicioAtendimento: any;
   horaFinalAtendimento: any;
   observacao: string;

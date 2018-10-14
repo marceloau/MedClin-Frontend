@@ -1,11 +1,9 @@
+import { Especialidade } from './../../../model/dominio/especialidade.model';
+import { EspecialidadeService } from './../cadastro/especialidade/service/especialidade.service';
 import { Medico } from './../../../model/medico.model';
 import { Router } from '@angular/router';
 import { MedicoService } from './service/medico.service';
 import { MedicoEBO } from './ebo/medicoebo';
-import { TipoPlanoSaude } from '../../../model/tipoplanosaude.model';
-import { TipoPlanoSaudeService } from '../cadastro/tipoPlanoSaude/service/tipoplanosaude.service';
-import { OperadoraConverter } from '../cadastro/operadora/converter/operadora.converter';
-import { OperadoraService } from '../cadastro/operadora/service/operadora.service';
 import { TipoContato } from '../../../model/tipo-contato.model';
 import { Excecao } from '../../comum/excecao/excecao';
 import { DominioConverter } from '../../comum/converter/dominio.converter';
@@ -20,22 +18,21 @@ import { Estado } from '../../../model/estado.model';
 import { TipoLogradouro } from '../../../model/tipologradouro.model';
 import { TipoContatoService } from '../cadastro/tipoContato/service/tipocontato.service';
 import { TipoContatoConverter } from '../cadastro/tipoContato/converter/tipocontato.converter';
-import { Operadora } from '../../../model/operadora.model';
-import { TipoPlanoSaudeConverter } from '../cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
 import { MedicoConverter } from './converter/medico.converter';
+import { EspecialidadeConverter } from '../cadastro/especialidade/converter/especialidade.converter';
 
 @Component({
   selector: 'app-medico',
   templateUrl: './medico.component.html',
   styleUrls: ['./medico.component.css'],
-  providers: [MedicoConverter, DominioConverter, Excecao, TipoContatoConverter]
+  providers: [MedicoConverter, DominioConverter, Excecao, TipoContatoConverter, EspecialidadeConverter]
 })
 export class MedicoComponent implements OnInit {
 
   constructor(private medicoService: MedicoService, private medicoConverter: MedicoConverter,
     private dominioService: DominioService, private dominioConverter: DominioConverter,
     private excecao: Excecao, private tipoContatoService: TipoContatoService, private tipoContatoConverter: TipoContatoConverter,
-    private router: Router) { }
+    private router: Router, private especialidadeService: EspecialidadeService, private especialidadeConverter: EspecialidadeConverter) { }
 
   @ViewChild('form')
   form: NgForm;
@@ -52,6 +49,7 @@ export class MedicoComponent implements OnInit {
   listaComboEstado = new Array<Estado>();
   listaComboTipoLogradouro = new Array<TipoLogradouro>();
   listaComboTipoContato = new Array<TipoContato>();
+  listaComboEspecialidade = new Array<Especialidade>();
   // Fim lista de atributos dos compbos de medico
 
   pagina: Pagina;
@@ -105,6 +103,14 @@ export class MedicoComponent implements OnInit {
     }, err => {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
+
+    // Combo de Especialidade
+    this.especialidadeService.listarRegistros(0, 100).subscribe((retorno: Pagina) => {
+      this.listaComboEspecialidade = this.especialidadeConverter.converterListaParaFrontend(retorno.content);
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+
   }
 
   inicializarTable() {
@@ -224,6 +230,10 @@ export class MedicoComponent implements OnInit {
     } else {
       this.listarRegistros(event.page, event.size);
     }
+  }
+
+  changeEspecialidade(valor) {
+    console.log();
   }
 
 }

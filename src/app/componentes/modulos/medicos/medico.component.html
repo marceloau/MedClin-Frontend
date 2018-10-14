@@ -86,6 +86,7 @@
                     <div class="row">
                       <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#abaDadosPessoais">Dados Pessoais</a></li>
+                        <li><a data-toggle="tab" href="#abaDadosProfissionais">Dados Profissionais</a></li>
                         <li><a data-toggle="tab" href="#abaEndereco">Endereço</a></li>
                         <li><a data-toggle="tab" href="#abaContato">Contato</a></li>
                         <li><a data-toggle="tab" href="#abaInformacaoAdicional">Informação Adicional</a></li>
@@ -152,6 +153,22 @@
                             <div class="form-group col-md-6">
                               <label>CPF</label>
                               <input type="text" class="form-control" [(ngModel)]="medico.cpf" #cpf="ngModel" id="cpf" name="cpf" placeholder="CPF">
+                            </div>
+                          </div>
+                        </div>
+                        <div id="abaDadosProfissionais" class="tab-pane fade">
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Especialidades</label>
+                              <select class="form-control select2"
+                                multiple="multiple" data-placeholder="Selecionar"
+                                style="width: 100%;" [(ngModel)]="medico.listaEspecialidade" #listaEspecialidade="ngModel" name="listaEspecialidade">
+                                <option *ngFor="let especialidade of listaComboEspecialidade" [value]="especialidade.codigo" >{{ especialidade.nome }}</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Número CRM</label>
+                              <input type="text" class="form-control" [(ngModel)]="medico.numeroCRM" #numeroCRM="ngModel" name="numeroCRM" id="numeroCRM" placeholder="numeroCRM">
                             </div>
                           </div>
                         </div>

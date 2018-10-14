@@ -61,7 +61,7 @@ export class MedicoConverter {
     }
     if (medico.listaAgendaMedico) {
       for (const index of medico.listaAgendaMedico) {
-        medicoEBO.listaAgendaMedico.push(this.agendaMedicoConverter.converterParaBackend(index));
+        medicoEBO.listaAgendaMedico.push(this.agendaMedicoConverter.converterParaBackend(index, medico.codigo));
       }
     }
     medicoEBO.numeroCRM = medico.numeroCRM;

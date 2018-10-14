@@ -10,7 +10,8 @@ export class Constantes {
   static readonly ERRO_CONFLITO = 409;
   static readonly ERRO_NOT_FOUND = 404;
   static readonly ERRO_INTERNAL_SERVER = 500;
-  static readonly FORMATO_DATA_BACKEND = 'yyyy-MM-ddTHH:mm:ss';
+  static readonly FORMATO_DATA_BACKEND = 'yyyy-MM-dd HH:mm:ss zzzz';
+  static readonly FORMATO_TIME_FRONTEND = 'h:mm';
   static readonly FORMATO_DATA_FRONTEND = 'yyyy-MM-dd';
   // Fim códigos de error retorno servico
 

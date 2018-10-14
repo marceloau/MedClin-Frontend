@@ -7,6 +7,7 @@ import { Constantes } from '../../../comum/constantes';
 import { ContatoConverter } from '../../../comum/converter/contato.converter';
 import { AgendaMedicoEBO } from '../ebo/agendamedicoebo';
 import { AgendaMedico } from '../../../../model/agendamedico.model';
+import { setHours, setMinutes, setSeconds } from 'date-fns';
 
 @Injectable({
   providedIn: 'root',
@@ -16,20 +17,20 @@ export class AgendaMedicoConverter {
   constructor(private dominioConverter: DominioConverter, private enderecoConverter: EnderecoConverter,
     private contatoConverter: ContatoConverter, private datePipe: DatePipe, private especialidadeConverter: EspecialidadeConverter) { }
 
-  converterParaBackend(agendaMedico: AgendaMedico): AgendaMedicoEBO {
+  converterParaBackend(agendaMedico: AgendaMedico, codigoPessoa: number): AgendaMedicoEBO {
     const agendaMedicoEBORetorno = new AgendaMedicoEBO();
     agendaMedicoEBORetorno.agendaMedicoPK.codigoAgendaMedico = agendaMedico.agendaMedicoPK.codigoAgendaMedico;
-    agendaMedicoEBORetorno.agendaMedicoPK.codigoPessoa = agendaMedico.agendaMedicoPK.codigoPessoa;
-    if (agendaMedico.dataAtendimento) {
-      agendaMedicoEBORetorno.dataAtendimento = this.datePipe.transform(agendaMedico.dataAtendimento, Constantes.FORMATO_DATA_FRONTEND);
-    }
+    agendaMedicoEBORetorno.agendaMedicoPK.codigoPessoa = codigoPessoa;
+    agendaMedicoEBORetorno.diaSemana = agendaMedico.diaSemana;
     if (agendaMedico.horaInicioAtendimento) {
+      const hora = agendaMedico.horaInicioAtendimento.split(':');
       agendaMedicoEBORetorno.horaInicioAtendimento = this.datePipe.transform(
-        agendaMedico.horaInicioAtendimento, Constantes.FORMATO_DATA_FRONTEND);
+        setHours(setMinutes(setSeconds(new Date(), 0), hora[1]), hora[0]), Constantes.FORMATO_DATA_BACKEND);
     }
-    if (agendaMedico.horaInicioAtendimento) {
+    if (agendaMedico.horaFinalAtendimento) {
+      const hora = agendaMedico.horaFinalAtendimento.split(':');
       agendaMedicoEBORetorno.horaFinalAtendimento = this.datePipe.transform(
-        agendaMedico.horaFinalAtendimento, Constantes.FORMATO_DATA_FRONTEND);
+        setHours(setMinutes(setSeconds(new Date(), 0), hora[1]), hora[0]), Constantes.FORMATO_DATA_BACKEND);
     }
     agendaMedicoEBORetorno.observacao = agendaMedico.observacao;
     agendaMedicoEBORetorno.flagAtivo = agendaMedico.flagAtivo;
@@ -52,9 +53,21 @@ export class AgendaMedicoConverter {
     const agendaMedicoRetorno = new AgendaMedicoEBO();
     agendaMedicoRetorno.agendaMedicoPK.codigoAgendaMedico = agendaMedicoEBO.agendaMedicoPK.codigoAgendaMedico;
     agendaMedicoRetorno.agendaMedicoPK.codigoPessoa = agendaMedicoEBO.agendaMedicoPK.codigoPessoa;
-    agendaMedicoRetorno.dataAtendimento = agendaMedicoEBO.dataAtendimento;
-    agendaMedicoRetorno.horaInicioAtendimento = agendaMedicoEBO.horaInicioAtendimento;
-    agendaMedicoRetorno.horaFinalAtendimento = agendaMedicoEBO.horaFinalAtendimento;
+    agendaMedicoRetorno.diaSemana = agendaMedicoEBO.diaSemana;
+    if ((agendaMedicoEBO.horaInicioAtendimento && agendaMedicoEBO.horaInicioAtendimento.length > 15)
+      || (agendaMedicoEBO.horaFinalAtendimento && agendaMedicoEBO.horaFinalAtendimento.length > 15)) {
+      if (agendaMedicoEBO.horaInicioAtendimento) {
+        agendaMedicoRetorno.horaInicioAtendimento = this.datePipe.transform(
+          agendaMedicoEBO.horaInicioAtendimento, Constantes.FORMATO_TIME_FRONTEND);
+      }
+      if (agendaMedicoEBO.horaFinalAtendimento) {
+        agendaMedicoRetorno.horaFinalAtendimento = this.datePipe.transform(
+        agendaMedicoEBO.horaFinalAtendimento, Constantes.FORMATO_TIME_FRONTEND);
+      }
+    } else {
+      agendaMedicoRetorno.horaInicioAtendimento = agendaMedicoEBO.horaInicioAtendimento;
+      agendaMedicoRetorno.horaFinalAtendimento = agendaMedicoEBO.horaFinalAtendimento;
+    }
     agendaMedicoRetorno.observacao = agendaMedicoEBO.observacao;
     agendaMedicoRetorno.flagAtivo = agendaMedicoEBO.flagAtivo;
     agendaMedicoRetorno.usuarioUltimaAlteracao = agendaMedicoEBO.usuarioUltimaAlteracao;

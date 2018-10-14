@@ -58,6 +58,7 @@
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
           <li class="active"><a data-toggle="tab" href="#abaDadosPessoais">Dados Pessoais</a></li>
+          <li><a data-toggle="tab" href="#abaDadosProfissionais">Dados Profissionais</a></li>
           <li><a data-toggle="tab" href="#abaEndereco">Endereço</a></li>
           <li><a data-toggle="tab" href="#abaContato">Contato</a></li>
           <li><a data-toggle="tab" href="#abaInformacaoAdicional">Informação Adicional</a></li>
@@ -146,6 +147,70 @@
                 </div>
             </div>
             <!-- Fim Edição das informações -->
+          </div>
+          <div id="abaDadosProfissionais" class="tab-pane fade">
+            <!-- Inicio Exibição das informações -->
+            <div class="row" *ngIf="!habilitarEdicao">
+                <div class="col-md-12">
+                  <div class="form-group col-md-6">
+                    <label>Especialidades</label><p class="text-muted">{{medico.listaEspecialidade && medico.listaEspecialidade
+                    ? medico.listaEspecialidade && medico.listaEspecialidade : 'Não Informado'}}</p>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>NumeroCRM</label><p class="text-muted">{{medico.numeroCRM ?
+                      medico.numeroCRM : 'Não Informado'}}</p>
+                  </div>
+                </div>
+                <div class="col-md-12 text-center">
+                  <label>Agenda de Atendimento</label>
+                </div>
+                <div class="col-md-12">
+                  <div class="col-md-4">
+                    <button type="button" id="btnNovoHorarioAtendimento" class="btn btn-primary pull-left" data-toggle="modal" data-target="#modal-horario-atendimento">
+                        Novo Horario Atendimento
+                    </button>
+                  </div>
+                  <div class="col-md-12">
+                    <mwl-calendar-week-view
+                      [dayStartHour]="6"
+                      [dayEndHour]="22"
+                      [weekStartsOn]="weekStartsOn"
+                      [weekendDays]="weekendDays"
+                      [locale]="locale"
+                      [viewDate]="viewDate"
+                      [events]="events">
+                    </mwl-calendar-week-view>
+                  </div>
+                </div>
+              </div>
+              <!-- Fim Exibição das informações -->
+            <div class="row" *ngIf="habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Especialidades</label>
+                  <select class="form-control select2"
+                    multiple="multiple" data-placeholder="Selecionar"
+                    style="width: 100%;" [(ngModel)]="medico.listaEspecialidade" #listaEspecialidade="ngModel" name="listaEspecialidade">
+                    <option *ngFor="let especialidade of listaComboEspecialidade" [value]="especialidade.codigo" >{{ especialidade.nome }}</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Número CRM</label>
+                  <input type="text" class="form-control" [(ngModel)]="medico.numeroCRM" #numeroCRM="ngModel" name="numeroCRM" id="numeroCRM" placeholder="numeroCRM">
+                </div>
+              </div>
+              <div class="col-md-12">
+                <mwl-calendar-week-view
+                  [dayStartHour]="6"
+                  [dayEndHour]="22"
+                  [weekStartsOn]="weekStartsOn"
+                  [weekendDays]="weekendDays"
+                  [locale]="locale"
+                  [viewDate]="viewDate"
+                  [events]="events">
+                </mwl-calendar-week-view>
+              </div>
+            </div>
           </div>
           <div id="abaEndereco" class="tab-pane fade">
             <!-- Inicio Exibição das informações -->
@@ -292,288 +357,6 @@
             </div>
             <!-- Fim Edição das informações -->
           </div>
-          <div id="historicoClinico" class="tab-pane fade">
-            <!-- The timeline -->
-            <ul class="timeline timeline-inverse">
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-red">
-                      10 Feb. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-envelope bg-blue"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
-                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                  <div class="timeline-body">
-                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                    quora plaxo ideeli hulu weebly balihoo...
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-primary btn-xs">Read more</a>
-                    <a class="btn btn-danger btn-xs">Delete</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-user bg-aqua"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-                  <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
-                  </h3>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-comments bg-yellow"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                  <div class="timeline-body">
-                    Take me to your leader!
-                    Switzerland is small and neutral!
-                    We are more like Germany, ambitious and misunderstood!
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-green">
-                      3 Jan. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-camera bg-purple"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                  <div class="timeline-body">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <li>
-                <i class="fa fa-clock-o bg-gray"></i>
-              </li>
-            </ul>
-          </div>
-          <div id="exames" class="tab-pane fade">
-            <!-- The timeline -->
-            <ul class="timeline timeline-inverse">
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-red">
-                      10 Feb. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-envelope bg-blue"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
-                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                  <div class="timeline-body">
-                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                    quora plaxo ideeli hulu weebly balihoo...
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-primary btn-xs">Read more</a>
-                    <a class="btn btn-danger btn-xs">Delete</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-user bg-aqua"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-                  <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
-                  </h3>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-comments bg-yellow"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                  <div class="timeline-body">
-                    Take me to your leader!
-                    Switzerland is small and neutral!
-                    We are more like Germany, ambitious and misunderstood!
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-green">
-                      3 Jan. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-camera bg-purple"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                  <div class="timeline-body">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <li>
-                <i class="fa fa-clock-o bg-gray"></i>
-              </li>
-            </ul>
-          </div>
-          <div id="medicamentos" class="tab-pane fade">
-            <!-- The timeline -->
-            <ul class="timeline timeline-inverse">
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-red">
-                      10 Feb. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-envelope bg-blue"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
-                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                  <div class="timeline-body">
-                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                    quora plaxo ideeli hulu weebly balihoo...
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-primary btn-xs">Read more</a>
-                    <a class="btn btn-danger btn-xs">Delete</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-user bg-aqua"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-                  <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
-                  </h3>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-comments bg-yellow"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                  <div class="timeline-body">
-                    Take me to your leader!
-                    Switzerland is small and neutral!
-                    We are more like Germany, ambitious and misunderstood!
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-green">
-                      3 Jan. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-camera bg-purple"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                  <div class="timeline-body">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <li>
-                <i class="fa fa-clock-o bg-gray"></i>
-              </li>
-            </ul>
-          </div>
           <!-- /.tab-pane -->
         </div>
         <!-- /.tab-content -->
@@ -583,6 +366,84 @@
     <!-- /.col -->
   </div>
   <!-- /.row -->
+
+  <div class="modal fade" id="modal-horario-atendimento">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" id="fecharModal" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">{{ 'Novo Horario Atendimento' }}</h4>
+          </div>
+          <div class="modal-body">
+            <form #form="ngForm" role="form">
+              <div *ngIf="mensagem && mensagem.codigoTipo === 1" class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+                {{mensagem.texto}}
+              </div>
+              <div class="row">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a data-toggle="tab" href="#abaNovoHorarioAtendimento">Horario de Atendimento</a></li>
+                </ul>
+                <div class="tab-content">
+                  <br>
+                  <div id="abaNovoHorarioAtendimento" class="tab-pane fade in active">
+                    <div class="col-md-12">
+                      <div class="form-group col-md-6">
+                        <label>Dia da Semana</label>
+                        <select class="form-control" [(ngModel)]="agendaMedico.diaSemana" #diaSemana="ngModel" id="diaSemana" name="diaSemana">
+                          <option>Selecione...</option>
+                          <option value="1">Domingo</option>
+                          <option value="2">Segunda-Feira</option>
+                          <option value="3">Terça-Feira</option>
+                          <option value="4">Quarta-Feira</option>
+                          <option value="5">Quinta-Feira</option>
+                          <option value="6">Sexta-Feira</option>
+                          <option value="7">Sábado</option>
+                        </select>
+                      </div>
+                      <!-- Date -->
+                      <div class="form-group col-md-6">
+                        <label>Horario de Inicio do Atendimento</label>
+                        <input type="time" class="form-control pull-right" [(ngModel)]="agendaMedico.horaInicioAtendimento"
+                        #horaInicioAtendimento="ngModel" min="06:00" max="22:00"
+                        (ngModelChange)="agendaMedico.horaInicioAtendimento = $event" name="horaInicioAtendimento" id="horaInicioAtendimento">
+                        <!-- /.input group -->
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <!-- Date -->
+                      <div class="form-group col-md-6">
+                        <label>Horario de Termino do Atendimento</label>
+                        <input type="time" class="form-control pull-right" [(ngModel)]="agendaMedico.horaFinalAtendimento"
+                        #horaFinalAtendimento="ngModel" min="06:00" max="22:00"
+                        (ngModelChange)="agendaMedico.horaFinalAtendimento = $event" name="horaFinalAtendimento" id="horaFinalAtendimento">
+                        <!-- /.input group -->
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="box-body pad">
+                        <label>Observações</label>
+                        <textarea id="observacao" [(ngModel)]="agendaMedico.observacao" #observacao="ngModel" name="observacao" rows="10" cols="138">
+                        </textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default pull-left" (click)="fecharModalHorarioAtendimento()" data-dismiss="modal" id="closeModal">Cancelar</button>
+              <button type="button" class="btn btn-primary" id="salvarAgendaMedico" (click)="salvarAgendaMedico()" >Salvar</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
 </section>
 <!-- /.content -->

@@ -1,7 +1,7 @@
 import { AgendaMedicoPK } from './agendamedicopk';
 export class AgendaMedico {
   agendaMedicoPK = new AgendaMedicoPK();
-  dataAtendimento: any;
+  diaSemana: number;
   horaInicioAtendimento: any;
   horaFinalAtendimento: any;
   observacao: string;
