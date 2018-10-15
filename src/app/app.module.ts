@@ -1,3 +1,5 @@
+import { HeaderCalendarioComponent } from './componentes/comum/calendario/calendar-header.component';
+import { ConsultaComponent } from './componentes/modulos/consultas/consulta.component';
 import { PerfilMedicoComponent } from './componentes/modulos/medicos/perfil/perfilmedico.component';
 import { EspecialidadeConverter } from './componentes/modulos/cadastro/especialidade/converter/especialidade.converter';
 import { DominioConverter } from './componentes/comum/converter/dominio.converter';
@@ -59,7 +61,9 @@ registerLocaleData(localePt);
     TipoPlanoSaudeComponent,
     TipoContatoComponent,
     MedicoComponent,
-    PerfilMedicoComponent
+    PerfilMedicoComponent,
+    ConsultaComponent,
+    HeaderCalendarioComponent
   ],
   imports: [
     BrowserModule,

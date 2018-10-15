@@ -1,3 +1,4 @@
+import { ConsultaComponent } from './componentes/modulos/consultas/consulta.component';
 import { PerfilMedicoComponent } from './componentes/modulos/medicos/perfil/perfilmedico.component';
 import { MedicoComponent } from './componentes/modulos/medicos/medico.component';
 import { TipoContatoComponent } from './componentes/modulos/cadastro/tipoContato/tipocontato.component';
@@ -52,6 +53,10 @@ export const ROUTES: Routes = [
   {
     path: 'medico/perfil/:codigo',
     component: PerfilMedicoComponent
+  },
+  {
+    path: 'agendamentos/consultas',
+    component: ConsultaComponent
   }
 
 ];

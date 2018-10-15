@@ -1,43 +1,43 @@
-import { AgendaMedicoConverter } from './../converter/agendamedico.converter';
-import { EspecialidadeConverter } from './../../cadastro/especialidade/converter/especialidade.converter';
-import { EspecialidadeService } from './../../cadastro/especialidade/service/especialidade.service';
-import { Especialidade } from './../../../../model/dominio/especialidade.model';
-import { MedicoEBO } from './../ebo/medicoebo';
-import { Medico } from './../../../../model/medico.model';
-import { MedicoConverter } from './../converter/medico.converter';
+import { AgendaMedicoConverter } from './../medicos/converter/agendamedico.converter';
+import { EspecialidadeConverter } from './../cadastro/especialidade/converter/especialidade.converter';
+import { EspecialidadeService } from './../cadastro/especialidade/service/especialidade.service';
+import { Especialidade } from './../../../model/dominio/especialidade.model';
+import { MedicoEBO } from './../medicos/ebo/medicoebo';
+import { Medico } from './../../../model/medico.model';
+import { MedicoConverter } from './../medicos/converter/medico.converter';
 import { NgForm } from '@angular/forms';
-import { Estado } from './../../../../model/estado.model';
-import { Mensagem } from './../../../../model/mensagem';
-import { TipoPlanoSaudeConverter } from './../../cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
-import { OperadoraConverter } from './../../cadastro/operadora/converter/operadora.converter';
-import { Excecao } from './../../../comum/excecao/excecao';
-import { DominioService } from './../../../comum/services/dominio.service';
+import { Estado } from './../../../model/estado.model';
+import { Mensagem } from './../../../model/mensagem';
+import { TipoPlanoSaudeConverter } from './../cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
+import { OperadoraConverter } from './../cadastro/operadora/converter/operadora.converter';
+import { Excecao } from './../../comum/excecao/excecao';
+import { DominioService } from './../../comum/services/dominio.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DominioConverter } from '../../../comum/converter/dominio.converter';
-import { TipoContatoService } from '../../cadastro/tipoContato/service/tipocontato.service';
-import { TipoContatoConverter } from '../../cadastro/tipoContato/converter/tipocontato.converter';
-import { EstadoCivil } from '../../../../model/estadocivil.model';
-import { TipoLogradouro } from '../../../../model/tipologradouro.model';
-import { TipoContato } from '../../../../model/tipo-contato.model';
-import { Constantes } from '../../../comum/constantes';
-import { Pagina } from '../../../../model/comum/pagina.model';
-import { MedicoService } from '../service/medico.service';
+import { DominioConverter } from '../../comum/converter/dominio.converter';
+import { TipoContatoService } from '../cadastro/tipoContato/service/tipocontato.service';
+import { TipoContatoConverter } from '../cadastro/tipoContato/converter/tipocontato.converter';
+import { EstadoCivil } from '../../../model/estadocivil.model';
+import { TipoLogradouro } from '../../../model/tipologradouro.model';
+import { TipoContato } from '../../../model/tipo-contato.model';
+import { Constantes } from '../../comum/constantes';
+import { Pagina } from '../../../model/comum/pagina.model';
+import { MedicoService } from '../medicos/service/medico.service';
 
 // Inicio Import Calendario
 import { CalendarEvent, DAYS_OF_WEEK } from 'angular-calendar';
 import { setHours, setMinutes, setDay } from 'date-fns';
-import { AgendaMedico } from '../../../../model/agendamedico.model';
+import { AgendaMedico } from '../../../model/agendamedico.model';
 // Fim Import Calendario
 
 @Component({
-  selector: 'app-perfilmedico',
-  templateUrl: './perfilmedico.component.html',
-  styleUrls: ['./perfilmedico.component.css'],
+  selector: 'app-consulta',
+  templateUrl: './consulta.component.html',
+  styleUrls: ['./consulta.component.css'],
   providers: [MedicoConverter, DominioConverter, Excecao, TipoContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter,
   AgendaMedicoConverter]
 })
-export class PerfilMedicoComponent implements OnInit {
+export class ConsultaComponent implements OnInit {
 
   @ViewChild('form')
   form: NgForm;
@@ -75,7 +75,7 @@ export class PerfilMedicoComponent implements OnInit {
     }
   };
 
-  view = 'week';
+  view = 'month';
 
   // Traduzir o calendário
   locale = 'pt';

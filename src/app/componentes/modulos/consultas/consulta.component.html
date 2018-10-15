@@ -1,0 +1,203 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Agendamento de Consultas
+  </h1>
+  <ol class="breadcrumb">
+    <li><a [routerLink]="['/']"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li>Agendamentos</li>
+    <li class="active">Consultas</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+  <div class="row">
+    <!-- /.col -->
+    <div class="col-md-12">
+      <div *ngIf="mensagem && mensagem.codigoTipo === 1" class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+        {{mensagem.texto}}
+      </div>
+      <div *ngIf="mensagem && mensagem.codigoTipo === 0" class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+        {{mensagem.texto}}
+      </div>
+      <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#abaDadosProfissionais">Listagem</a></li>
+          <li><a data-toggle="tab" href="#abaHorarioAtendimento">Calendário</a></li>
+        </ul>
+        <div class="tab-content">
+          <div id="abaDadosProfissionais" class="tab-pane fade">
+            <!-- Inicio Exibição das informações -->
+            <div class="row" *ngIf="!habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Especialidades</label><p class="text-muted">{{medico.listaEspecialidade && medico.listaEspecialidade
+                  ? medico.listaEspecialidade && medico.listaEspecialidade : 'Não Informado'}}</p>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>NumeroCRM</label><p class="text-muted">{{medico.numeroCRM ?
+                    medico.numeroCRM : 'Não Informado'}}</p>
+                </div>
+              </div>
+            </div>
+            <!-- Fim Exibição das informações -->
+            <div class="row" *ngIf="habilitarEdicao">
+              <div class="col-md-12">
+                <div class="form-group col-md-6">
+                  <label>Especialidades</label>
+                  <select class="form-control select2"
+                    multiple="multiple" data-placeholder="Selecionar"
+                    style="width: 100%;" [(ngModel)]="medico.listaEspecialidade" #listaEspecialidade="ngModel" name="listaEspecialidade">
+                    <option *ngFor="let especialidade of listaComboEspecialidade" [value]="especialidade.codigo" >{{ especialidade.nome }}</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Número CRM</label>
+                  <input type="text" class="form-control" [(ngModel)]="medico.numeroCRM" #numeroCRM="ngModel" name="numeroCRM" id="numeroCRM" placeholder="numeroCRM">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="abaHorarioAtendimento" class="tab-pane fade">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="col-md-4">
+                  <button type="button" id="btnNovoHorarioAtendimento" class="btn btn-primary pull-left" data-toggle="modal" data-target="#modal-horario-atendimento">
+                      Novo Agendamento
+                  </button>
+                </div>
+                <div class="col-md-12">
+                  <app-header-calendario
+                    [(view)]="view"
+                    [(viewDate)]="viewDate">
+                  </app-header-calendario>
+                  <div [ngSwitch]="view">
+                      <mwl-calendar-month-view
+                      *ngSwitchCase="'month'"
+                      [weekStartsOn]="weekStartsOn"
+                      [weekendDays]="weekendDays"
+                      [locale]="locale"
+                      [viewDate]="viewDate"
+                      (eventClicked)="eventClicked($event)"
+                      [events]="events">
+                    </mwl-calendar-month-view>
+                    <mwl-calendar-week-view
+                      *ngSwitchCase="'week'"
+                      [weekStartsOn]="weekStartsOn"
+                      [weekendDays]="weekendDays"
+                      [locale]="locale"
+                      [viewDate]="viewDate"
+                      (eventClicked)="eventClicked($event)"
+                      [events]="events">
+                    >
+                    </mwl-calendar-week-view>
+                    <mwl-calendar-day-view
+                      *ngSwitchCase="'day'"
+                      [locale]="locale"
+                      [viewDate]="viewDate"
+                      (eventClicked)="eventClicked($event)"
+                      [events]="events">
+                    >
+                    </mwl-calendar-day-view>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.tab-pane -->
+        </div>
+        <!-- /.tab-content -->
+      </div>
+      <!-- /.nav-tabs-custom -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+
+  <div class="modal fade" id="modal-horario-atendimento">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" id="fecharModal" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{ agendaMedico && agendaMedico.agendaMedicoPK
+            && agendaMedico.agendaMedicoPK.codigoAgendaMedico ? 'Atualizar Horario Atendimento' : 'Novo Horario Atendimento' }}</h4>
+        </div>
+        <div class="modal-body">
+          <form #form="ngForm" role="form">
+            <div *ngIf="mensagem && mensagem.codigoTipo === 1" class="alert alert-danger alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+              {{mensagem.texto}}
+            </div>
+            <div class="row">
+              <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#abaNovoHorarioAtendimento">Horario de Atendimento</a></li>
+              </ul>
+              <div class="tab-content">
+                <br>
+                <div id="abaNovoHorarioAtendimento" class="tab-pane fade in active">
+                  <div class="col-md-12">
+                    <div class="form-group col-md-6">
+                      <label>Dia da Semana</label>
+                      <select class="form-control" [(ngModel)]="agendaMedico.diaSemana" #diaSemana="ngModel" id="diaSemana" name="diaSemana">
+                        <option>Selecione...</option>
+                        <option value="1">Domingo</option>
+                        <option value="2">Segunda-Feira</option>
+                        <option value="3">Terça-Feira</option>
+                        <option value="4">Quarta-Feira</option>
+                        <option value="5">Quinta-Feira</option>
+                        <option value="6">Sexta-Feira</option>
+                        <option value="7">Sábado</option>
+                      </select>
+                    </div>
+                    <!-- Date -->
+                    <div class="form-group col-md-6">
+                      <label>Horario de Inicio do Atendimento</label>
+                      <input type="time" class="form-control pull-right" [(ngModel)]="agendaMedico.horaInicioAtendimento"
+                      #horaInicioAtendimento="ngModel" min="06:00" max="22:00"
+                      (ngModelChange)="agendaMedico.horaInicioAtendimento = $event" name="horaInicioAtendimento" id="horaInicioAtendimento">
+                      <!-- /.input group -->
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <!-- Date -->
+                    <div class="form-group col-md-6">
+                      <label>Horario de Termino do Atendimento</label>
+                      <input type="time" class="form-control pull-right" [(ngModel)]="agendaMedico.horaFinalAtendimento"
+                      #horaFinalAtendimento="ngModel" min="06:00" max="22:00"
+                      (ngModelChange)="agendaMedico.horaFinalAtendimento = $event" name="horaFinalAtendimento" id="horaFinalAtendimento">
+                      <!-- /.input group -->
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="box-body pad">
+                      <label>Observações</label>
+                      <textarea id="observacao" [(ngModel)]="agendaMedico.observacao" #observacao="ngModel" name="observacao" rows="10" cols="138">
+                      </textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" (click)="fecharModalHorarioAtendimento()" data-dismiss="modal" id="closeModal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="salvarAgendaMedico" (click)="salvarAgendaMedico()" >Salvar</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+</section>
+<!-- /.content -->
