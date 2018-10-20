@@ -1,3 +1,7 @@
+import { ConsultaConverter } from './converter/consulta.converter';
+import { ConsultaService } from './service/consulta.service';
+import { StatusConsulta } from './statusconsulta.enum';
+import { Consulta } from './../../../model/consulta.model';
 import { AgendaMedicoConverter } from './../medicos/converter/agendamedico.converter';
 import { EspecialidadeConverter } from './../cadastro/especialidade/converter/especialidade.converter';
 import { EspecialidadeService } from './../cadastro/especialidade/service/especialidade.service';
@@ -42,6 +46,8 @@ export class ConsultaComponent implements OnInit {
   @ViewChild('form')
   form: NgForm;
 
+  pagina: Pagina;
+
   habilitarEdicao = false;
 
   medico = new Medico();
@@ -49,6 +55,12 @@ export class ConsultaComponent implements OnInit {
   agendaMedico = new AgendaMedico();
 
   mensagem = new Mensagem();
+
+  consulta = new Consulta();
+
+  listaConsulta = new Array<Consulta>();
+
+  StatusConsulta: typeof StatusConsulta = StatusConsulta;
 
   // Inicio lista de atributos dos compbos de medico
   listaComboEstadoCivil = new Array<EstadoCivil>();
@@ -89,47 +101,72 @@ export class ConsultaComponent implements OnInit {
   events: CalendarEvent[] = [];
   // Fim Calendário
 
-  constructor(private route: ActivatedRoute, private medicoService: MedicoService, private medicoConverter: MedicoConverter,
+  constructor(private route: ActivatedRoute, private consultaService: ConsultaService, private consultaConverter: ConsultaConverter,
     private dominioService: DominioService, private dominioConverter: DominioConverter,
-    private excecao: Excecao, private tipoContatoService: TipoContatoService, private tipoContatoConverter: TipoContatoConverter,
-    private router: Router, private especialidadeService: EspecialidadeService, private especialidadeConverter: EspecialidadeConverter,
-    private agendaMedicoConverter: AgendaMedicoConverter) { }
+    private excecao: Excecao) { }
 
   ngOnInit() {
-    this.route.params.subscribe(
-      res => {
-        this.medico.codigo = res.codigo;
-      }
-    );
-    this.inicializarCombos();
     this.inicializarCalendario();
+    this.consultaService.listarRegistros(0, 10).subscribe((retorno: Pagina) => {
+      this.pagina = retorno;
+      if (retorno) {
+        this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);
+      }
+      this.inicializarTable();
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+  }
+
+  inicializarTable() {
+    const table: any = $('#tabelaConsulta');
+    table.DataTable().destroy();
+    setTimeout(() =>
+      table.DataTable({
+        'paging'      : false,
+        'lengthChange': false,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : false
+      }), 0
+    );
   }
 
   inicializarCalendario() {
-    this.medicoService.buscarPorCodigo(this.medico.codigo).subscribe((medico: MedicoEBO) => {
-      this.medico = this.medicoConverter.converterParaFrontend(medico);
-      if (this.medico.listaAgendaMedico && this.medico.listaAgendaMedico.length > 0) {
-        const agenda: CalendarEvent[] = [];
-        let evento: any = {};
-        let horaInicio = [];
-        let horaFim = [];
-        for (const index of this.medico.listaAgendaMedico) {
-          horaInicio = index.horaInicioAtendimento.split(':');
-          horaFim = index.horaFinalAtendimento.split(':');
-          evento = {
-            title: index.horaInicioAtendimento + ' - ' + index.horaFinalAtendimento,
-            start: setDay(setHours(setMinutes(new Date(), horaInicio[1]), horaInicio[0]), (index.diaSemana - 1)),
-            end: setDay(setHours(setMinutes(new Date(), horaFim[1]), horaFim[0]), (index.diaSemana - 1)),
-            color: this.cores.blue,
-            data: index
-          };
-          agenda.push(evento);
-          // evento.start = setDay(setHours(setMinutes(new Date(), horaInicio[1]), horaInicio[0]), (index.diaSemana - 1));
-          // evento.end = setDay(setHours(setMinutes(new Date(), horaFim[1]), horaFim[0]), (index.diaSemana - 1));
-          // evento.color = this.cores.blue;
-        }
-        this.events = agenda;
-      }
+    // this.medicoService.buscarPorCodigo(this.medico.codigo).subscribe((medico: MedicoEBO) => {
+    //   this.medico = this.medicoConverter.converterParaFrontend(medico);
+    //   if (this.medico.listaAgendaMedico && this.medico.listaAgendaMedico.length > 0) {
+    //     const agenda: CalendarEvent[] = [];
+    //     let evento: any = {};
+    //     let horaInicio = [];
+    //     let horaFim = [];
+    //     for (const index of this.medico.listaAgendaMedico) {
+    //       horaInicio = index.horaInicioAtendimento.split(':');
+    //       horaFim = index.horaFinalAtendimento.split(':');
+    //       evento = {
+    //         title: index.horaInicioAtendimento + ' - ' + index.horaFinalAtendimento,
+    //         start: setDay(setHours(setMinutes(new Date(), horaInicio[1]), horaInicio[0]), (index.diaSemana - 1)),
+    //         end: setDay(setHours(setMinutes(new Date(), horaFim[1]), horaFim[0]), (index.diaSemana - 1)),
+    //         color: this.cores.blue,
+    //         data: index
+    //       };
+    //       agenda.push(evento);
+    //       // evento.start = setDay(setHours(setMinutes(new Date(), horaInicio[1]), horaInicio[0]), (index.diaSemana - 1));
+    //       // evento.end = setDay(setHours(setMinutes(new Date(), horaFim[1]), horaFim[0]), (index.diaSemana - 1));
+    //       // evento.color = this.cores.blue;
+    //     }
+    //     this.events = agenda;
+    //   }
+    // }, err => {
+    //   this.mensagem = this.excecao.exibirExcecao(err.error);
+    // });
+  }
+
+  listarRegistros(pagina, total) {
+    this.consultaService.listarRegistros(pagina, total).subscribe((retorno: Pagina) => {
+      this.pagina = retorno;
+      this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);
     }, err => {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
@@ -156,43 +193,6 @@ export class ConsultaComponent implements OnInit {
     } else {
       this.habilitarEdicao = true;
     }
-  }
-
-  inicializarCombos() {
-    // Combo de estado civil.
-    this.dominioService.listarDominio(Constantes.DOMINIO_ESTADO_CIVIL).subscribe((retorno: Array<any>) => {
-      this.listaComboEstadoCivil = this.dominioConverter.converterListaParaFrontend(retorno, Constantes.DOMINIO_ESTADO_CIVIL);
-    }, err => {
-      this.mensagem = this.excecao.exibirExcecao(err.error);
-    });
-
-    // Combo de estado.
-    this.dominioService.listarDominio(Constantes.DOMINIO_ESTADO).subscribe((retorno: Array<any>) => {
-      this.listaComboEstado = this.dominioConverter.converterListaParaFrontend(retorno, Constantes.DOMINIO_ESTADO);
-    }, err => {
-      this.mensagem = this.excecao.exibirExcecao(err.error);
-    });
-
-    // Combo de tipo logradouro.
-    this.dominioService.listarDominio(Constantes.DOMINIO_TIPO_LOGRADOURO).subscribe((retorno: Array<any>) => {
-      this.listaComboTipoLogradouro = this.dominioConverter.converterListaParaFrontend(retorno, Constantes.DOMINIO_TIPO_LOGRADOURO);
-    }, err => {
-      this.mensagem = this.excecao.exibirExcecao(err.error);
-    });
-
-    // Combo de Tipo Contato.
-    this.tipoContatoService.listarRegistros(0, 100).subscribe((retorno: Pagina) => {
-      this.listaComboTipoContato = this.tipoContatoConverter.converterListaParaFrontend(retorno.content);
-    }, err => {
-      this.mensagem = this.excecao.exibirExcecao(err.error);
-    });
-
-    // Combo de Especialidade
-    this.especialidadeService.listarRegistros(0, 100).subscribe((retorno: Pagina) => {
-      this.listaComboEspecialidade = this.especialidadeConverter.converterListaParaFrontend(retorno.content);
-    }, err => {
-      this.mensagem = this.excecao.exibirExcecao(err.error);
-    });
   }
 
   atualizar() {
@@ -235,5 +235,13 @@ export class ConsultaComponent implements OnInit {
     this.mensagem = new Mensagem();
     const modal: any = $('#fecharMosdal');
     modal.click();
+  }
+
+  changePage(event) {
+    if (this.consulta.paciente.nome) {
+      this.buscarPorNomePaginacao(event.page, event.size, this.consulta.paciente.nome);
+    } else {
+      this.listarRegistros(event.page, event.size);
+    }
   }
 }
