@@ -1,3 +1,4 @@
+import { ConsultaEBO } from './ebo/consultaebo';
 import { ConsultaConverter } from './converter/consulta.converter';
 import { ConsultaService } from './service/consulta.service';
 import { StatusConsulta } from './statusconsulta.enum';
@@ -173,26 +174,17 @@ export class ConsultaComponent implements OnInit {
   }
 
   eventClicked({ event }: { event: any }): void {
-    this.agendaMedico = this.agendaMedicoConverter.converterParaFrontend(event.data);
+    this.consulta = this.consultaConverter.converterParaFrontend(event.data);
     const modal: any = $('#btnNovoHorarioAtendimento');
     modal.click();
   }
 
   buscarPorCodigo(codigo: number) {
-    this.medicoService.buscarPorCodigo(codigo).subscribe((medico: MedicoEBO) => {
-      this.medico = this.medicoConverter.converterParaFrontend(medico);
+    this.consultaService.buscarPorCodigo(codigo).subscribe((consulta: ConsultaEBO) => {
+      this.consulta = this.consultaConverter.converterParaFrontend(consulta);
     }, err => {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
-  }
-
-  modoEdicao() {
-    if (this.habilitarEdicao) {
-      this.atualizar();
-      this.habilitarEdicao = false;
-    } else {
-      this.habilitarEdicao = true;
-    }
   }
 
   atualizar() {
@@ -226,6 +218,17 @@ export class ConsultaComponent implements OnInit {
     });
   }
 
+  buscar() {
+    this.consultaService.buscarPorNome(0, 10, this.consulta.paciente.nome).subscribe((retorno: Pagina) => {
+      this.pagina = retorno;
+      if (retorno) {
+        this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);
+      }
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+  }
+
   limparCamposAgendaMedico() {
     this.agendaMedico = new AgendaMedico();
   }
@@ -243,5 +246,16 @@ export class ConsultaComponent implements OnInit {
     } else {
       this.listarRegistros(event.page, event.size);
     }
+  }
+
+  buscarPorNomePaginacao(pagina: number, total: number, nome: string) {
+    this.consultaService.buscarPorNome(pagina, total, nome).subscribe((retorno: Pagina) => {
+      this.pagina = retorno;
+      if (retorno) {
+        this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);
+      }
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
   }
 }
