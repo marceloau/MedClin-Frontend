@@ -244,6 +244,7 @@ export class ConsultaComponent implements OnInit {
         const modal: any = $('#fecharModal');
         modal.click();
         this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
+        this.listarRegistros(0, 10);
       }, err => {
         this.mensagem = this.excecao.exibirExcecao(err.error);
       });
@@ -256,6 +257,7 @@ export class ConsultaComponent implements OnInit {
         const modal: any = $('#fecharModal');
         modal.click();
         this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
+        this.listarRegistros(0, 10);
       }, err => {
         this.mensagem = this.excecao.exibirExcecao(err.error);
       });

@@ -53,10 +53,10 @@ export class ConsultaConverter {
     consultaRetorno.flagConfirmada = consultaEBO.flagConfirmada;
     consultaRetorno.flagPrimeiraConsulta = consultaEBO.flagPrimeiraConsulta;
     if (consultaEBO.dataAtendimento) {
-      consultaRetorno.dataAtendimento = this.datePipe.transform(consultaEBO.dataAtendimento, Constantes.FORMATO_DATA_FRONTEND);
+      consultaRetorno.dataAtendimento = this.datePipe.transform(consultaEBO.dataAtendimento, Constantes.FORMATO_DATA_FRONTEND_COMBO);
     }
     if (consultaEBO.dataConsulta) {
-      consultaRetorno.dataConsulta = this.datePipe.transform(consultaEBO.dataConsulta, Constantes.FORMATO_DATA_FRONTEND);
+      consultaRetorno.dataConsulta = this.datePipe.transform(consultaEBO.dataConsulta, Constantes.FORMATO_DATA_FRONTEND_COMBO);
     }
     consultaRetorno.flagAtivo = consultaEBO.flagAtivo;
     consultaRetorno.dataCriacao = consultaEBO.dataCriacao;
