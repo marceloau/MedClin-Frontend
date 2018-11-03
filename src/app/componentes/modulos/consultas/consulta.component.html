@@ -35,11 +35,6 @@
           <div id="abaListagem" class="tab-pane fade in active">
             <div class="row">
               <div class="col-md-12">
-                <div *ngIf="mensagem && mensagem.codigoTipo === 0" class="alert alert-success alert-dismissible">
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                  <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
-                  {{mensagem.texto}}
-                </div>
                 <div class="input-group col-md-4 pull-left">
                   <button type="button" id="btnNovoHorarioAtendimento" class="btn btn-primary pull-left" data-toggle="modal" data-target="#modal-horario-atendimento">
                       Novo Agendamento
@@ -79,7 +74,7 @@
                         <button type="button" class="btn btn-default">
                           <i class="fa fa-search" title="Visualizar Perfil"></i>
                         </button>
-                        <button type="button" class="btn btn-default">
+                        <button type="button" (click)="abrirModalAtualizar(consulta.codigo)" class="btn btn-default">
                           <i class="fa fa-edit" title="Editar"></i>
                         </button>
                       </div>
@@ -186,43 +181,68 @@
                 <br>
                 <div id="abaNovoHorarioAtendimento" class="tab-pane fade in active">
                   <div class="col-md-12">
+                    <div class="col-md-6">
+                      <div class="input-group col-md-12 pull-left">
+                        <div class="input-group col-md-12 pull-left">
+                          <input type="text" class="form-control" id="nomeMedico" name="nomeMedico" value="consulta.medico.nome" [(ngModel)]="consulta.medico.nome"
+                          #nome="ngModel" placeholder="Informe o nome do medico.">
+                          <span class="input-group-btn">
+                            <button type="button" (click)="buscarMedicoConsulta()" class="btn btn-primary btn-flat" data-toggle="modal"
+                            data-target="#modal-consulta-medico">Buscar</button>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="input-group col-md-12 pull-left">
+                        <div class="input-group col-md-12 pull-left">
+                          <input type="text" class="form-control" id="nomePaciente" name="nomePaciente" value="consulta.paciente.nome" [(ngModel)]="consulta.paciente.nome"
+                          #nome="ngModel" placeholder="Informe o nome do paciente.">
+                          <span class="input-group-btn">
+                            <button type="button" (click)="buscarPacienteConsulta()" class="btn btn-primary btn-flat" data-toggle="modal"
+                            data-target="#modal-consulta-paciente">Buscar</button>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-12">
                     <div class="form-group col-md-6">
-                      <label>Dia da Semana</label>
-                      <select class="form-control" [(ngModel)]="agendaMedico.diaSemana" #diaSemana="ngModel" id="diaSemana" name="diaSemana">
+                      <label>Status</label>
+                      <select class="form-control" [(ngModel)]="consulta.codigoStatusConsulta" #codigoStatusConsulta="ngModel" id="codigoStatusConsulta" name="codigoStatusConsulta">
                         <option>Selecione...</option>
-                        <option value="1">Domingo</option>
-                        <option value="2">Segunda-Feira</option>
-                        <option value="3">Terça-Feira</option>
-                        <option value="4">Quarta-Feira</option>
-                        <option value="5">Quinta-Feira</option>
-                        <option value="6">Sexta-Feira</option>
-                        <option value="7">Sábado</option>
+                        <option value="1">Aberto</option>
+                        <option value="2">Confirmado</option>
+                        <option value="3">Aguardando Atendimento</option>
+                        <option value="4">Em Atendimento</option>
+                        <option value="5">Finalizada</option>
+                        <option value="6">Cancelada</option>
+                      </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label>Primeira Consulta?</label>
+                      <select class="form-control" [(ngModel)]="consulta.flagPrimeiraConsulta" #flagPrimeiraConsulta="ngModel" id="flagPrimeiraConsulta" name="flagPrimeiraConsulta">
+                        <option value="S">Sim</option>
+                        <option value="N">Não</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group col-md-6">
+                      <label>Consulta Confirmada?</label>
+                      <select class="form-control" [(ngModel)]="consulta.flagConfirmada" #flagConfirmada="ngModel" id="flagConfirmada" name="flagConfirmada">
+                        <option value="S">Sim</option>
+                        <option value="N">Não</option>
                       </select>
                     </div>
                     <!-- Date -->
                     <div class="form-group col-md-6">
-                      <label>Horario de Inicio do Atendimento</label>
-                      <input type="time" class="form-control pull-right" [(ngModel)]="agendaMedico.horaInicioAtendimento"
-                      #horaInicioAtendimento="ngModel" min="06:00" max="22:00"
-                      (ngModelChange)="agendaMedico.horaInicioAtendimento = $event" name="horaInicioAtendimento" id="horaInicioAtendimento">
+                      <label>Data da Consulta</label>
+                      <input type="datetime-local" class="form-control pull-right" [(ngModel)]="consulta.dataConsulta"
+                      #dataConsulta="ngModel"
+                      (ngModelChange)="agendaMedico.dataConsulta = $event" name="dataConsulta" id="dataConsulta">
                       <!-- /.input group -->
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <!-- Date -->
-                    <div class="form-group col-md-6">
-                      <label>Horario de Termino do Atendimento</label>
-                      <input type="time" class="form-control pull-right" [(ngModel)]="agendaMedico.horaFinalAtendimento"
-                      #horaFinalAtendimento="ngModel" min="06:00" max="22:00"
-                      (ngModelChange)="agendaMedico.horaFinalAtendimento = $event" name="horaFinalAtendimento" id="horaFinalAtendimento">
-                      <!-- /.input group -->
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="box-body pad">
-                      <label>Observações</label>
-                      <textarea id="observacao" [(ngModel)]="agendaMedico.observacao" #observacao="ngModel" name="observacao" rows="10" cols="138">
-                      </textarea>
                     </div>
                   </div>
                 </div>
@@ -231,8 +251,184 @@
           </form>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default pull-left" (click)="fecharModalHorarioAtendimento()" data-dismiss="modal" id="closeModal">Cancelar</button>
-            <button type="button" class="btn btn-primary" id="salvarAgendaMedico" (click)="salvarAgendaMedico()" >Salvar</button>
+            <button type="button" class="btn btn-default pull-left" (click)="fecharModalAgendamento()" data-dismiss="modal" id="closeModal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="salvar" (click)="salvar()" >Salvar</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <!-- Modal para selecionar o paciente da consulta -->
+  <div class="modal fade" id="modal-consulta-paciente">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" id="fecharModalConsultaPaciente" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Buscar Paciente</h4>
+        </div>
+        <div class="modal-body">
+          <form #form="ngForm" role="form">
+            <div *ngIf="mensagem && mensagem.codigoTipo === 1" class="alert alert-danger alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+              {{mensagem.texto}}
+            </div>
+            <div class="row">
+              <br>
+              <div id="abaNovoHorarioAtendimento" class="tab-pane fade in active">
+                <div class="col-md-12">
+                  <div class="input-group col-md-12 pull-left">
+                    <div class="input-group col-md-12 pull-left">
+                      <input type="text" class="form-control" id="nome" name="nome" value="consulta.paciente.nome" [(ngModel)]="consulta.paciente.nome"
+                      #nome="ngModel" placeholder="Informe o nome do paciente.">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="buscarPacienteConsulta()" class="btn btn-primary btn-flat">Buscar</button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <table id="tabelaModalConsultaPaciente" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nome</th>
+                      <th>Nome da Mãe</th>
+                      <th>RG</th>
+                      <th>CPF</th>
+                      <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let paciente of listaPacienteModal">
+                      <td>{{ paciente.codigo }}</td>
+                      <td>{{ paciente.nome }}</td>
+                      <td>{{ paciente.nomeMae }}</td>
+                      <td>{{ paciente.rg }}</td>
+                      <td>{{ paciente.cpf }}</td>
+                      <td>
+                        <div class="btn-group">
+                          <button type="button" (click)="selecionarPacienteModalConsulta(paciente)" class="btn btn-default">
+                            <i class="fa fa-check" title="Selecionar"></i>
+                          </button>
+                        </div>
+                        <a class="btn-group">
+
+                        </a>
+                        <a class="btn-group">
+
+                        </a>
+                      </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nome</th>
+                      <th>Nome da Mãe</th>
+                      <th>RG</th>
+                      <th>CPF</th>
+                      <th>Ações</th>
+                    </tr>
+                    </tfoot>
+                  </table>
+                  <app-paginacao [page]="paginaPaciente" (paginationEvent)=changePage($event)></app-paginacao>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <!-- Modal para selecionar o médico da consulta -->
+  <div class="modal fade" id="modal-consulta-medico">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" id="fecharModalConsultaMedico" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Buscar Médico</h4>
+        </div>
+        <div class="modal-body">
+          <form #form="ngForm" role="form">
+            <div *ngIf="mensagem && mensagem.codigoTipo === 1" class="alert alert-danger alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+              {{mensagem.texto}}
+            </div>
+            <div class="row">
+              <br>
+              <div id="abaNovoHorarioAtendimento" class="tab-pane fade in active">
+                <div class="col-md-12">
+                  <div class="input-group col-md-12 pull-left">
+                    <div class="input-group col-md-12 pull-left">
+                      <input type="text" class="form-control" id="nome" name="nome" value="consulta.paciente.nome" [(ngModel)]="consulta.paciente.nome"
+                      #nome="ngModel" placeholder="Informe o nome do paciente.">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="buscarMedicoConsulta()" class="btn btn-primary btn-flat">Buscar</button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <table id="tabelaModalConsultaMedico" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nome</th>
+                      <th>Estado Civil</th>
+                      <th>RG</th>
+                      <th>CPF</th>
+                      <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let medico of listaMedicoModal">
+                      <td>{{ medico.codigo }}</td>
+                      <td>{{ medico.nome }}</td>
+                      <td>{{ medico.estadoCivil.nome }}</td>
+                      <td>{{ medico.rg }}</td>
+                      <td>{{ medico.cpf }}</td>
+                      <td>
+                        <div class="btn-group">
+                          <button type="button" (click)="selecionarMedicoModalConsulta(medico)" class="btn btn-default">
+                            <i class="fa fa-check" title="Selecionar"></i>
+                          </button>
+                        </div>
+                        <a class="btn-group">
+
+                        </a>
+                        <a class="btn-group">
+
+                        </a>
+                      </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nome</th>
+                      <th>Estado Civil</th>
+                      <th>RG</th>
+                      <th>CPF</th>
+                      <th>Ações</th>
+                    </tr>
+                    </tfoot>
+                  </table>
+                  <app-paginacao [page]="paginaMedico" (paginationEvent)=changePage($event)></app-paginacao>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
       <!-- /.modal-content -->

@@ -1,31 +1,25 @@
+import { PacienteEBO } from './../pacientes/ebo/pacienteebo';
+import { PacienteService } from './../pacientes/service/paciente.service';
+import { PacienteConverter } from './../pacientes/converter/paciente.converter';
 import { ConsultaEBO } from './ebo/consultaebo';
 import { ConsultaConverter } from './converter/consulta.converter';
 import { ConsultaService } from './service/consulta.service';
 import { StatusConsulta } from './statusconsulta.enum';
 import { Consulta } from './../../../model/consulta.model';
-import { AgendaMedicoConverter } from './../medicos/converter/agendamedico.converter';
-import { EspecialidadeConverter } from './../cadastro/especialidade/converter/especialidade.converter';
-import { EspecialidadeService } from './../cadastro/especialidade/service/especialidade.service';
 import { Especialidade } from './../../../model/dominio/especialidade.model';
-import { MedicoEBO } from './../medicos/ebo/medicoebo';
 import { Medico } from './../../../model/medico.model';
 import { MedicoConverter } from './../medicos/converter/medico.converter';
 import { NgForm } from '@angular/forms';
 import { Estado } from './../../../model/estado.model';
 import { Mensagem } from './../../../model/mensagem';
-import { TipoPlanoSaudeConverter } from './../cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
-import { OperadoraConverter } from './../cadastro/operadora/converter/operadora.converter';
 import { Excecao } from './../../comum/excecao/excecao';
 import { DominioService } from './../../comum/services/dominio.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DominioConverter } from '../../comum/converter/dominio.converter';
-import { TipoContatoService } from '../cadastro/tipoContato/service/tipocontato.service';
-import { TipoContatoConverter } from '../cadastro/tipoContato/converter/tipocontato.converter';
 import { EstadoCivil } from '../../../model/estadocivil.model';
 import { TipoLogradouro } from '../../../model/tipologradouro.model';
 import { TipoContato } from '../../../model/tipo-contato.model';
-import { Constantes } from '../../comum/constantes';
 import { Pagina } from '../../../model/comum/pagina.model';
 import { MedicoService } from '../medicos/service/medico.service';
 
@@ -33,14 +27,14 @@ import { MedicoService } from '../medicos/service/medico.service';
 import { CalendarEvent, DAYS_OF_WEEK } from 'angular-calendar';
 import { setHours, setMinutes, setDay } from 'date-fns';
 import { AgendaMedico } from '../../../model/agendamedico.model';
+import { Paciente } from '../../../model/paciente.model';
 // Fim Import Calendario
 
 @Component({
   selector: 'app-consulta',
   templateUrl: './consulta.component.html',
   styleUrls: ['./consulta.component.css'],
-  providers: [MedicoConverter, DominioConverter, Excecao, TipoContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter,
-  AgendaMedicoConverter]
+  providers: [MedicoConverter, DominioConverter, Excecao, PacienteConverter, MedicoConverter]
 })
 export class ConsultaComponent implements OnInit {
 
@@ -48,6 +42,10 @@ export class ConsultaComponent implements OnInit {
   form: NgForm;
 
   pagina: Pagina;
+
+  paginaMedico: Pagina;
+
+  paginaPaciente: Pagina;
 
   habilitarEdicao = false;
 
@@ -60,6 +58,10 @@ export class ConsultaComponent implements OnInit {
   consulta = new Consulta();
 
   listaConsulta = new Array<Consulta>();
+
+  listaPacienteModal = new Array<Paciente>();
+
+  listaMedicoModal = new Array<Medico>();
 
   StatusConsulta: typeof StatusConsulta = StatusConsulta;
 
@@ -103,8 +105,8 @@ export class ConsultaComponent implements OnInit {
   // Fim Calendário
 
   constructor(private route: ActivatedRoute, private consultaService: ConsultaService, private consultaConverter: ConsultaConverter,
-    private dominioService: DominioService, private dominioConverter: DominioConverter,
-    private excecao: Excecao) { }
+    private excecao: Excecao, private pacienteConverter: PacienteConverter, private pacienteService: PacienteService,
+    private medicoConverter: MedicoConverter, private medicoService: MedicoService) { }
 
   ngOnInit() {
     this.inicializarCalendario();
@@ -121,6 +123,36 @@ export class ConsultaComponent implements OnInit {
 
   inicializarTable() {
     const table: any = $('#tabelaConsulta');
+    table.DataTable().destroy();
+    setTimeout(() =>
+      table.DataTable({
+        'paging'      : false,
+        'lengthChange': false,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : false
+      }), 0
+    );
+  }
+
+  inicializarTableModalConsulta() {
+    const table: any = $('#tabelaModalConsultaPaciente');
+    table.DataTable().destroy();
+    setTimeout(() =>
+      table.DataTable({
+        'paging'      : false,
+        'lengthChange': false,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : false
+      }), 0
+    );
+  }
+
+  inicializarTableModalConsultaMedico() {
+    const table: any = $('#tabelaModalConsultaMedico');
     table.DataTable().destroy();
     setTimeout(() =>
       table.DataTable({
@@ -188,34 +220,46 @@ export class ConsultaComponent implements OnInit {
   }
 
   atualizar() {
-    const objetoAtualizado: MedicoEBO = this.medicoConverter.converterParaBackend(this.medico);
-    this.medicoService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: MedicoEBO) => {
-      this.mensagem.codigoTipo = 0;
-      this.mensagem.titulo = 'Sucesso';
-      this.mensagem.texto = 'Médico atualizado com sucesso.';
-      this.habilitarEdicao = false;
-      this.medico = this.medicoConverter.converterParaFrontend(objetoSalvo);
-      this.inicializarCalendario();
-    }, err => {
-      this.mensagem = this.excecao.exibirExcecao(err.error);
-    });
+    // const objetoAtualizado: MedicoEBO = this.medicoConverter.converterParaBackend(this.medico);
+    // this.medicoService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: MedicoEBO) => {
+    //   this.mensagem.codigoTipo = 0;
+    //   this.mensagem.titulo = 'Sucesso';
+    //   this.mensagem.texto = 'Médico atualizado com sucesso.';
+    //   this.habilitarEdicao = false;
+    //   this.medico = this.medicoConverter.converterParaFrontend(objetoSalvo);
+    //   this.inicializarCalendario();
+    // }, err => {
+    //   this.mensagem = this.excecao.exibirExcecao(err.error);
+    // });
   }
 
-  salvarAgendaMedico() {
-    this.medico.listaAgendaMedico.push(this.agendaMedico);
-    const objetoAtualizado: MedicoEBO = this.medicoConverter.converterParaBackend(this.medico);
-    this.medicoService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: MedicoEBO) => {
-      this.mensagem.codigoTipo = 0;
-      this.mensagem.titulo = 'Sucesso';
-      this.mensagem.texto = 'Agenda do médico atualizada com sucesso.';
-      this.habilitarEdicao = false;
-      this.limparCamposAgendaMedico();
-      const modal: any = $('#fecharModal');
-      modal.click();
-      this.medico = this.medicoConverter.converterParaFrontend(objetoSalvo);
-    }, err => {
-      this.mensagem = this.excecao.exibirExcecao(err.error);
-    });
+  salvar() {
+    const objetoAtualizado: ConsultaEBO = this.consultaConverter.converterParaBackend(this.consulta);
+    if (objetoAtualizado.codigoConsulta) {
+      this.consultaService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: ConsultaEBO) => {
+        this.mensagem.codigoTipo = 0;
+        this.mensagem.titulo = 'Sucesso';
+        this.mensagem.texto = 'Consulta atualizada com sucesso.';
+        this.limparCamposConsulta();
+        const modal: any = $('#fecharModal');
+        modal.click();
+        this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
+      }, err => {
+        this.mensagem = this.excecao.exibirExcecao(err.error);
+      });
+    } else {
+      this.consultaService.salvar(objetoAtualizado).subscribe(( objetoSalvo: ConsultaEBO) => {
+        this.mensagem.codigoTipo = 0;
+        this.mensagem.titulo = 'Sucesso';
+        this.mensagem.texto = 'Consulta marcada com sucesso.';
+        this.limparCamposConsulta();
+        const modal: any = $('#fecharModal');
+        modal.click();
+        this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
+      }, err => {
+        this.mensagem = this.excecao.exibirExcecao(err.error);
+      });
+    }
   }
 
   buscar() {
@@ -229,12 +273,59 @@ export class ConsultaComponent implements OnInit {
     });
   }
 
-  limparCamposAgendaMedico() {
-    this.agendaMedico = new AgendaMedico();
+  buscarPacienteConsulta() {
+    this.pacienteService.buscar(0, 10, this.consulta.paciente.nome, null, null, null, null, null, null).subscribe((retorno: Pagina) => {
+      this.paginaPaciente = retorno;
+      if (retorno) {
+        this.listaPacienteModal = this.pacienteConverter.converterListaParaFrontend(retorno.content);
+      } else {
+        this.listaPacienteModal = [];
+      }
+      this.inicializarTableModalConsulta();
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
   }
 
-  fecharModalHorarioAtendimento() {
-    this.limparCamposAgendaMedico();
+  buscarMedicoConsulta() {
+    this.medicoService.buscar(0, 10, this.consulta.medico.nome).subscribe((retorno: Pagina) => {
+      this.paginaMedico = retorno;
+      if (retorno) {
+        this.listaMedicoModal = this.medicoConverter.converterListaParaFrontend(retorno.content);
+      } else {
+        this.listaMedicoModal = [];
+      }
+      this.inicializarTableModalConsultaMedico();
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+  }
+
+  abrirModalAtualizar(codigo: number) {
+    this.habilitarEdicao = true;
+    this.buscarPorCodigo(codigo);
+    const modal: any = $('#btnNovoHorarioAtendimento');
+    modal.click();
+  }
+
+  selecionarPacienteModalConsulta(paciente: Paciente) {
+    this.consulta.paciente = paciente;
+    const modal: any = $('#fecharModalConsultaPaciente');
+    modal.click();
+  }
+
+  selecionarMedicoModalConsulta(medico: Medico) {
+    this.consulta.medico = medico;
+    const modal: any = $('#fecharModalConsultaMedico');
+    modal.click();
+  }
+
+  limparCamposConsulta() {
+    this.consulta = new Consulta();
+  }
+
+  fecharModalAgendamento() {
+    this.limparCamposConsulta();
     this.mensagem = new Mensagem();
     const modal: any = $('#fecharMosdal');
     modal.click();

@@ -16,7 +16,7 @@ export class ConsultaConverter {
   converterParaBackend(consulta: Consulta): ConsultaEBO {
     const consultaEBO = new ConsultaEBO();
     consultaEBO.codigoConsulta = consulta.codigo;
-    consultaEBO.codigoStatusConsulta = consulta.codigo;
+    consultaEBO.codigoStatusConsulta = consulta.codigoStatusConsulta;
     consultaEBO.paciente = this.pacienteConverter.converterParaBackend(consulta.paciente);
     consultaEBO.medico = this.medicoConverter.converterParaBackend(consulta.medico);
     consultaEBO.flagConfirmada = consulta.flagConfirmada;
@@ -53,10 +53,10 @@ export class ConsultaConverter {
     consultaRetorno.flagConfirmada = consultaEBO.flagConfirmada;
     consultaRetorno.flagPrimeiraConsulta = consultaEBO.flagPrimeiraConsulta;
     if (consultaEBO.dataAtendimento) {
-      consultaRetorno.dataAtendimento = this.datePipe.transform(consultaEBO.dataAtendimento, Constantes.FORMATO_DATA_BACKEND);
+      consultaRetorno.dataAtendimento = this.datePipe.transform(consultaEBO.dataAtendimento, Constantes.FORMATO_DATA_FRONTEND);
     }
     if (consultaEBO.dataConsulta) {
-      consultaRetorno.dataConsulta = this.datePipe.transform(consultaEBO.dataConsulta, Constantes.FORMATO_DATA_BACKEND);
+      consultaRetorno.dataConsulta = this.datePipe.transform(consultaEBO.dataConsulta, Constantes.FORMATO_DATA_FRONTEND);
     }
     consultaRetorno.flagAtivo = consultaEBO.flagAtivo;
     consultaRetorno.dataCriacao = consultaEBO.dataCriacao;

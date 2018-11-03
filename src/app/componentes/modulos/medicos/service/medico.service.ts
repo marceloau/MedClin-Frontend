@@ -33,24 +33,9 @@ export class MedicoService {
   /**
    *
    */
-  buscar( pagina: number, total: number, nome: string, numeroRg: string,
-    numeroCpf: string, textoContato: string ) {
-    const endereco = this.enderecoBase + this.pathBase + '/buscarPaciente/' + pagina + '/' + total;
-    let params: any;
-    params = {};
-    if (nome) {
-      params.nomePaciente = nome;
-    }
-    if (numeroRg) {
-      params.numeroRg = numeroRg;
-    }
-    if (numeroCpf) {
-      params.numeroCpf = numeroCpf;
-    }
-    if (textoContato) {
-      params.textoContato = textoContato;
-    }
-    return this.http.get(endereco, {params});
+  buscar( pagina: number, total: number, nome: string) {
+    const endereco = this.enderecoBase + this.pathBase + '/' + pagina + '/' + total + '/' + nome;
+    return this.http.get(endereco);
   }
 
   /**

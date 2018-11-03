@@ -205,8 +205,7 @@ export class MedicoComponent implements OnInit {
   }
 
   buscar() {
-    this.medicoService.buscar(0, 10, this.medico.nome, this.medico.rg, this.medico.cpf,
-       this.medico.contato.textoContato).subscribe((retorno: Pagina) => {
+    this.medicoService.buscar(0, 10, this.medico.nome).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       this.listaMedicos = this.medicoConverter.converterListaParaFrontend(retorno.content);
     }, err => {
@@ -215,8 +214,7 @@ export class MedicoComponent implements OnInit {
   }
 
   buscarPorNomePaginacao(pagina: number, total: number) {
-    this.medicoService.buscar(pagina, total, this.medico.nome, this.medico.rg, this.medico.cpf,
-      this.medico.contato.textoContato).subscribe((retorno: Pagina) => {
+    this.medicoService.buscar(pagina, total, this.medico.nome).subscribe((retorno: Pagina) => {
      this.pagina = retorno;
      this.listaMedicos = this.medicoConverter.converterListaParaFrontend(retorno.content);
     }, err => {

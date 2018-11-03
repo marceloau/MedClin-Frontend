@@ -60,7 +60,7 @@ export class PlanoSaudeConverter {
     objetoRetornoEBO.numeroCartao = objeto.numeroCartao;
     objetoRetornoEBO.nomeTitular = objeto.nomeTitular;
     if (objeto.dataValidadeCartao) {
-      objetoRetornoEBO.validadeCartao = this.datePipe.transform(new Date(objeto.dataValidadeCartao), Constantes.FORMATO_DATA_BACKEND);
+      objetoRetornoEBO.validadeCartao = this.datePipe.transform(new Date(objeto.dataValidadeCartao), Constantes.FORMATO_DATA_BACKEND_DATE);
     }
     if (objeto.operadora.codigo) {
       objetoRetornoEBO.operadora = this.oeradoraConverter.converterParaBackend(objeto.operadora);
