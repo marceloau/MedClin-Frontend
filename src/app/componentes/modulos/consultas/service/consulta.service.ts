@@ -34,7 +34,7 @@ export class ConsultaService {
    *
    */
   buscarPorNome( pagina: number, total: number, nome: string ) {
-    const endereco = this.enderecoBase + this.pathBase + '/' + pagina + '/' + total + '/' + nome;
+    const endereco = this.enderecoBase + this.pathBase + '/buscarConsulta' + '/' + pagina + '/' + total + '?nomePaciente=' + nome;
     return this.http.get(endereco);
   }
 

@@ -71,9 +71,6 @@
                     <td>{{ consulta.flagPrimeiraConsulta === 'S' ? 'Sim' : 'Não' }}</td>
                     <td>
                       <div class="btn-group">
-                        <button type="button" class="btn btn-default">
-                          <i class="fa fa-search" title="Visualizar Perfil"></i>
-                        </button>
                         <button type="button" (click)="abrirModalAtualizar(consulta.codigo)" class="btn btn-default">
                           <i class="fa fa-edit" title="Editar"></i>
                         </button>
