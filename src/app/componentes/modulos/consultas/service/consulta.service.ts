@@ -33,8 +33,21 @@ export class ConsultaService {
   /**
    *
    */
-  buscarPorNome( pagina: number, total: number, nome: string ) {
-    const endereco = this.enderecoBase + this.pathBase + '/buscarConsulta' + '/' + pagina + '/' + total + '?nomePaciente=' + nome;
+  buscar( pagina: number, total: number, nome: string , dataConsulta: string, mesConsulta: string) {
+    let endereco = this.enderecoBase + this.pathBase + '/buscarConsulta' + '/' + pagina + '/' + total + '?';
+
+    if (nome) {
+      endereco = endereco + '&nomePaciente=' + nome;
+    }
+
+    if (dataConsulta) {
+      endereco = endereco + '&dataConsulta=' + dataConsulta;
+    }
+
+    if (mesConsulta) {
+      endereco = endereco + '&mesConsulta=' + mesConsulta;
+    }
+
     return this.http.get(endereco);
   }
 

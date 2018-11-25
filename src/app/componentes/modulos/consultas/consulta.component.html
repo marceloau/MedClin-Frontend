@@ -28,15 +28,15 @@
       </div>
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-          <li class="active"><a data-toggle="tab" href="#abaListagem">Listagem</a></li>
-          <li><a data-toggle="tab" href="#abaCalendario">Calendário</a></li>
+          <li><a data-toggle="tab" href="#abaListagem">Listagem</a></li>
+          <li class="active"><a data-toggle="tab" href="#abaCalendario">Calendário</a></li>
         </ul>
         <div class="tab-content">
-          <div id="abaListagem" class="tab-pane fade in active">
+          <div id="abaListagem" class="tab-pane fade">
             <div class="row">
               <div class="col-md-12">
                 <div class="input-group col-md-4 pull-left">
-                  <button type="button" id="btnNovoHorarioAtendimento" class="btn btn-primary pull-left" data-toggle="modal" data-target="#modal-horario-atendimento">
+                  <button type="button" id="btnNovoAgendamento" class="btn btn-primary pull-left" data-toggle="modal" data-target="#modal-agendamento">
                       Novo Agendamento
                   </button>
                 </div>
@@ -55,7 +55,9 @@
                   <thead>
                   <tr>
                     <th>Código</th>
-                    <th>Nome</th>
+                    <th>Nome do Paciente</th>
+                    <th>Nome do Médico</th>
+                    <th>Data Consulta</th>
                     <th>Status</th>
                     <th>Confirmada?</th>
                     <th>Primeira Consulta?</th>
@@ -66,6 +68,8 @@
                   <tr *ngFor="let consulta of listaConsulta">
                     <td>{{ consulta.codigo }}</td>
                     <td>{{ consulta.paciente.nome }}</td>
+                    <td>{{ consulta.medico.nome }}</td>
+                    <td>{{ consulta.dataConsulta }}</td>
                     <td>{{ StatusConsulta[consulta.codigoStatusConsulta] }}</td>
                     <td>{{ consulta.flagConfirmada === 'S' ? 'Sim' : 'Não' }}</td>
                     <td>{{ consulta.flagPrimeiraConsulta === 'S' ? 'Sim' : 'Não' }}</td>
@@ -87,7 +91,8 @@
                   <tfoot>
                   <tr>
                     <th>Código</th>
-                    <th>Nome</th>
+                    <th>Nome do Paciente</th>
+                    <th>Nome do Médico</th>
                     <th>Status</th>
                     <th>Confirmada?</th>
                     <th>Primeira Consulta?</th>
@@ -99,11 +104,11 @@
               </div>
             </div>
           </div>
-          <div id="abaCalendario" class="tab-pane fade">
+          <div id="abaCalendario" class="tab-pane fade in active">
             <div class="row">
               <div class="col-md-12">
                 <div class="col-md-4">
-                  <button type="button" id="btnNovoHorarioAtendimento" class="btn btn-primary pull-left" data-toggle="modal" data-target="#modal-horario-atendimento">
+                  <button type="button" id="btnNovoAgendamento" class="btn btn-primary pull-left" data-toggle="modal" data-target="#modal-agendamento">
                       Novo Agendamento
                   </button>
                 </div>
@@ -119,27 +124,13 @@
                       [weekendDays]="weekendDays"
                       [locale]="locale"
                       [viewDate]="viewDate"
-                      (eventClicked)="eventClicked($event)"
+                      [refresh]="refresh"
+                      [activeDayIsOpen]="activeDayIsOpen"
+                      (dayClicked)="dayClicked($event.day)"
+                      (eventClicked)="handleEvent('Clicked', $event.event)"
+                      (eventTimesChanged)="eventTimesChanged($event)"
                       [events]="events">
                     </mwl-calendar-month-view>
-                    <mwl-calendar-week-view
-                      *ngSwitchCase="'week'"
-                      [weekStartsOn]="weekStartsOn"
-                      [weekendDays]="weekendDays"
-                      [locale]="locale"
-                      [viewDate]="viewDate"
-                      (eventClicked)="eventClicked($event)"
-                      [events]="events">
-                    >
-                    </mwl-calendar-week-view>
-                    <mwl-calendar-day-view
-                      *ngSwitchCase="'day'"
-                      [locale]="locale"
-                      [viewDate]="viewDate"
-                      (eventClicked)="eventClicked($event)"
-                      [events]="events">
-                    >
-                    </mwl-calendar-day-view>
                   </div>
                 </div>
               </div>
@@ -155,7 +146,7 @@
   </div>
   <!-- /.row -->
 
-  <div class="modal fade" id="modal-horario-atendimento">
+  <div class="modal fade" id="modal-agendamento">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">

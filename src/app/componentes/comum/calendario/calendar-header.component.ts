@@ -34,7 +34,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
       <div class="col-md-4">
         <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):locale }}</h3>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" style="display:none;">
         <div class="btn-group">
           <div
             class="btn btn-primary"

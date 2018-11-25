@@ -1,3 +1,4 @@
+import { Pagina } from './../../../model/comum/pagina.model';
 import { PacienteEBO } from './../pacientes/ebo/pacienteebo';
 import { PacienteService } from './../pacientes/service/paciente.service';
 import { PacienteConverter } from './../pacientes/converter/paciente.converter';
@@ -14,18 +15,19 @@ import { Estado } from './../../../model/estado.model';
 import { Mensagem } from './../../../model/mensagem';
 import { Excecao } from './../../comum/excecao/excecao';
 import { DominioService } from './../../comum/services/dominio.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DominioConverter } from '../../comum/converter/dominio.converter';
 import { EstadoCivil } from '../../../model/estadocivil.model';
 import { TipoLogradouro } from '../../../model/tipologradouro.model';
 import { TipoContato } from '../../../model/tipo-contato.model';
-import { Pagina } from '../../../model/comum/pagina.model';
 import { MedicoService } from '../medicos/service/medico.service';
 
 // Inicio Import Calendario
-import { CalendarEvent, DAYS_OF_WEEK } from 'angular-calendar';
-import { setHours, setMinutes, setDay } from 'date-fns';
+import { CalendarEvent, DAYS_OF_WEEK, CalendarEventAction,
+  CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
+import { setDay, getDay, getDate, getMonth, setMonth, setYear, getYear } from 'date-fns';
+import { Subject } from 'rxjs';
 import { AgendaMedico } from '../../../model/agendamedico.model';
 import { Paciente } from '../../../model/paciente.model';
 // Fim Import Calendario
@@ -47,6 +49,8 @@ export class ConsultaComponent implements OnInit {
 
   paginaPaciente: Pagina;
 
+  paginaConsulta: Pagina;
+
   habilitarEdicao = false;
 
   medico = new Medico();
@@ -58,6 +62,8 @@ export class ConsultaComponent implements OnInit {
   consulta = new Consulta();
 
   listaConsulta = new Array<Consulta>();
+
+  listaConsultaCalendario = new Array<Consulta>();
 
   listaPacienteModal = new Array<Paciente>();
 
@@ -76,17 +82,33 @@ export class ConsultaComponent implements OnInit {
 
   // Inicio Calendário
   cores: any = {
-    red: {
+    vermelho: {
       primary: '#ad2121',
       secondary: '#FAE3E3'
     },
-    blue: {
+    azul: {
       primary: '#1e90ff',
       secondary: '#D1E8FF'
     },
-    yellow: {
+    amarelo: {
       primary: '#e3bc08',
       secondary: '#FDF1BA'
+    },
+    verde: {
+      primary: '#37c45f',
+      secondary: '#94e3ac'
+    },
+    azulMarinho: {
+      primary: '#191d8c',
+      secondary: '#4c51d4'
+    },
+    preto: {
+      primary: '#0e0f0e',
+      secondary: '#0e0f0e'
+    },
+    cinza: {
+      primary: '#59595c',
+      secondary: '#59595c'
     }
   };
 
@@ -102,6 +124,19 @@ export class ConsultaComponent implements OnInit {
   viewDate: Date = new Date();
 
   events: CalendarEvent[] = [];
+
+  refresh: Subject<any> = new Subject();
+
+  actions: CalendarEventAction[] = [
+    {
+      label: '<i class="fa fa-fw fa-pencil" alt="Atualizar Consulta" title="Atualizar Consulta"></i>',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.handleEvent('Atualizar', event);
+      }
+    }
+  ];
+
+  activeDayIsOpen = false;
   // Fim Calendário
 
   constructor(private route: ActivatedRoute, private consultaService: ConsultaService, private consultaConverter: ConsultaConverter,
@@ -119,6 +154,21 @@ export class ConsultaComponent implements OnInit {
     }, err => {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
+  }
+
+  eventTimesChanged({
+    event,
+    newStart,
+    newEnd
+  }: CalendarEventTimesChangedEvent): void {
+    event.start = newStart;
+    event.end = newEnd;
+    this.handleEvent('Dropped or resized', event);
+    this.refresh.next();
+  }
+
+  handleEvent(action: string, event: any): void {
+    this.abrirModalAtualizar(event.data.codigo);
   }
 
   inicializarTable() {
@@ -167,33 +217,34 @@ export class ConsultaComponent implements OnInit {
   }
 
   inicializarCalendario() {
-    // this.medicoService.buscarPorCodigo(this.medico.codigo).subscribe((medico: MedicoEBO) => {
-    //   this.medico = this.medicoConverter.converterParaFrontend(medico);
-    //   if (this.medico.listaAgendaMedico && this.medico.listaAgendaMedico.length > 0) {
-    //     const agenda: CalendarEvent[] = [];
-    //     let evento: any = {};
-    //     let horaInicio = [];
-    //     let horaFim = [];
-    //     for (const index of this.medico.listaAgendaMedico) {
-    //       horaInicio = index.horaInicioAtendimento.split(':');
-    //       horaFim = index.horaFinalAtendimento.split(':');
-    //       evento = {
-    //         title: index.horaInicioAtendimento + ' - ' + index.horaFinalAtendimento,
-    //         start: setDay(setHours(setMinutes(new Date(), horaInicio[1]), horaInicio[0]), (index.diaSemana - 1)),
-    //         end: setDay(setHours(setMinutes(new Date(), horaFim[1]), horaFim[0]), (index.diaSemana - 1)),
-    //         color: this.cores.blue,
-    //         data: index
-    //       };
-    //       agenda.push(evento);
-    //       // evento.start = setDay(setHours(setMinutes(new Date(), horaInicio[1]), horaInicio[0]), (index.diaSemana - 1));
-    //       // evento.end = setDay(setHours(setMinutes(new Date(), horaFim[1]), horaFim[0]), (index.diaSemana - 1));
-    //       // evento.color = this.cores.blue;
-    //     }
-    //     this.events = agenda;
-    //   }
-    // }, err => {
-    //   this.mensagem = this.excecao.exibirExcecao(err.error);
-    // });
+    this.consultaService.buscar(0, 100, null, null, this.viewDate.toString()).subscribe((consultaEBO: Pagina) => {
+      this.listaConsultaCalendario = this.consultaConverter.converterListaParaFrontend(consultaEBO.content);
+      if (consultaEBO && consultaEBO.content && consultaEBO.content.length > 0) {
+        const consultas: CalendarEvent[] = [];
+        let evento: any = {};
+        for (const index of this.listaConsultaCalendario) {
+          evento = {
+            title: index.paciente.nome + ' - ' + new Date(index.dataConsulta).getHours() + ':'
+            + (new Date(index.dataConsulta).getMinutes() === 0 ? '00hrs' : new Date(index.dataConsulta).getMinutes()) + ' - '
+            + StatusConsulta[index.codigoStatusConsulta] + (index.flagPrimeiraConsulta === 'S' ? ' - Primeira Consulta' : ''),
+            start : new Date(index.dataConsulta),
+            end : new Date(index.dataConsulta),
+            color: StatusConsulta[index.codigoStatusConsulta] === 'Confirmado' ? this.cores.azul
+            : (StatusConsulta[index.codigoStatusConsulta] === 'Aberto' ? this.cores.amarelo
+            : (StatusConsulta[index.codigoStatusConsulta] === 'Cancelada' ? this.cores.vermelho
+            : (StatusConsulta[index.codigoStatusConsulta] === 'Finalizada' ? this.cores.verde
+            : (StatusConsulta[index.codigoStatusConsulta] === 'Aguardando Atendimento' ? this.cores.azulMarinho
+            : (StatusConsulta[index.codigoStatusConsulta] === 'Em Atendimento' ? this.cores.preto : this.cores.cinza))))),
+            actions: this.actions,
+            data: index
+          };
+          consultas.push(evento);
+        }
+        this.events = consultas;
+      }
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
   }
 
   listarRegistros(pagina, total) {
@@ -205,10 +256,21 @@ export class ConsultaComponent implements OnInit {
     });
   }
 
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    this.viewDate = date;
+    if ((this.activeDayIsOpen === true) || this.events.length === 0) {
+      this.activeDayIsOpen = false;
+    } else {
+      this.activeDayIsOpen = true;
+    }
+  }
+
   eventClicked({ event }: { event: any }): void {
-    this.consulta = this.consultaConverter.converterParaFrontend(event.data);
-    const modal: any = $('#btnNovoHorarioAtendimento');
-    modal.click();
+    if ((this.activeDayIsOpen === true) || this.events.length === 0) {
+      this.activeDayIsOpen = false;
+    } else {
+      this.activeDayIsOpen = true;
+    }
   }
 
   buscarPorCodigo(codigo: number) {
@@ -217,20 +279,6 @@ export class ConsultaComponent implements OnInit {
     }, err => {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
-  }
-
-  atualizar() {
-    // const objetoAtualizado: MedicoEBO = this.medicoConverter.converterParaBackend(this.medico);
-    // this.medicoService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: MedicoEBO) => {
-    //   this.mensagem.codigoTipo = 0;
-    //   this.mensagem.titulo = 'Sucesso';
-    //   this.mensagem.texto = 'Médico atualizado com sucesso.';
-    //   this.habilitarEdicao = false;
-    //   this.medico = this.medicoConverter.converterParaFrontend(objetoSalvo);
-    //   this.inicializarCalendario();
-    // }, err => {
-    //   this.mensagem = this.excecao.exibirExcecao(err.error);
-    // });
   }
 
   salvar() {
@@ -265,7 +313,7 @@ export class ConsultaComponent implements OnInit {
   }
 
   buscar() {
-    this.consultaService.buscarPorNome(0, 10, this.consulta.paciente.nome).subscribe((retorno: Pagina) => {
+    this.consultaService.buscar(0, 10, this.consulta.paciente.nome, null, null).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       if (retorno) {
         this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);
@@ -304,9 +352,9 @@ export class ConsultaComponent implements OnInit {
   }
 
   abrirModalAtualizar(codigo: number) {
-    this.habilitarEdicao = true;
+    this.mensagem = new Mensagem();
     this.buscarPorCodigo(codigo);
-    const modal: any = $('#btnNovoHorarioAtendimento');
+    const modal: any = $('#btnNovoAgendamento');
     modal.click();
   }
 
@@ -342,7 +390,7 @@ export class ConsultaComponent implements OnInit {
   }
 
   buscarPorNomePaginacao(pagina: number, total: number, nome: string) {
-    this.consultaService.buscarPorNome(pagina, total, nome).subscribe((retorno: Pagina) => {
+    this.consultaService.buscar(pagina, total, nome, null, null).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       if (retorno) {
         this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);
