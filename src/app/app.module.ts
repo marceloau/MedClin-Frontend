@@ -1,3 +1,5 @@
+import { TipoExameConverter } from './componentes/modulos/cadastro/tipoExame/converter/tipoexame.converter';
+import { ExameComponent } from './componentes/modulos/cadastro/exame/exame.component';
 import { HeaderCalendarioComponent } from './componentes/comum/calendario/calendar-header.component';
 import { ConsultaComponent } from './componentes/modulos/consultas/consulta.component';
 import { PerfilMedicoComponent } from './componentes/modulos/medicos/perfil/perfilmedico.component';
@@ -40,6 +42,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+import { TipoExameComponent } from './componentes/modulos/cadastro/tipoExame/tipoexame.component';
 // Fim import calendário.
 
 registerLocaleData(localePt);
@@ -63,7 +66,9 @@ registerLocaleData(localePt);
     MedicoComponent,
     PerfilMedicoComponent,
     ConsultaComponent,
-    HeaderCalendarioComponent
+    TipoExameComponent,
+    HeaderCalendarioComponent,
+    ExameComponent
   ],
   imports: [
     BrowserModule,
@@ -81,7 +86,7 @@ registerLocaleData(localePt);
   ],
   providers: [SegurancaService, UsuarioService, DominioConverter, EnderecoConverter,
     TipoContatoConverter, ContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter, DatePipe,
-    EspecialidadeConverter],
+    EspecialidadeConverter, TipoExameConverter],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

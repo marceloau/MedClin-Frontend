@@ -12,6 +12,8 @@ import { LoginComponent } from './componentes/login/login.component';
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 import { TipoPlanoSaudeComponent } from './componentes/modulos/cadastro/tipoPlanoSaude/tipoplanosaude.component';
+import { TipoExameComponent } from './componentes/modulos/cadastro/tipoExame/tipoexame.component';
+import { ExameComponent } from './componentes/modulos/cadastro/exame/exame.component';
 
 export const ROUTES: Routes = [
   {
@@ -45,6 +47,14 @@ export const ROUTES: Routes = [
   {
     path: 'configuracoes/cadastro/tipo-contato',
     component: TipoContatoComponent
+  },
+  {
+    path: 'configuracoes/cadastro/tipo-exame',
+    component: TipoExameComponent
+  },
+  {
+    path: 'configuracoes/cadastro/exame',
+    component: ExameComponent
   },
   {
     path: 'configuracoes/medicos',
