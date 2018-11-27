@@ -18,11 +18,11 @@
       <li class="header">Menu</li>
       <li class="treeview menu-open">
         <a [routerLink]="['/']">
-          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+          <i class="fa fa-tachometer-alt"></i> <span>Dashboard</span>
         </a>
       </li>
       <li><a [routerLink]="['/pacientes']">
-        <i class="fa fa-users"></i> <span>Pacientes</span></a>
+        <i class="fa fa-user-injured"></i> <span>Pacientes</span></a>
       </li>
       <li class="treeview">
         <a href="#"><i class="fa fa-heartbeat"></i> <span>Atendimento</span>
@@ -32,7 +32,7 @@
         </a>
         <ul class="treeview-menu">
           <li class="treeview">
-            <a href=""><i class="fa fa-clock-o"></i>Agendamentos
+            <a href=""><i class="fa fa-calendar-alt"></i>Agendamentos
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
@@ -41,7 +41,7 @@
               <li><a [routerLink]="['/agendamentos/consultas']"><i class="fa fa-stethoscope"></i> Consultas</a></li>
             </ul>
           </li>
-          <li><a href=""><i class="fa fa-file-text-o"></i>Solicitação de Exames</a></li>
+          <li><a href=""><i class="fa fa-file-alt"></i>Solicitação de Exames</a></li>
           <li><a href=""><i class="fa fa-eyedropper"></i>Prescrição de Medicamentos</a></li>
         </ul>
       </li>
@@ -54,22 +54,23 @@
         </a>
         <ul class="treeview-menu">
           <li class="treeview">
-            <a href=""><i class="fa fa-files-o"></i>Cadastros
+            <a href=""><i class="fa fa-file-alt"></i>Cadastros
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
             <ul class="treeview-menu">
               <li><a [routerLink]="['/configuracoes/cadastro/especialidade']"><i class="fa fa-stethoscope"></i> Especialidade</a></li>
-              <li><a [routerLink]="['/configuracoes/cadastro/exame']"><i class="fa fa-file-text-o"></i> Exame</a></li>
+              <li><a [routerLink]="['/configuracoes/cadastro/exame']"><i class="fa fa-vials"></i> Exame</a></li>
+              <li><a [routerLink]="['/configuracoes/cadastro/medicamento']"><i class="fa fa-capsules"></i> Medicamento</a></li>
               <li><a [routerLink]="['/configuracoes/cadastro/operadora']"><i class="fa fa-institution"></i> Operadora</a></li>
-              <li><a [routerLink]="['/configuracoes/cadastro/tipo-plano-saude']"><i class="fa fa-medkit"></i> Tipo de Plano de Saúde</a></li>
               <li><a [routerLink]="['/configuracoes/cadastro/tipo-contato']"><i class="fa fa-envelope-square"></i> Tipo de Contato</a></li>
-              <li><a [routerLink]="['/configuracoes/cadastro/tipo-exame']"><i class="fa fa-eyedropper"></i> Tipo de Exame</a></li>
+              <li><a [routerLink]="['/configuracoes/cadastro/tipo-exame']"><i class="fa fa-vial"></i> Tipo de Exame</a></li>
+              <li><a [routerLink]="['/configuracoes/cadastro/tipo-medicamento']"><i class="fa fa-pills"></i> Tipo de Medicamento</a></li>
+              <li><a [routerLink]="['/configuracoes/cadastro/tipo-plano-saude']"><i class="fa fa-medkit"></i> Tipo de Plano de Saúde</a></li>
             </ul>
           </li>
           <li><a [routerLink]="['/configuracoes/medicos']"><i class="fa fa-user-md"></i>Médicos</a></li>
-          <li><a href=""><i class="fa fa-file-text-o"></i>Solicitação de Exames</a></li>
           <li><a href=""><i class="fa fa-eyedropper"></i>Prescrição de Medicamentos</a></li>
         </ul>
         <ul class="treeview-menu">

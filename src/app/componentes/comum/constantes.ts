@@ -4,6 +4,7 @@ export class Constantes {
   static readonly DOMINIO_ESTADO_CIVIL = 'estado-civil';
   static readonly DOMINIO_ESTADO = 'estado';
   static readonly DOMINIO_TIPO_LOGRADOURO = 'tipo-logradouro';
+  static readonly DOMINIO_USO_MEDICAMENTO = 'uso-medicamento';
   // Fim constantes dominio.
 
   // Inicio códigos de error retorno servico

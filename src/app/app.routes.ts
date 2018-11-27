@@ -1,3 +1,5 @@
+import { MedicamentoComponent } from './componentes/modulos/cadastro/medicamento/medicamento.component';
+import { TipoMedicamentoComponent } from './componentes/modulos/cadastro/tipoMedicamento/tipomedicamento.component';
 import { ConsultaComponent } from './componentes/modulos/consultas/consulta.component';
 import { PerfilMedicoComponent } from './componentes/modulos/medicos/perfil/perfilmedico.component';
 import { MedicoComponent } from './componentes/modulos/medicos/medico.component';
@@ -53,8 +55,16 @@ export const ROUTES: Routes = [
     component: TipoExameComponent
   },
   {
+    path: 'configuracoes/cadastro/tipo-medicamento',
+    component: TipoMedicamentoComponent
+  },
+  {
     path: 'configuracoes/cadastro/exame',
     component: ExameComponent
+  },
+  {
+    path: 'configuracoes/cadastro/medicamento',
+    component: MedicamentoComponent
   },
   {
     path: 'configuracoes/medicos',

@@ -1,14 +1,14 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-      Tipo Contato
+      Medicamento
       <small></small>
     </h1>
     <ol class="breadcrumb">
       <li><a [routerLink]="['/']"><i class="fa fa-tachometer-alt"></i> Home</a></li>
       <li><i class="fa fa-gears"></i> Configurações</li>
       <li><i class="fa fa-file-alt"></i> Cadastro</li>
-      <li class="active">Tipo Contato</li>
+      <li class="active">Medicamento</li>
     </ol>
   </section>
 
@@ -28,27 +28,27 @@
               </div>
               <div class="input-group col-md-8 pull-left">
                 <div class="input-group col-md-6 pull-left">
-                  <input type="text" class="form-control" id="nome" name="nome" value="tipoContato.nome" [(ngModel)]="tipoContato.nome"
-                  #nome="ngModel" placeholder="Informe o nome do tipo contato que deseja procurar.">
+                  <input type="text" class="form-control" id="nome" name="nome" value="medicamento.nome" [(ngModel)]="medicamento.nome"
+                  #nome="ngModel" placeholder="Informe o nome do tipo de medicamento que deseja procurar.">
                   <span class="input-group-btn">
                     <button type="button" (click)="buscar()" class="btn btn-primary btn-flat">Buscar</button>
                   </span>
                 </div>
               </div>
               <div class="input-group col-md-3 pull-right">
-                <button id="btnNovoTipoContato" type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modal-novo-tipo-contato">
-                    Novo Tipo Contato
+                <button id="btnNovoMedicamento" type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modal-novo-medicamento">
+                    Novo Medicamento
                 </button>
               </div>
             </div>
             <br>
-            <div class="modal fade" id="modal-novo-tipo-contato">
+            <div class="modal fade" id="modal-novo-medicamento">
               <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
                     <button id="fecharModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">{{ tipoContato && !tipoContato.codigo ? 'Novo Tipo Contato' : habilitarEdicao ? 'Atualizar Tipo Contato' : 'Visualizar Tipo Contato' }}</h4>
+                    <h4 class="modal-title">{{ medicamento && !medicamento.codigo ? 'Novo Medicamento' : habilitarEdicao ? 'Atualizar Medicamento' : 'Visualizar Medicamento' }}</h4>
                   </div>
                   <div class="modal-body">
                     <form #form="ngForm" role="form">
@@ -62,12 +62,26 @@
                           <div class="col-md-12">
                             <div class="form-group col-md-6">
                               <label>Nome</label>
-                              <input type="text" class="form-control" id="nome" name="nome" value="tipoContato.nome" [(ngModel)]="tipoContato.nome"
+                              <input type="text" class="form-control" id="nome" name="nome" value="medicamento.nome" [(ngModel)]="medicamento.nome"
                               #nome="ngModel" placeholder="Nome" [disabled]='!habilitarEdicao'>
                             </div>
                             <div class="form-group col-md-6">
+                              <label>Uso do Medicamento</label>
+                              <select class="form-control" [(ngModel)]="medicamento.usoMedicamento.codigo" #codigo="ngModel" name="usoMedicamento" [disabled]='!habilitarEdicao'>
+                                <option>Selecione...</option>
+                                <option *ngFor="let usoMedicamento of listaComboUsoMedicamento" [value]="usoMedicamento.codigo" >{{ usoMedicamento.nome }}</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Tipo de Medicamento</label>
+                              <select class="form-control" [(ngModel)]="medicamento.tipoMedicamento.codigo" #codigo="ngModel" name="tipoMedicamento" [disabled]='!habilitarEdicao'>
+                                <option>Selecione...</option>
+                                <option *ngFor="let tipoMedicamento of listaComboTipoMedicamento" [value]="tipoMedicamento.codigo" >{{ tipoMedicamento.nome }}</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-6">
                               <label>Status</label>
-                              <select class="form-control" [(ngModel)]="tipoContato.flagAtivo" #flagAtivo="ngModel" id="flagAtivo" name="flagAtivo" [disabled]='!habilitarEdicao'>
+                              <select class="form-control" [(ngModel)]="medicamento.flagAtivo" #flagAtivo="ngModel" id="flagAtivo" name="flagAtivo" [disabled]='!habilitarEdicao'>
                                 <option value="">Selecione...</option>
                                 <option value="S">Ativo</option>
                                 <option value="N">Inativo</option>
@@ -76,7 +90,19 @@
                           </div>
                           <div class="col-md-12">
                             <div class="box-body pad">
-                              <textarea id="descricao" [(ngModel)]="tipoContato.descricao" #descricao="ngModel" name="descricao" rows="10" cols="138" placeholder="Descrição do tipo de contato" [disabled]='!habilitarEdicao'>
+                              <textarea id="composicao" [(ngModel)]="medicamento.composicao" #composicao="ngModel" name="composicao" rows="10" cols="138" placeholder="Composição do medicamento" [disabled]='!habilitarEdicao'>
+                              </textarea>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="box-body pad">
+                              <textarea id="posologia" [(ngModel)]="medicamento.posologia" #posologia="ngModel" name="posologia" rows="10" cols="138" placeholder="Posologia do medicamento" [disabled]='!habilitarEdicao'>
+                              </textarea>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="box-body pad">
+                              <textarea id="descricao" [(ngModel)]="medicamento.descricao" #descricao="ngModel" name="descricao" rows="10" cols="138" placeholder="Descrição do medicamento" [disabled]='!habilitarEdicao'>
                               </textarea>
                             </div>
                           </div>
@@ -85,7 +111,7 @@
                     </form>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" (click)="fecharModalTipoContato()" data-dismiss="modal" id="closeModal">Cancelar</button>
+                    <button type="button" class="btn btn-default pull-left" (click)="fecharModalMedicamento()" data-dismiss="modal" id="closeModal">Cancelar</button>
                     <button type="button" class="btn btn-primary" id="salvarModal" (hidden)= 'habilitarEdicao' (click)="salvar()" >Salvar</button>
                   </div>
                 </div>
@@ -94,28 +120,32 @@
               <!-- /.modal-dialog -->
             </div>
             <!-- /.modal -->
-            <table id="tabelaTipoContato" class="table table-bordered table-striped">
+            <table id="tabelaMedicamento" class="table table-bordered table-striped">
               <thead>
               <tr>
                 <th>Código</th>
                 <th>Nome</th>
-                <th>Descrição</th>
+                <th>Tipo</th>
+                <th>Composição</th>
+                <th>Posologia</th>
                 <th>Status</th>
                 <th>Ações</th>
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let tipoContato of listaTipoContato">
-                <td>{{ tipoContato.codigo }}</td>
-                <td>{{ tipoContato.nome }}</td>
-                <td>{{ tipoContato.descricao }}</td>
-                <td>{{ tipoContato.flagAtivo === 'S' ? 'Ativo' : 'Inativo' }}</td>
+              <tr *ngFor="let medicamento of listaMedicamento">
+                <td>{{ medicamento.codigo }}</td>
+                <td>{{ medicamento.nome }}</td>
+                <td>{{ medicamento.tipoMedicamento.nome }}</td>
+                <td>{{ medicamento.composicao }}</td>
+                <td>{{ medicamento.posologia }}</td>
+                <td>{{ medicamento.flagAtivo === 'S' ? 'Ativo' : 'Inativo' }}</td>
                 <td>
                   <div class="btn-group">
-                    <button type="button" (click)="visualizarRegistro(tipoContato.codigo)" class="btn btn-default">
-                      <i class="fa fa-search" title="Visualizar Perfil"></i>
+                    <button type="button" (click)="visualizarRegistro(medicamento.codigo)" class="btn btn-default">
+                      <i class="fa fa-search" title="Visualizar"></i>
                     </button>
-                    <button type="button" (click)="abrirModalAtualizar(tipoContato.codigo)" class="btn btn-default">
+                    <button type="button" (click)="abrirModalAtualizar(medicamento.codigo)" class="btn btn-default">
                       <i class="fa fa-edit" title="Editar"></i>
                     </button>
                   </div>
@@ -132,7 +162,9 @@
               <tr>
                 <th>Código</th>
                 <th>Nome</th>
-                <th>Descrição</th>
+                <th>Tipo</th>
+                <th>Composição</th>
+                <th>Posologia</th>
                 <th>Status</th>
                 <th>Ações</th>
               </tr>

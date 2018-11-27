@@ -1,6 +1,6 @@
-import { TipoExameEBO } from './ebo/tipoexameebo';
-import { TipoExameService } from './service/tipoexame.service';
-import { TipoExameConverter } from './converter/tipoexame.converter';
+import { TipoMedicamentoEBO } from './ebo/tipomedicamentoebo';
+import { TipoMedicamentoService } from './service/tipomedicamento.service';
+import { TipoMedicamentoConverter } from './converter/tipomedicamento.converter';
 import { Mensagem } from '../../../../model/mensagem';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -11,17 +11,17 @@ import 'DataTables.net';
 import 'datatables.net-bs4';
 import { Pagina } from '../../../../model/comum/pagina.model';
 import { Excecao } from '../../../comum/excecao/excecao';
-import { TipoExame } from '../../../../model/tipoexame.model';
+import { TipoMedicamento } from '../../../../model/tipomedicamento.model';
 
 @Component({
-  selector: 'app-tipoexame',
-  templateUrl: './tipoExame.component.html',
-  styleUrls: ['./tipoExame.component.css'],
-  providers: [TipoExameConverter, Excecao]
+  selector: 'app-tipomedicamento',
+  templateUrl: './tipoMedicamento.component.html',
+  styleUrls: ['./tipoMedicamento.component.css'],
+  providers: [TipoMedicamentoConverter, Excecao]
 })
-export class TipoExameComponent implements OnInit {
+export class TipoMedicamentoComponent implements OnInit {
 
-  constructor(private tipoExameService: TipoExameService, private tipoExameConverter: TipoExameConverter,
+  constructor(private tipoMedicamentoService: TipoMedicamentoService, private tipoMedicamentoConverter: TipoMedicamentoConverter,
     private excecao: Excecao) {
   }
 
@@ -31,16 +31,16 @@ export class TipoExameComponent implements OnInit {
   habilitarEdicao = true;
 
   mensagem = new Mensagem();
-  listaTipoExame = new Array<TipoExame>();
+  listaTipoMedicamento = new Array<TipoMedicamento>();
 
-  tipoExame = new TipoExame();
+  tipoMedicamento = new TipoMedicamento();
 
   pagina: Pagina;
 
 
   ngOnInit() {
-    this.tipoExameService.listarRegistros(0, 10).subscribe((retorno: Pagina) => {
-      this.listaTipoExame = this.tipoExameConverter.converterListaParaFrontend(retorno.content);
+    this.tipoMedicamentoService.listarRegistros(0, 10).subscribe((retorno: Pagina) => {
+      this.listaTipoMedicamento = this.tipoMedicamentoConverter.converterListaParaFrontend(retorno.content);
       this.pagina = retorno;
       this.inicializarTable();
     }, err => {
@@ -52,7 +52,7 @@ export class TipoExameComponent implements OnInit {
   }
 
   inicializarTable() {
-    const table: any = $('#tabelaTipoExame');
+    const table: any = $('#tabelaTipoMedicamento');
     table.DataTable().destroy();
     setTimeout(() =>
       table.DataTable({
@@ -69,18 +69,18 @@ export class TipoExameComponent implements OnInit {
   visualizarRegistro(codigo: number) {
     this.habilitarEdicao = false;
     this.buscarPorCodigo(codigo);
-    const modal: any = $('#btnNovoTipoExame');
+    const modal: any = $('#btnNovoTipoMedicamento');
     modal.click();
   }
 
   salvar() {
-    const objetoSalvar: TipoExameEBO = this.tipoExameConverter.converterParaBackend(this.tipoExame);
+    const objetoSalvar: TipoMedicamentoEBO = this.tipoMedicamentoConverter.converterParaBackend(this.tipoMedicamento);
 
-    if (this.tipoExame && !this.tipoExame.codigo) {
-      this.tipoExameService.salvar(objetoSalvar).subscribe(( objetoSalvo: TipoExameEBO) => {
+    if (this.tipoMedicamento && !this.tipoMedicamento.codigo) {
+      this.tipoMedicamentoService.salvar(objetoSalvar).subscribe(( objetoSalvo: TipoMedicamentoEBO) => {
         this.mensagem.codigoTipo = 0;
         this.mensagem.titulo = 'Sucesso';
-        this.mensagem.texto = 'Tipo de exame salvo com sucesso.';
+        this.mensagem.texto = 'Tipo de medicamento salvo com sucesso.';
         const modal: any = $('#fecharModal');
         modal.click();
         this.limparCampos();
@@ -95,11 +95,11 @@ export class TipoExameComponent implements OnInit {
   }
 
   atualizar() {
-    const objetoAtualizado: TipoExameEBO = this.tipoExameConverter.converterParaBackend(this.tipoExame);
-    this.tipoExameService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: TipoExameEBO) => {
+    const objetoAtualizado: TipoMedicamentoEBO = this.tipoMedicamentoConverter.converterParaBackend(this.tipoMedicamento);
+    this.tipoMedicamentoService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: TipoMedicamentoEBO) => {
       this.mensagem.codigoTipo = 0;
       this.mensagem.titulo = 'Sucesso';
-      this.mensagem.texto = 'Tipo de exame atualizado com sucesso.';
+      this.mensagem.texto = 'Tipo de medicamento atualizado com sucesso.';
       const modal: any = $('#fecharModal');
       modal.click();
       this.listarRegistros(0, 10);
@@ -110,55 +110,55 @@ export class TipoExameComponent implements OnInit {
   }
 
   buscarPorCodigo(codigo: number) {
-    this.tipoExameService.buscarPorCodigo(codigo).subscribe((tipoExame: TipoExameEBO) => {
-      this.tipoExame = this.tipoExameConverter.converterParaFrontend(tipoExame);
+    this.tipoMedicamentoService.buscarPorCodigo(codigo).subscribe((tipoMedicamento: TipoMedicamentoEBO) => {
+      this.tipoMedicamento = this.tipoMedicamentoConverter.converterParaFrontend(tipoMedicamento);
     }, err => {
       // @TODO colocar para retornar exceção do util exceção.
       this.mensagem.codigoTipo = 1;
       this.mensagem.titulo = 'Erro';
-      this.mensagem.texto = 'Nenhum registro encontrado para o código do tipo de exame.';
+      this.mensagem.texto = 'Nenhum registro encontrado para o código do tipo de medicamento.';
     });
   }
 
   buscar() {
-    this.tipoExameService.buscarPorNome(0, 10, this.tipoExame.nome).subscribe((retorno: Pagina) => {
+    this.tipoMedicamentoService.buscarPorNome(0, 10, this.tipoMedicamento.nome).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
-      this.listaTipoExame = this.tipoExameConverter.converterListaParaFrontend(retorno.content);
+      this.listaTipoMedicamento = this.tipoMedicamentoConverter.converterListaParaFrontend(retorno.content);
     }, err => {
       // @TODO colocar para retornar exceção do util exceção.
       this.mensagem.codigoTipo = 1;
       this.mensagem.titulo = 'Erro';
-      this.mensagem.texto = 'Nenhum registro encontrado para o nome do tipo de exame.';
+      this.mensagem.texto = 'Nenhum registro encontrado para o nome do tipo de medicamento.';
     });
   }
 
   buscarPorNomePaginacao(pagina: number, total: number, nome: string) {
-    this.tipoExameService.buscarPorNome(pagina, total, nome).subscribe((retorno: Pagina) => {
+    this.tipoMedicamentoService.buscarPorNome(pagina, total, nome).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
-      this.listaTipoExame = this.tipoExameConverter.converterListaParaFrontend(retorno.content);
+      this.listaTipoMedicamento = this.tipoMedicamentoConverter.converterListaParaFrontend(retorno.content);
     }, err => {
       // @TODO colocar para retornar exceção do util exceção.
       this.mensagem.codigoTipo = 1;
       this.mensagem.titulo = 'Erro';
-      this.mensagem.texto = 'Nenhum registro encontrado para o nome do tipo de exame.';
+      this.mensagem.texto = 'Nenhum registro encontrado para o nome do tipo de medicamento.';
     });
   }
 
   limparCampos() {
-    this.tipoExame = new TipoExame();
+    this.tipoMedicamento = new TipoMedicamento();
   }
 
   abrirModalAtualizar(codigo: number) {
     this.habilitarEdicao = true;
     this.buscarPorCodigo(codigo);
-    const modal: any = $('#btnNovoTipoExame');
+    const modal: any = $('#btnNovoTipoMedicamento');
     modal.click();
   }
 
   listarRegistros(pagina, total) {
-    this.tipoExameService.listarRegistros(pagina, total).subscribe((retorno: Pagina) => {
+    this.tipoMedicamentoService.listarRegistros(pagina, total).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
-      this.listaTipoExame = this.tipoExameConverter.converterListaParaFrontend(retorno.content);
+      this.listaTipoMedicamento = this.tipoMedicamentoConverter.converterListaParaFrontend(retorno.content);
     }, err => {
       // @TODO colocar para retornar exceção do util exceção.
       this.mensagem.codigoTipo = 1;
@@ -167,7 +167,7 @@ export class TipoExameComponent implements OnInit {
     });
   }
 
-  fecharModalTipoExame() {
+  fecharModalTipoMedicamento() {
     this.limparCampos();
     this.mensagem = new Mensagem();
     const modal: any = $('#fecharModal');
@@ -176,8 +176,8 @@ export class TipoExameComponent implements OnInit {
   }
 
   changePage(event) {
-    if (this.tipoExame.nome) {
-      this.buscarPorNomePaginacao(event.page, event.size, this.tipoExame.nome);
+    if (this.tipoMedicamento.nome) {
+      this.buscarPorNomePaginacao(event.page, event.size, this.tipoMedicamento.nome);
     } else {
       this.listarRegistros(event.page, event.size);
     }

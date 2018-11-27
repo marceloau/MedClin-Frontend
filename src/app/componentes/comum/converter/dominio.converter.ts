@@ -1,3 +1,5 @@
+import { UsoMedicamentoEBO } from './../../modulos/cadastro/medicamento/ebo/usomedicamentoebo';
+import { UsoMedicamento } from './../../../model/usomedicamento.model';
 import { EstadoCivilEBO } from './../ebo/estadocivilebo';
 import { TipoLogradouro } from './../../../model/tipologradouro.model';
 import { Estado } from '../../../model/estado.model';
@@ -50,6 +52,15 @@ export class DominioConverter {
         objetoRetorno.dataCriacao = objeto.dataCriacao;
         objetoRetorno.dataUltimaAlteracao = objeto.dataUltimaAlteracao;
         objetoRetorno.usuarioUltimaAlteracao = objeto.usuarioUltimaAlteracao;
+      } else if (dominio === Constantes.DOMINIO_USO_MEDICAMENTO) {
+        objetoRetorno = new UsoMedicamento();
+        objetoRetorno.codigo = objeto.codigoUsoMedicamento;
+        objetoRetorno.nome = objeto.nomeUsoMedicamento;
+        objetoRetorno.descricao = objeto.descricaoUsoMedicamento;
+        objetoRetorno.flagAtivo = objeto.flagAtivo;
+        objetoRetorno.dataCriacao = objeto.dataCriacao;
+        objetoRetorno.dataUltimaAlteracao = objeto.dataUltimaAlteracao;
+        objetoRetorno.usuarioUltimaAlteracao = objeto.usuarioUltimaAlteracao;
       }
     }
 
@@ -64,27 +75,20 @@ export class DominioConverter {
       objetoRetornoEBO = new EstadoCivilEBO();
       objetoRetornoEBO.codigoEstadoCivil = objeto.codigo;
       objetoRetornoEBO.nomeEstadoCivil = objeto.nome;
-      objetoRetornoEBO.flagAtivo = objeto.flagAtivo;
-      objetoRetornoEBO.dataCriacao = objeto.dataCriacao;
-      objetoRetornoEBO.dataUltimaAlteracao = objeto.dataUltimaAlteracao;
-      objetoRetornoEBO.usuarioUltimaAlteracao = objeto.usuarioUltimaAlteracao;
     } else if (dominio === Constantes.DOMINIO_ESTADO) {
       objetoRetornoEBO = new EstadoEBO();
       objetoRetornoEBO.codigoEstado = objeto.codigo;
       objetoRetornoEBO.nomeEstado = objeto.nome;
       objetoRetornoEBO.siglaEstado = objeto.siglaEstado;
-      objetoRetornoEBO.flagAtivo = objeto.flagAtivo;
-      objetoRetornoEBO.dataCriacao = objeto.dataCriacao;
-      objetoRetornoEBO.dataUltimaAlteracao = objeto.dataUltimaAlteracao;
-      objetoRetornoEBO.usuarioUltimaAlteracao = objeto.usuarioUltimaAlteracao;
     } else if (dominio === Constantes.DOMINIO_TIPO_LOGRADOURO) {
       objetoRetornoEBO = new TipoLogradouroEBO();
       objetoRetornoEBO.codigoTipoLogradouro = objeto.codigo;
       objetoRetornoEBO.nomeTipoLogradouro = objeto.nome;
-      objetoRetornoEBO.flagAtivo = objeto.flagAtivo;
-      objetoRetornoEBO.dataCriacao = objeto.dataCriacao;
-      objetoRetornoEBO.dataUltimaAlteracao = objeto.dataUltimaAlteracao;
-      objetoRetornoEBO.usuarioUltimaAlteracao = objeto.usuarioUltimaAlteracao;
+    } else if (dominio === Constantes.DOMINIO_USO_MEDICAMENTO) {
+      objetoRetornoEBO = new UsoMedicamentoEBO();
+      objetoRetornoEBO.codigoUsoMedicamento = objeto.codigo;
+      objetoRetornoEBO.nomeUsoMedicamento = objeto.nome;
+      objetoRetornoEBO.descricaoUsoMedicamento = objeto.descricao;
     }
 
     return objetoRetornoEBO;

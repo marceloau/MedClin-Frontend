@@ -1,3 +1,7 @@
+import { MedicamentoComponent } from './componentes/modulos/cadastro/medicamento/medicamento.component';
+import { UsoMedicamentoConverter } from './componentes/modulos/cadastro/medicamento/converter/usomedicamento.converter';
+import { TipoMedicamentoConverter } from './componentes/modulos/cadastro/tipoMedicamento/converter/tipomedicamento.converter';
+import { TipoMedicamentoComponent } from './componentes/modulos/cadastro/tipoMedicamento/tipomedicamento.component';
 import { TipoExameConverter } from './componentes/modulos/cadastro/tipoExame/converter/tipoexame.converter';
 import { ExameComponent } from './componentes/modulos/cadastro/exame/exame.component';
 import { HeaderCalendarioComponent } from './componentes/comum/calendario/calendar-header.component';
@@ -68,7 +72,9 @@ registerLocaleData(localePt);
     ConsultaComponent,
     TipoExameComponent,
     HeaderCalendarioComponent,
-    ExameComponent
+    ExameComponent,
+    TipoMedicamentoComponent,
+    MedicamentoComponent
   ],
   imports: [
     BrowserModule,
@@ -86,7 +92,7 @@ registerLocaleData(localePt);
   ],
   providers: [SegurancaService, UsuarioService, DominioConverter, EnderecoConverter,
     TipoContatoConverter, ContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter, DatePipe,
-    EspecialidadeConverter, TipoExameConverter],
+    EspecialidadeConverter, TipoExameConverter, TipoMedicamentoConverter],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
