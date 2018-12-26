@@ -1,5 +1,4 @@
 import { Pagina } from './../../../model/comum/pagina.model';
-import { PacienteEBO } from './../pacientes/ebo/pacienteebo';
 import { PacienteService } from './../pacientes/service/paciente.service';
 import { PacienteConverter } from './../pacientes/converter/paciente.converter';
 import { ConsultaEBO } from './ebo/consultaebo';
@@ -14,9 +13,8 @@ import { NgForm } from '@angular/forms';
 import { Estado } from './../../../model/estado.model';
 import { Mensagem } from './../../../model/mensagem';
 import { Excecao } from './../../comum/excecao/excecao';
-import { DominioService } from './../../comum/services/dominio.service';
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DominioConverter } from '../../comum/converter/dominio.converter';
 import { EstadoCivil } from '../../../model/estadocivil.model';
 import { TipoLogradouro } from '../../../model/tipologradouro.model';
@@ -25,8 +23,7 @@ import { MedicoService } from '../medicos/service/medico.service';
 
 // Inicio Import Calendario
 import { CalendarEvent, DAYS_OF_WEEK, CalendarEventAction,
-  CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
-import { setDay, getDay, getDate, getMonth, setMonth, setYear, getYear } from 'date-fns';
+  CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { Subject } from 'rxjs';
 import { AgendaMedico } from '../../../model/agendamedico.model';
 import { Paciente } from '../../../model/paciente.model';
@@ -129,7 +126,7 @@ export class ConsultaComponent implements OnInit {
 
   actions: CalendarEventAction[] = [
     {
-      label: '<i class="fa fa-fw fa-pencil" alt="Atualizar Consulta" title="Atualizar Consulta"></i>',
+      label: '<i class="fa fa-fw fa-edit" alt="Atualizar Consulta" title="Atualizar Consulta"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.handleEvent('Atualizar', event);
       }
@@ -217,7 +214,7 @@ export class ConsultaComponent implements OnInit {
   }
 
   inicializarCalendario() {
-    this.consultaService.buscar(0, 100, null, null, this.viewDate.toString()).subscribe((consultaEBO: Pagina) => {
+    this.consultaService.buscar(0, 100, null, null, this.viewDate.toString(), null).subscribe((consultaEBO: Pagina) => {
       this.listaConsultaCalendario = this.consultaConverter.converterListaParaFrontend(consultaEBO.content);
       if (consultaEBO && consultaEBO.content && consultaEBO.content.length > 0) {
         const consultas: CalendarEvent[] = [];
@@ -313,7 +310,7 @@ export class ConsultaComponent implements OnInit {
   }
 
   buscar() {
-    this.consultaService.buscar(0, 10, this.consulta.paciente.nome, null, null).subscribe((retorno: Pagina) => {
+    this.consultaService.buscar(0, 10, this.consulta.paciente.nome, null, null, null).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       if (retorno) {
         this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);
@@ -390,7 +387,7 @@ export class ConsultaComponent implements OnInit {
   }
 
   buscarPorNomePaginacao(pagina: number, total: number, nome: string) {
-    this.consultaService.buscar(pagina, total, nome, null, null).subscribe((retorno: Pagina) => {
+    this.consultaService.buscar(pagina, total, nome, null, null, null).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       if (retorno) {
         this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);

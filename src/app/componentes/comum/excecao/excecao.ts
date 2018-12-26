@@ -22,7 +22,7 @@ export class Excecao {
     } else if (erro.status === Constantes.ERRO_INTERNAL_SERVER) {
       this.mensagem.titulo = 'Erro interno do Servidor';
       this.mensagem.codigoTipo = 1;
-      this.mensagem.texto = 'Não foi possível salvar o registro.';
+      this.mensagem.texto = 'Ocorreu um erro interno no Servidor, contate o administrador.';
     }
     return this.mensagem;
   }

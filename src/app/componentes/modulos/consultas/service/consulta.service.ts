@@ -33,7 +33,7 @@ export class ConsultaService {
   /**
    *
    */
-  buscar( pagina: number, total: number, nome: string , dataConsulta: string, mesConsulta: string) {
+  buscar( pagina: number, total: number, nome: string , dataConsulta: string, mesConsulta: string, codigoPaciente: number) {
     let endereco = this.enderecoBase + this.pathBase + '/buscarConsulta' + '/' + pagina + '/' + total + '?';
 
     if (nome) {
@@ -46,6 +46,10 @@ export class ConsultaService {
 
     if (mesConsulta) {
       endereco = endereco + '&mesConsulta=' + mesConsulta;
+    }
+
+    if (codigoPaciente) {
+      endereco = endereco + '&codigoPaciente=' + codigoPaciente;
     }
 
     return this.http.get(endereco);

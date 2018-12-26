@@ -1,3 +1,5 @@
+import { SolicitacaoMedicamentoConverter } from './solicitacaomedicamento.converter';
+import { SolicitacaoExameConverter } from './solicitacaoexame.converter';
 import { PacienteConverter } from './../../pacientes/converter/paciente.converter';
 import { ConsultaEBO } from './../ebo/consultaebo';
 import { Consulta } from './../../../../model/consulta.model';
@@ -11,7 +13,9 @@ import { Constantes } from '../../../comum/constantes';
 })
 export class ConsultaConverter {
 
-  constructor(private datePipe: DatePipe, private medicoConverter: MedicoConverter, private pacienteConverter: PacienteConverter) { }
+  constructor(private datePipe: DatePipe, private medicoConverter: MedicoConverter, private pacienteConverter: PacienteConverter,
+    private solicitacaoExameConverter: SolicitacaoExameConverter,
+    private solicitacaoMedicamentoConverter: SolicitacaoMedicamentoConverter) { }
 
   converterParaBackend(consulta: Consulta): ConsultaEBO {
     const consultaEBO = new ConsultaEBO();
@@ -21,6 +25,17 @@ export class ConsultaConverter {
     consultaEBO.medico = this.medicoConverter.converterParaBackend(consulta.medico);
     consultaEBO.flagConfirmada = consulta.flagConfirmada;
     consultaEBO.flagPrimeiraConsulta = consulta.flagPrimeiraConsulta;
+    if (consulta.listaSolicitacaoExame && consulta.listaSolicitacaoExame.length > 0) {
+      consultaEBO.listaSolicitacaoExame = this.solicitacaoExameConverter.converterListaParaBackend(consulta.listaSolicitacaoExame);
+    } else {
+      consultaEBO.listaSolicitacaoExame = null;
+    }
+    if (consulta.listaSolicitacaoMedicamento && consulta.listaSolicitacaoMedicamento.length > 0) {
+      consultaEBO.listaSolicitacaoMedicamento = this.solicitacaoMedicamentoConverter
+      .converterListaParaBackend(consulta.listaSolicitacaoMedicamento);
+    } else {
+      consultaEBO.listaSolicitacaoMedicamento = null;
+    }
     if (consulta.dataAtendimento) {
       consultaEBO.dataAtendimento = this.datePipe.transform(consulta.dataAtendimento, Constantes.FORMATO_DATA_BACKEND);
     }
@@ -57,6 +72,17 @@ export class ConsultaConverter {
     }
     if (consultaEBO.dataConsulta) {
       consultaRetorno.dataConsulta = this.datePipe.transform(consultaEBO.dataConsulta, Constantes.FORMATO_DATA_FRONTEND_COMBO);
+    }
+    if (consultaEBO.listaSolicitacaoExame && consultaRetorno.listaSolicitacaoExame.length > 0) {
+      consultaRetorno.listaSolicitacaoExame = this.solicitacaoExameConverter.converterListaParaFrontend(consultaEBO.listaSolicitacaoExame);
+    } else {
+      consultaRetorno.listaSolicitacaoExame = null;
+    }
+    if (consultaEBO.listaSolicitacaoMedicamento && consultaEBO.listaSolicitacaoMedicamento.length > 0) {
+      consultaRetorno.listaSolicitacaoMedicamento = this.solicitacaoMedicamentoConverter
+      .converterListaParaFrontend(consultaEBO.listaSolicitacaoMedicamento);
+    } else {
+      consultaRetorno.listaSolicitacaoMedicamento = null;
     }
     consultaRetorno.flagAtivo = consultaEBO.flagAtivo;
     consultaRetorno.dataCriacao = consultaEBO.dataCriacao;

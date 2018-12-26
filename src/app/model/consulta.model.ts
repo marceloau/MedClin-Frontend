@@ -1,3 +1,6 @@
+import { SolicitacaoExame } from './solicitacaoexame.model';
+import { SolicitacaoMedicamento } from './solicitacaomedicamento.model';
+import { Medicamento } from './medicamento.model';
 import { Medico } from './medico.model';
 import { Paciente } from './paciente.model';
 export class Consulta {
@@ -8,6 +11,8 @@ export class Consulta {
   codigoStatusConsulta: number;
   flagConfirmada: string;
   flagPrimeiraConsulta: string;
+  listaSolicitacaoExame = new Array<SolicitacaoExame>();
+  listaSolicitacaoMedicamento = new Array<SolicitacaoMedicamento>();
   dataAtendimento: any;
   dataConsulta: any;
   flagAtivo: string;

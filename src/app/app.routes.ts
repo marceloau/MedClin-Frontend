@@ -1,3 +1,4 @@
+import { AtendimentoConsultaComponent } from './componentes/modulos/consultas/atendimento/atendimentoconsulta.component';
 import { MedicamentoComponent } from './componentes/modulos/cadastro/medicamento/medicamento.component';
 import { TipoMedicamentoComponent } from './componentes/modulos/cadastro/tipoMedicamento/tipomedicamento.component';
 import { ConsultaComponent } from './componentes/modulos/consultas/consulta.component';
@@ -77,7 +78,11 @@ export const ROUTES: Routes = [
   {
     path: 'agendamentos/consultas',
     component: ConsultaComponent
-  }
+  },
+  {
+    path: 'agendamentos/consulta/:codigo',
+    component: AtendimentoConsultaComponent
+  },
 
 ];
 
