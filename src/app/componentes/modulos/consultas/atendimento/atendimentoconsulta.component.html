@@ -37,7 +37,7 @@
             </li>
           </ul>
 
-          <a class="btn btn-primary btn-block" (click)="modoEdicao()"><b>Finalizar Consulta</b></a>
+          <a class="btn btn-primary btn-block" (click)="finalizarConsulta()"><b>Finalizar Consulta</b></a>
         </div>
         <!-- /.box-body -->
       </div>
@@ -59,7 +59,7 @@
         <ul class="nav nav-tabs">
           <li class="active"><a data-toggle="tab" href="#abaProntuarioMedico">Prontuário Médico</a></li>
           <li><a data-toggle="tab" href="#abaSolicitacaoExame">Solicitação de Exames</a></li>
-          <li><a data-toggle="tab" href="#abaSolicitacaoMedicamento">Solicitação de Medicamentos</a></li>
+          <li><a data-toggle="tab" href="#abaSolicitacaoMedicamento">Prescrever Medicamentos</a></li>
         </ul>
         <div class="tab-content">
           <div id="abaProntuarioMedico" class="tab-pane fade in active">
@@ -110,16 +110,48 @@
           <div id="abaSolicitacaoExame" class="tab-pane fade">
             <div class="row">
               <div class="col-md-8">
-              <label>Exames</label>
-                <div class="box-body pad">
+                <div class="box box-solid">
+                  <div class="box-header with-border">
+                    <i class="fa fa-text-width"></i>
 
+                    <h3 class="box-title">Solicitações de Exame</h3>
+                    <a class="btn btn-default btn-xs" *ngIf="listaSolicitacaoExame.length > 0">Imprimir Todos</a>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <table class="table table-bordered">
+                      <tr>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Descrição</th>
+                        <th>Ações</th>
+                      </tr>
+                      <tr *ngFor="let solicitacaoExame of listaSolicitacaoExame">
+                        <td>{{solicitacaoExame.exame.nome}}</td>
+                        <td>{{solicitacaoExame.exame.tipoExame.nome}}</td>
+                        <td>{{solicitacaoExame.exame.descricao}}</td>
+                        <td>
+                          <div class="btn-group">
+                            <button type="button" (click)="selecionarExame(solicitacaoExame)" class="btn btn-default">
+                              <i class="fa fa-print" title="Imprimir"></i>
+                            </button>
+                            <button type="button" (click)="removerSolicitacaoExame(solicitacaoExame)" class="btn btn-default">
+                              <i class="fa fa-times-circle" title="Excluir"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <!-- /.box-body -->
                 </div>
+                <!-- /.box -->
               </div>
               <div class="col-md-4">
-              <label>Lista de Exames Solicitados</label>
-                <div class="box-body pad">
-
-                </div>
+                <span class="input-group-btn">
+                  <button type="button" (click)="buscarExame()" class="btn btn-primary btn-flat" data-toggle="modal"
+                  data-target="#modal-solicitacao-exame">Adicionar Solicitação de Exame</button>
+                </span>
               </div>
             </div>
             <ul>
@@ -159,16 +191,50 @@
           <div id="abaSolicitacaoMedicamento" class="tab-pane fade">
             <div class="row">
               <div class="col-md-8">
-              <label>Medicamentos</label>
-                <div class="box-body pad">
+                <div class="box box-solid">
+                  <div class="box-header with-border">
+                    <i class="fa fa-text-width"></i>
 
+                    <h3 class="box-title">Medicamentos Prescritos</h3>
+                    <a class="btn btn-default btn-xs" *ngIf="listaSolicitacaoMedicamento.length > 0">Imprimir Todos</a>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <table class="table table-bordered">
+                      <tr>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Uso</th>
+                        <th>Descrição</th>
+                        <th>Ações</th>
+                      </tr>
+                      <tr *ngFor="let solicitacaoMedicamento of listaSolicitacaoMedicamento">
+                        <td>{{solicitacaoMedicamento.medicamento.nome}}</td>
+                        <td>{{solicitacaoMedicamento.medicamento.tipoMedicamento.nome}}</td>
+                        <td>{{solicitacaoMedicamento.medicamento.usoMedicamento.nome}}</td>
+                        <td>{{solicitacaoMedicamento.medicamento.descricao}}</td>
+                        <td>
+                          <div class="btn-group">
+                            <button type="button" (click)="selecionarMedicamento(solicitacaoMedicamento)" class="btn btn-default">
+                              <i class="fa fa-print" title="Imprimir"></i>
+                            </button>
+                            <button type="button" (click)="removerSolicitacaoMedicamento(solicitacaoMedicamento)" class="btn btn-default">
+                              <i class="fa fa-times-circle" title="Excluir"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <!-- /.box-body -->
                 </div>
+                <!-- /.box -->
               </div>
               <div class="col-md-4">
-              <label>Lista de Medicamentos Prescritos</label>
-                <div class="box-body pad">
-
-                </div>
+                <span class="input-group-btn">
+                  <button type="button" (click)="buscarMedicamento()" class="btn btn-primary btn-flat" data-toggle="modal"
+                  data-target="#modal-solicitacao-medicamento">Prescrever Medicamento</button>
+                </span>
               </div>
             </div>
             <ul>
@@ -214,6 +280,173 @@
     <!-- /.col -->
   </div>
   <!-- /.row -->
+
+  <!-- Modal para selecionar o exame -->
+  <div class="modal fade" id="modal-solicitacao-exame">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" id="fecharModalSolicitacaoExame" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Buscar Exame</h4>
+        </div>
+        <div class="modal-body">
+          <form #form="ngForm" role="form">
+            <div *ngIf="mensagem && mensagem.codigoTipo === 1" class="alert alert-danger alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+              {{mensagem.texto}}
+            </div>
+            <div class="row">
+              <br>
+              <div class="tab-pane fade in active">
+                <div class="col-md-12">
+                  <div class="input-group col-md-12 pull-left">
+                    <div class="input-group col-md-12 pull-left">
+                      <input type="text" class="form-control" id="nome" name="nome" value="modalBuscarExame.nome" [(ngModel)]="modalBuscarExame.nome"
+                      #nome="ngModel" placeholder="Informe o nome do Exame.">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="buscarExame()" class="btn btn-primary btn-flat">Buscar</button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <table id="tabelaModalSolicitacaoExame" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nome</th>
+                      <th>Tipo</th>
+                      <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let exame of listaModalExame">
+                      <td>{{ exame.codigo }}</td>
+                      <td>{{ exame.nome }}</td>
+                      <td>{{ exame.tipoExame.nome }}</td>
+                      <td>
+                        <div class="btn-group">
+                          <button type="button" (click)="selecionarExame(exame)" class="btn btn-default">
+                            <i class="fa fa-check" title="Selecionar"></i>
+                          </button>
+                        </div>
+                        <a class="btn-group">
+
+                        </a>
+                        <a class="btn-group">
+
+                        </a>
+                      </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nome</th>
+                      <th>Tipo</th>
+                      <th>Ações</th>
+                    </tr>
+                    </tfoot>
+                  </table>
+                  <app-paginacao [page]="paginaModalExame" (paginationEvent)=changePage($event)></app-paginacao>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <!-- Modal para selecionar o medicamento -->
+  <div class="modal fade" id="modal-solicitacao-medicamento">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" id="fecharModalSolicitacaoMedicamento" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Buscar Medicamento</h4>
+        </div>
+        <div class="modal-body">
+          <form #form="ngForm" role="form">
+            <div *ngIf="mensagem && mensagem.codigoTipo === 1" class="alert alert-danger alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+              {{mensagem.texto}}
+            </div>
+            <div class="row">
+              <br>
+              <div class="tab-pane fade in active">
+                <div class="col-md-12">
+                  <div class="input-group col-md-12 pull-left">
+                    <div class="input-group col-md-12 pull-left">
+                      <input type="text" class="form-control" id="nome" name="nome" value="modalBuscarMedicamento.nome" [(ngModel)]="modalBuscarMedicamento.nome"
+                      #nome="ngModel" placeholder="Informe o nome do Medicamento.">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="buscarMedicamento()" class="btn btn-primary btn-flat">Buscar</button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <table id="tabelaModalSolicitacaoMedicamento" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nome</th>
+                      <th>Tipo</th>
+                      <th>Uso</th>
+                      <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let medicamento of listaModalMedicamento">
+                      <td>{{ medicamento.codigo }}</td>
+                      <td>{{ medicamento.nome }}</td>
+                      <td>{{ medicamento.tipoMedicamento.nome }}</td>
+                      <td>{{ medicamento.usoMedicamento.nome }}</td>
+                      <td>
+                        <div class="btn-group">
+                          <button type="button" (click)="selecionarMedicamento(medicamento)" class="btn btn-default">
+                            <i class="fa fa-check" title="Selecionar"></i>
+                          </button>
+                        </div>
+                        <a class="btn-group">
+
+                        </a>
+                        <a class="btn-group">
+
+                        </a>
+                      </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nome</th>
+                      <th>Tipo</th>
+                      <th>Uso</th>
+                      <th>Ações</th>
+                    </tr>
+                    </tfoot>
+                  </table>
+                  <app-paginacao [page]="paginaModalMedicamento" (paginationEvent)=changePage($event)></app-paginacao>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
 
 </section>
 <!-- /.content -->

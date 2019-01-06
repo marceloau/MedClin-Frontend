@@ -1,3 +1,5 @@
+import { Consulta } from './../../../../model/consulta.model';
+import { Exame } from './../../../../model/exame.model';
 import { ExameConverter } from './../../cadastro/exame/converter/exame.converter';
 import { SolicitacaoExameEBO } from './../ebo/solicitacaoexameebo';
 import { SolicitacaoExamePK } from './../../../../model/solicitacaoexamepk.model';
@@ -68,6 +70,19 @@ export class SolicitacaoExameConverter {
     solicitacaoExameRetorno.exame = this.exameConverter.converterParaFrontend(solicitacaoExameEBO.exame);
 
     return solicitacaoExameRetorno;
+  }
+
+  converterExameParaSolicitacaoExame(exame: Exame, consulta: Consulta): SolicitacaoExame {
+    const retorno = new SolicitacaoExame();
+
+    retorno.consulta = consulta;
+    retorno.dataSolicitacaoExame = new Date();
+    retorno.exame = exame;
+    retorno.flagAtivo = 'S';
+    retorno.solicitacaoExamePK = new SolicitacaoExamePK();
+    retorno.solicitacaoExamePK.codigoConsulta = consulta.codigo;
+
+    return retorno;
   }
 
 }

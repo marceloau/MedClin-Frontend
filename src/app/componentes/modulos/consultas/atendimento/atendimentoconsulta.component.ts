@@ -1,3 +1,10 @@
+import { MedicamentoConverter } from './../../cadastro/medicamento/converter/medicamento.converter';
+import { MedicamentoService } from './../../cadastro/medicamento/service/medicamento.service';
+import { Medicamento } from './../../../../model/medicamento.model';
+import { Pagina } from './../../../../model/comum/pagina.model';
+import { ExameConverter } from './../../cadastro/exame/converter/exame.converter';
+import { ExameService } from './../../cadastro/exame/service/exame.service';
+import { Exame } from './../../../../model/exame.model';
 import { SolicitacaoMedicamento } from './../../../../model/solicitacaomedicamento.model';
 import { SolicitacaoMedicamentoConverter } from './../converter/solicitacaomedicamento.converter';
 import { SolicitacaoMedicamentoService } from './../service/solicitacaomedicamento.service';
@@ -12,33 +19,27 @@ import { NgForm } from '@angular/forms';
 import { Estado } from './../../../../model/estado.model';
 import { Mensagem } from './../../../../model/mensagem';
 import { TipoPlanoSaudeConverter } from './../../cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
-import { OperadoraService } from './../../cadastro/operadora/service/operadora.service';
 import { OperadoraConverter } from './../../cadastro/operadora/converter/operadora.converter';
 import { Excecao } from './../../../comum/excecao/excecao';
-import { DominioService } from './../../../comum/services/dominio.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Paciente } from '../../../../model/paciente.model';
-import { PacienteService } from '../../pacientes/service/paciente.service';
 import { PacienteConverter } from '../../pacientes/converter/paciente.converter';
 import { DominioConverter } from '../../../comum/converter/dominio.converter';
-import { TipoContatoService } from '../../cadastro/tipoContato/service/tipocontato.service';
 import { TipoContatoConverter } from '../../cadastro/tipoContato/converter/tipocontato.converter';
-import { TipoPlanoSaudeService } from '../../cadastro/tipoPlanoSaude/service/tipoplanosaude.service';
 import { EstadoCivil } from '../../../../model/estadocivil.model';
 import { TipoLogradouro } from '../../../../model/tipologradouro.model';
 import { TipoContato } from '../../../../model/tipo-contato.model';
 import { Operadora } from '../../../../model/operadora.model';
 import { TipoPlanoSaude } from '../../../../model/tipoplanosaude.model';
-import { Constantes } from '../../../comum/constantes';
-import { Pagina } from '../../../../model/comum/pagina.model';
 import { Consulta } from '../../../../model/consulta.model';
 
 @Component({
   selector: 'app-atendimentoconsulta',
   templateUrl: './atendimentoconsulta.component.html',
   styleUrls: ['./atendimentoconsulta.component.css'],
-  providers: [PacienteConverter, DominioConverter, Excecao, TipoContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter]
+  providers: [PacienteConverter, DominioConverter, Excecao, TipoContatoConverter, OperadoraConverter,
+    TipoPlanoSaudeConverter, SolicitacaoExameConverter, SolicitacaoMedicamentoConverter]
 })
 export class AtendimentoConsultaComponent implements OnInit {
 
@@ -60,6 +61,14 @@ export class AtendimentoConsultaComponent implements OnInit {
   listaSolicitacaoExame = new Array<SolicitacaoExame>();
   listaSolicitacaoMedicamento = new Array<SolicitacaoMedicamento>();
 
+  modalBuscarExame = new Exame();
+  listaModalExame = new Array<Exame>();
+  paginaModalExame = new Pagina();
+
+  modalBuscarMedicamento = new Medicamento();
+  listaModalMedicamento = new Array<Medicamento>();
+  paginaModalMedicamento = new Pagina();
+
   mensagem = new Mensagem();
 
   // Inicio lista de atributos dos compbos de paciente
@@ -74,9 +83,13 @@ export class AtendimentoConsultaComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private excecao: Excecao, private consultaService: ConsultaService,
     private consultaConverter: ConsultaConverter,
+    private exameService: ExameService,
+    private exameConverter: ExameConverter,
     private solicitacaoExameService: SolicitacaoExameService, private solicitacaoExameConverter: SolicitacaoExameConverter,
     private solicitacaoMedicamentoService: SolicitacaoMedicamentoService,
-    private solicitacaoMedicamentoConverter: SolicitacaoMedicamentoConverter) { }
+    private solicitacaoMedicamentoConverter: SolicitacaoMedicamentoConverter,
+    private medicamentoService: MedicamentoService,
+    private medicamentoConverter: MedicamentoConverter) { }
 
   ngOnInit() {
     this.route.params.subscribe(
@@ -138,13 +151,125 @@ export class AtendimentoConsultaComponent implements OnInit {
     });
   }
 
-  modoEdicao() {
-    if (this.habilitarEdicao) {
-      this.atualizar();
-      this.habilitarEdicao = false;
+  buscarExame() {
+    if (this.modalBuscarExame.nome) {
+      this.exameService.buscarPorNome(0, 10, this.modalBuscarExame.nome).subscribe((retorno: Pagina) => {
+        this.paginaModalExame = retorno;
+        if (retorno && retorno.content) {
+          this.listaModalExame = this.exameConverter.converterListaParaFrontend(retorno.content);
+        } else {
+          this.listaModalExame = [];
+        }
+        this.inicializarTableModalSolicitacaoExame();
+      }, err => {
+        this.mensagem = this.excecao.exibirExcecao(err.error);
+      });
     } else {
-      this.habilitarEdicao = true;
+      this.exameService.listarRegistros(0, 10).subscribe((retorno: Pagina) => {
+        this.paginaModalExame = retorno;
+        if (retorno && retorno.content) {
+          this.listaModalExame = this.exameConverter.converterListaParaFrontend(retorno.content);
+        } else {
+          this.listaModalExame = [];
+        }
+        this.inicializarTableModalSolicitacaoExame();
+      }, err => {
+        this.mensagem = this.excecao.exibirExcecao(err.error);
+      });
     }
+  }
+
+  inicializarTableModalSolicitacaoExame() {
+    const table: any = $('#tabelaModalSolicitacaoExame');
+    table.DataTable().destroy();
+    setTimeout(() =>
+      table.DataTable({
+        'paging'      : false,
+        'lengthChange': false,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : false
+      }), 0
+    );
+  }
+
+  selecionarExame(exame: Exame) {
+    this.listaSolicitacaoExame.push(this.solicitacaoExameConverter.converterExameParaSolicitacaoExame(exame, this.consulta));
+    const modal: any = $('#fecharModalSolicitacaoExame');
+    modal.click();
+  }
+
+  removerSolicitacaoExame(solicitacaoExame: SolicitacaoExame) {
+    this.listaSolicitacaoExame = this.listaSolicitacaoExame.filter(item => item.exame.codigo !== solicitacaoExame.exame.codigo);
+  }
+
+  removerSolicitacaoMedicamento(solicitacaoMedicamento: SolicitacaoMedicamento) {
+    this.listaSolicitacaoMedicamento = this.listaSolicitacaoMedicamento.filter(item =>
+      item.medicamento.codigo !== solicitacaoMedicamento.medicamento.codigo);
+  }
+
+  buscarMedicamento() {
+    if (this.modalBuscarMedicamento.nome) {
+      this.medicamentoService.buscarPorNome(0, 10, this.modalBuscarMedicamento.nome).subscribe((retorno: Pagina) => {
+        this.paginaModalMedicamento = retorno;
+        if (retorno && retorno.content) {
+          this.listaModalMedicamento = this.medicamentoConverter.converterListaParaFrontend(retorno.content);
+        } else {
+          this.listaModalMedicamento = [];
+        }
+        this.inicializarTableModalSolicitacaoMedicamento();
+      }, err => {
+        this.mensagem = this.excecao.exibirExcecao(err.error);
+      });
+    } else {
+      this.medicamentoService.listarRegistros(0, 10).subscribe((retorno: Pagina) => {
+        this.paginaModalMedicamento = retorno;
+        if (retorno && retorno.content) {
+          this.listaModalMedicamento = this.medicamentoConverter.converterListaParaFrontend(retorno.content);
+        } else {
+          this.listaModalMedicamento = [];
+        }
+        this.inicializarTableModalSolicitacaoMedicamento();
+      }, err => {
+        this.mensagem = this.excecao.exibirExcecao(err.error);
+      });
+    }
+  }
+
+  inicializarTableModalSolicitacaoMedicamento() {
+    const table: any = $('#tabelaModalSolicitacaoMedicamento');
+    table.DataTable().destroy();
+    setTimeout(() =>
+      table.DataTable({
+        'paging'      : false,
+        'lengthChange': false,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : false
+      }), 0
+    );
+  }
+
+  selecionarMedicamento(medicamento: Medicamento) {
+    this.listaSolicitacaoMedicamento.push(this.solicitacaoMedicamentoConverter
+      .converterMedicamentoParaSolicitacaoMedicamento(medicamento, this.consulta));
+    const modal: any = $('#fecharModalSolicitacaoMedicamento');
+    modal.click();
+  }
+
+  finalizarConsulta() {
+    const objetoAtualizado: ConsultaEBO = this.consultaConverter.converterParaBackend(this.consulta);
+    this.consultaService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: ConsultaEBO) => {
+      this.mensagem.codigoTipo = 0;
+      this.mensagem.titulo = 'Sucesso';
+      this.mensagem.texto = 'Consulta finalizada com sucesso.';
+      this.habilitarEdicao = false;
+      this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
   }
 
   atualizar() {

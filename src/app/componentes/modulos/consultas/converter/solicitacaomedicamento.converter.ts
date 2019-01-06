@@ -1,3 +1,5 @@
+import { Consulta } from './../../../../model/consulta.model';
+import { Medicamento } from './../../../../model/medicamento.model';
 import { MedicamentoConverter } from './../../cadastro/medicamento/converter/medicamento.converter';
 import { SolicitacaoMedicamentoEBO } from './../ebo/solicitacaomedicamentoebo';
 import { SolicitacaoMedicamento } from './../../../../model/solicitacaomedicamento.model';
@@ -72,6 +74,19 @@ export class SolicitacaoMedicamentoConverter {
     solicitacaoMedicamentoRetorno.medicamento = this.medicamentoConverter.converterParaFrontend(solicitacaoMedicamentoEBO.medicamento);
 
     return solicitacaoMedicamentoRetorno;
+  }
+
+  converterMedicamentoParaSolicitacaoMedicamento(medicamento: Medicamento, consulta: Consulta): SolicitacaoMedicamento {
+    const retorno = new SolicitacaoMedicamento();
+
+    retorno.consulta = consulta;
+    retorno.dataSolicitacaoMedicamento = new Date();
+    retorno.medicamento = medicamento;
+    retorno.flagAtivo = 'S';
+    retorno.solicitacaoMedicamentoPK = new SolicitacaoMedicamentoPK();
+    retorno.solicitacaoMedicamentoPK.codigoConsulta = consulta.codigo;
+
+    return retorno;
   }
 
 }
