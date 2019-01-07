@@ -83,16 +83,16 @@
             </div>
             <!-- Fim Edição das informações -->
             <ul *ngIf="possuiHistoricoClinico">
-              <ul class="timeline timeline-inverse" *ngFor="let consulta of listaConsultas">
+              <ul class="timeline timeline-inverse" *ngFor="let timeLine of listaTimeLineHistoricoClinico">
                   <!-- timeline time label -->
                   <li class="time-label">
                         <span class="bg-red">
-                          {{consulta.dataConsulta | date:'dd/MM/yyyy'}}
+                          {{timeLine.data | date:'dd/MM/yyyy'}}
                         </span>
                   </li>
                   <!-- /.timeline-label -->
                   <!-- timeline item -->
-                  <li>
+                  <li *ngFor="let consulta of timeLine.objetos">
                     <i class="fa fa-stethoscope bg-blue"></i>
 
                     <div class="timeline-item">

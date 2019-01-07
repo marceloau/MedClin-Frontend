@@ -1,3 +1,4 @@
+import { TimeLine } from './../../../../model/comum/timeline.model';
 import { MedicamentoConverter } from './../../cadastro/medicamento/converter/medicamento.converter';
 import { MedicamentoService } from './../../cadastro/medicamento/service/medicamento.service';
 import { Medicamento } from './../../../../model/medicamento.model';
@@ -80,6 +81,8 @@ export class AtendimentoConsultaComponent implements OnInit {
   listaComboTipoPlanoSaude = new Array<TipoPlanoSaude>();
   // Fim lista de atributos dos compbos de paciente
 
+  listaTimeLineHistoricoClinico = new Array<TimeLine>();
+
   constructor(private route: ActivatedRoute,
     private excecao: Excecao, private consultaService: ConsultaService,
     private consultaConverter: ConsultaConverter,
@@ -135,6 +138,7 @@ export class AtendimentoConsultaComponent implements OnInit {
         if (this.listaConsultas.length > 0) {
           this.possuiHistoricoClinico = true;
         }
+        this.montarHistoricoClinico(this.listaConsultas);
       }, err => {
         this.mensagem = this.excecao.exibirExcecao(err.error);
       });
@@ -281,5 +285,33 @@ export class AtendimentoConsultaComponent implements OnInit {
     }, err => {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
+  }
+
+  montarHistoricoClinico(listaConsulta: Array<Consulta>) {
+    if (listaConsulta && listaConsulta.length > 0) {
+      const retorno = new Array<TimeLine>();
+      for (const index of listaConsulta) {
+        if (retorno.length > 0) {
+          retorno.forEach(function (timeLine) {
+            if (timeLine.data === index.dataConsulta) {
+              timeLine.objetos.push(index);
+            } else {
+              const timeLineNova = new TimeLine();
+              timeLineNova.data = index.dataConsulta;
+              timeLineNova.objetos = new Array<Consulta>();
+              timeLineNova.objetos.push(index);
+              retorno.push(timeLineNova);
+            }
+          });
+        } else {
+          const timeLineNova = new TimeLine();
+          timeLineNova.data = index.dataConsulta;
+          timeLineNova.objetos = new Array<Consulta>();
+          timeLineNova.objetos.push(index);
+          retorno.push(timeLineNova);
+        }
+      }
+      this.listaTimeLineHistoricoClinico = retorno;
+    }
   }
 }
