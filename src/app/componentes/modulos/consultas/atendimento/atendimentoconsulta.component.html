@@ -66,9 +66,18 @@
             <!-- Inicio Edição das informações -->
             <div class="row">
               <div class="col-md-12">
-                <div class="box-body pad">
-                  <textarea id="historicoClinico" [(ngModel)]="consulta.historicoClinico" #historicoClinico="ngModel" name="historicoClinico" rows="20" cols="138">
-                  </textarea>
+                <div class="box box-solid">
+                  <div class="box-header with-border">
+                    <i class="fa fa-file-alt"></i>
+                    <h3 class="box-title">História Clinica</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <textarea id="historicoClinico" [(ngModel)]="consulta.historicoClinico"
+                    #historicoClinico="ngModel" name="historicoClinico" rows="20" style="width: 100%;">
+                    </textarea>
+                  </div>
+                  <!-- /.box-body -->
                 </div>
               </div>
             </div>
@@ -112,10 +121,9 @@
               <div class="col-md-8">
                 <div class="box box-solid">
                   <div class="box-header with-border">
-                    <i class="fa fa-text-width"></i>
+                    <i class="fa fa-file-alt"></i>
 
                     <h3 class="box-title">Solicitações de Exame</h3>
-                    <a class="btn btn-default btn-xs" *ngIf="listaSolicitacaoExame.length > 0">Imprimir Todos</a>
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
@@ -126,7 +134,7 @@
                         <th>Descrição</th>
                         <th>Ações</th>
                       </tr>
-                      <tr *ngFor="let solicitacaoExame of listaSolicitacaoExame">
+                      <tr *ngFor="let solicitacaoExame of consulta.listaSolicitacaoExame">
                         <td>{{solicitacaoExame.exame.nome}}</td>
                         <td>{{solicitacaoExame.exame.tipoExame.nome}}</td>
                         <td>{{solicitacaoExame.exame.descricao}}</td>
@@ -151,11 +159,13 @@
                 <span class="input-group-btn">
                   <button type="button" (click)="buscarExame()" class="btn btn-primary btn-flat" data-toggle="modal"
                   data-target="#modal-solicitacao-exame">Adicionar Solicitação de Exame</button>
+                  <button type="button" *ngIf="consulta.listaSolicitacaoExame.length > 0"
+                  class="btn btn-default btn-flat">Imprimir Todos</button>
                 </span>
               </div>
             </div>
-            <ul>
-              <ul class="timeline timeline-inverse" *ngFor="let solicitacaoExame of listaSolicitacaoExame">
+            <ul *ngIf="consulta.listaSolicitacaoExame.length > 0">
+              <ul class="timeline timeline-inverse" *ngFor="let solicitacaoExame of consulta.listaSolicitacaoExame">
                   <!-- timeline time label -->
                   <li class="time-label" *ngIf="possuiSolicitacaoExame">
                         <span class="bg-red">
@@ -193,10 +203,10 @@
               <div class="col-md-8">
                 <div class="box box-solid">
                   <div class="box-header with-border">
-                    <i class="fa fa-text-width"></i>
+                    <i class="fa fa-pills"></i>
 
                     <h3 class="box-title">Medicamentos Prescritos</h3>
-                    <a class="btn btn-default btn-xs" *ngIf="listaSolicitacaoMedicamento.length > 0">Imprimir Todos</a>
+
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
@@ -208,7 +218,7 @@
                         <th>Descrição</th>
                         <th>Ações</th>
                       </tr>
-                      <tr *ngFor="let solicitacaoMedicamento of listaSolicitacaoMedicamento">
+                      <tr *ngFor="let solicitacaoMedicamento of consulta.listaSolicitacaoMedicamento">
                         <td>{{solicitacaoMedicamento.medicamento.nome}}</td>
                         <td>{{solicitacaoMedicamento.medicamento.tipoMedicamento.nome}}</td>
                         <td>{{solicitacaoMedicamento.medicamento.usoMedicamento.nome}}</td>
@@ -234,11 +244,13 @@
                 <span class="input-group-btn">
                   <button type="button" (click)="buscarMedicamento()" class="btn btn-primary btn-flat" data-toggle="modal"
                   data-target="#modal-solicitacao-medicamento">Prescrever Medicamento</button>
+                  <button type="button" *ngIf="consulta.listaSolicitacaoMedicamento.length > 0"
+                  class="btn btn-default btn-flat">Imprimir Todos</button>
                 </span>
               </div>
             </div>
-            <ul>
-              <ul class="timeline timeline-inverse" *ngFor="let solicitacaoMedicamento of listaSolicitacaoMedicamento">
+            <ul *ngIf="consulta.listaSolicitacaoMedicamento.length > 0">
+              <ul class="timeline timeline-inverse" *ngFor="let solicitacaoMedicamento of consulta.listaSolicitacaoMedicamento">
                   <!-- timeline time label -->
                   <li class="time-label" *ngIf="possuiSolicitacaoMedicamento">
                         <span class="bg-red">

@@ -26,6 +26,7 @@ export class SolicitacaoExameConverter {
     solicitacaoExameRetorno.dataCriacao = solicitacaoExame.dataCriacao;
     solicitacaoExameRetorno.dataUltimaAlteracao = solicitacaoExame.dataUltimaAlteracao;
     solicitacaoExameRetorno.usuarioUltimaAlteracao = solicitacaoExame.usuarioUltimaAlteracao;
+    solicitacaoExameRetorno.consulta = undefined;
     if (solicitacaoExame.dataSolicitacaoExame) {
       solicitacaoExameRetorno.dataSolicitacaoExame = this.datePipe.transform(
         solicitacaoExame.dataSolicitacaoExame, Constantes.FORMATO_DATA_BACKEND);
@@ -75,7 +76,6 @@ export class SolicitacaoExameConverter {
   converterExameParaSolicitacaoExame(exame: Exame, consulta: Consulta): SolicitacaoExame {
     const retorno = new SolicitacaoExame();
 
-    retorno.consulta = consulta;
     retorno.dataSolicitacaoExame = new Date();
     retorno.exame = exame;
     retorno.flagAtivo = 'S';

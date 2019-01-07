@@ -42,6 +42,10 @@ import { TipoPlanoSaudeConverter } from './componentes/modulos/cadastro/tipoPlan
 import { DatePipe, CommonModule } from '@angular/common';
 import { MedicoComponent } from './componentes/modulos/medicos/medico.component';
 
+// Inicio import notificações temporarias
+import { ToastrModule } from 'ng6-toastr-notifications';
+// Fim import notificações temporarias
+
 // Inicio import calendário.
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
@@ -83,6 +87,7 @@ registerLocaleData(localePt);
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    ToastrModule.forRoot(),
     // Inicio imports do calendario
     CommonModule,
     BrowserAnimationsModule,

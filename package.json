@@ -27,6 +27,7 @@
     "datatables.net": "^1.10.19",
     "datatables.net-bs4": "^1.10.19",
     "date-fns": "^1.29.0",
+    "ng6-toastr-notifications": "^1.0.4",
     "rxjs": "^6.0.0",
     "zone.js": "~0.8.26"
   },

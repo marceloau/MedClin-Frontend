@@ -10,7 +10,6 @@ import { SolicitacaoMedicamentoConverter } from './../converter/solicitacaomedic
 import { SolicitacaoMedicamentoService } from './../service/solicitacaomedicamento.service';
 import { SolicitacaoExame } from './../../../../model/solicitacaoexame.model';
 import { SolicitacaoExameConverter } from './../converter/solicitacaoexame.converter';
-import { SolicitacaoExameEBO } from './../ebo/solicitacaoexameebo';
 import { SolicitacaoExameService } from './../service/solicitacaoexame.service';
 import { ConsultaEBO } from './../ebo/consultaebo';
 import { ConsultaConverter } from './../converter/consulta.converter';
@@ -33,6 +32,7 @@ import { TipoContato } from '../../../../model/tipo-contato.model';
 import { Operadora } from '../../../../model/operadora.model';
 import { TipoPlanoSaude } from '../../../../model/tipoplanosaude.model';
 import { Consulta } from '../../../../model/consulta.model';
+import { ToastrManager } from 'ng6-toastr-notifications';
 
 @Component({
   selector: 'app-atendimentoconsulta',
@@ -89,7 +89,8 @@ export class AtendimentoConsultaComponent implements OnInit {
     private solicitacaoMedicamentoService: SolicitacaoMedicamentoService,
     private solicitacaoMedicamentoConverter: SolicitacaoMedicamentoConverter,
     private medicamentoService: MedicamentoService,
-    private medicamentoConverter: MedicamentoConverter) { }
+    private medicamentoConverter: MedicamentoConverter,
+    public toastr: ToastrManager) { }
 
   ngOnInit() {
     this.route.params.subscribe(
@@ -195,17 +196,22 @@ export class AtendimentoConsultaComponent implements OnInit {
   }
 
   selecionarExame(exame: Exame) {
-    this.listaSolicitacaoExame.push(this.solicitacaoExameConverter.converterExameParaSolicitacaoExame(exame, this.consulta));
-    const modal: any = $('#fecharModalSolicitacaoExame');
-    modal.click();
+    const exameSolicitado = this.consulta.listaSolicitacaoExame.filter(item => item.exame.codigo === exame.codigo);
+    if (exameSolicitado.length > 0) {
+      this.toastr.infoToastr('Exame de ' + exame.nome + ' já consta na lista de solicitações', 'Info!');
+    } else {
+      this.consulta.listaSolicitacaoExame.push(this.solicitacaoExameConverter.converterExameParaSolicitacaoExame(exame, this.consulta));
+      this.toastr.successToastr('Exame de ' + exame.nome + ' adicionado a lista de solicitações', 'Sucesso!');
+    }
   }
 
   removerSolicitacaoExame(solicitacaoExame: SolicitacaoExame) {
-    this.listaSolicitacaoExame = this.listaSolicitacaoExame.filter(item => item.exame.codigo !== solicitacaoExame.exame.codigo);
+    this.consulta.listaSolicitacaoExame = this.consulta.listaSolicitacaoExame
+    .filter(item => item.exame.codigo !== solicitacaoExame.exame.codigo);
   }
 
   removerSolicitacaoMedicamento(solicitacaoMedicamento: SolicitacaoMedicamento) {
-    this.listaSolicitacaoMedicamento = this.listaSolicitacaoMedicamento.filter(item =>
+    this.consulta.listaSolicitacaoMedicamento = this.consulta.listaSolicitacaoMedicamento.filter(item =>
       item.medicamento.codigo !== solicitacaoMedicamento.medicamento.codigo);
   }
 
@@ -253,31 +259,23 @@ export class AtendimentoConsultaComponent implements OnInit {
   }
 
   selecionarMedicamento(medicamento: Medicamento) {
-    this.listaSolicitacaoMedicamento.push(this.solicitacaoMedicamentoConverter
-      .converterMedicamentoParaSolicitacaoMedicamento(medicamento, this.consulta));
-    const modal: any = $('#fecharModalSolicitacaoMedicamento');
-    modal.click();
+    const medicamentoPrescrito = this.consulta.listaSolicitacaoMedicamento.filter(item => item.medicamento.codigo === medicamento.codigo);
+    if (medicamentoPrescrito.length > 0) {
+      this.toastr.infoToastr('Medicamento ' + medicamento.nome + ' já consta na lista de medicamentos prescritos.', 'Info!');
+    } else {
+      this.consulta.listaSolicitacaoMedicamento.push(this.solicitacaoMedicamentoConverter
+        .converterMedicamentoParaSolicitacaoMedicamento(medicamento, this.consulta));
+      this.toastr.successToastr('Medicamento ' + medicamento.nome + ' adicionado a lista de medicamentos prescritos.', 'Sucesso!');
+    }
   }
 
   finalizarConsulta() {
+    this.consulta.dataAtendimento = new Date();
     const objetoAtualizado: ConsultaEBO = this.consultaConverter.converterParaBackend(this.consulta);
     this.consultaService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: ConsultaEBO) => {
       this.mensagem.codigoTipo = 0;
       this.mensagem.titulo = 'Sucesso';
       this.mensagem.texto = 'Consulta finalizada com sucesso.';
-      this.habilitarEdicao = false;
-      this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
-    }, err => {
-      this.mensagem = this.excecao.exibirExcecao(err.error);
-    });
-  }
-
-  atualizar() {
-    const objetoAtualizado: ConsultaEBO = this.consultaConverter.converterParaBackend(this.consulta);
-    this.consultaService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: ConsultaEBO) => {
-      this.mensagem.codigoTipo = 0;
-      this.mensagem.titulo = 'Sucesso';
-      this.mensagem.texto = 'Consulta atualizado com sucesso.';
       this.habilitarEdicao = false;
       this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
     }, err => {

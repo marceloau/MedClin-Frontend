@@ -28,6 +28,7 @@ export class SolicitacaoMedicamentoConverter {
     solicitacaoMedicamentoRetorno.dataCriacao = solicitacaoMedicamento.dataCriacao;
     solicitacaoMedicamentoRetorno.dataUltimaAlteracao = solicitacaoMedicamento.dataUltimaAlteracao;
     solicitacaoMedicamentoRetorno.usuarioUltimaAlteracao = solicitacaoMedicamento.usuarioUltimaAlteracao;
+    solicitacaoMedicamentoRetorno.consulta = undefined;
     if (solicitacaoMedicamento.dataSolicitacaoMedicamento) {
       solicitacaoMedicamentoRetorno.dataSolicitacaoMedicamento = this.datePipe.transform(
         solicitacaoMedicamento.dataSolicitacaoMedicamento, Constantes.FORMATO_DATA_BACKEND);
@@ -79,7 +80,6 @@ export class SolicitacaoMedicamentoConverter {
   converterMedicamentoParaSolicitacaoMedicamento(medicamento: Medicamento, consulta: Consulta): SolicitacaoMedicamento {
     const retorno = new SolicitacaoMedicamento();
 
-    retorno.consulta = consulta;
     retorno.dataSolicitacaoMedicamento = new Date();
     retorno.medicamento = medicamento;
     retorno.flagAtivo = 'S';

@@ -10,8 +10,10 @@ export class ConsultaEBO {
   codigoStatusConsulta: number;
   flagConfirmada: string;
   flagPrimeiraConsulta: string;
+  historicoClinico: string;
   dataAtendimento: any;
   dataConsulta: any;
+  ordemChegada: number;
   listaSolicitacaoExame = new Array<SolicitacaoExameEBO>();
   listaSolicitacaoMedicamento = new Array<SolicitacaoMedicamentoEBO>();
   flagAtivo: string;

@@ -1,3 +1,5 @@
+import { SolicitacaoMedicamento } from './../../../../model/solicitacaomedicamento.model';
+import { SolicitacaoExame } from './../../../../model/solicitacaoexame.model';
 import { SolicitacaoMedicamentoConverter } from './solicitacaomedicamento.converter';
 import { SolicitacaoExameConverter } from './solicitacaoexame.converter';
 import { PacienteConverter } from './../../pacientes/converter/paciente.converter';
@@ -25,6 +27,8 @@ export class ConsultaConverter {
     consultaEBO.medico = this.medicoConverter.converterParaBackend(consulta.medico);
     consultaEBO.flagConfirmada = consulta.flagConfirmada;
     consultaEBO.flagPrimeiraConsulta = consulta.flagPrimeiraConsulta;
+    consultaEBO.historicoClinico = consulta.historicoClinico;
+    consultaEBO.ordemChegada = consulta.ordemChegada;
     if (consulta.listaSolicitacaoExame && consulta.listaSolicitacaoExame.length > 0) {
       consultaEBO.listaSolicitacaoExame = this.solicitacaoExameConverter.converterListaParaBackend(consulta.listaSolicitacaoExame);
     } else {
@@ -67,22 +71,24 @@ export class ConsultaConverter {
     consultaRetorno.medico = this.medicoConverter.converterParaFrontend(consultaEBO.medico);
     consultaRetorno.flagConfirmada = consultaEBO.flagConfirmada;
     consultaRetorno.flagPrimeiraConsulta = consultaEBO.flagPrimeiraConsulta;
+    consultaRetorno.historicoClinico = consultaEBO.historicoClinico;
+    consultaRetorno.ordemChegada = consultaEBO.ordemChegada;
     if (consultaEBO.dataAtendimento) {
       consultaRetorno.dataAtendimento = this.datePipe.transform(consultaEBO.dataAtendimento, Constantes.FORMATO_DATA_FRONTEND_COMBO);
     }
     if (consultaEBO.dataConsulta) {
       consultaRetorno.dataConsulta = this.datePipe.transform(consultaEBO.dataConsulta, Constantes.FORMATO_DATA_FRONTEND_COMBO);
     }
-    if (consultaEBO.listaSolicitacaoExame && consultaRetorno.listaSolicitacaoExame.length > 0) {
+    if (consultaEBO.listaSolicitacaoExame && consultaEBO.listaSolicitacaoExame.length > 0) {
       consultaRetorno.listaSolicitacaoExame = this.solicitacaoExameConverter.converterListaParaFrontend(consultaEBO.listaSolicitacaoExame);
     } else {
-      consultaRetorno.listaSolicitacaoExame = null;
+      consultaRetorno.listaSolicitacaoExame = new Array<SolicitacaoExame>();
     }
     if (consultaEBO.listaSolicitacaoMedicamento && consultaEBO.listaSolicitacaoMedicamento.length > 0) {
       consultaRetorno.listaSolicitacaoMedicamento = this.solicitacaoMedicamentoConverter
       .converterListaParaFrontend(consultaEBO.listaSolicitacaoMedicamento);
     } else {
-      consultaRetorno.listaSolicitacaoMedicamento = null;
+      consultaRetorno.listaSolicitacaoMedicamento = new Array<SolicitacaoMedicamento>();
     }
     consultaRetorno.flagAtivo = consultaEBO.flagAtivo;
     consultaRetorno.dataCriacao = consultaEBO.dataCriacao;

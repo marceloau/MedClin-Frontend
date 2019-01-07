@@ -11,6 +11,8 @@ export class Consulta {
   codigoStatusConsulta: number;
   flagConfirmada: string;
   flagPrimeiraConsulta: string;
+  historicoClinico: string;
+  ordemChegada: number;
   listaSolicitacaoExame = new Array<SolicitacaoExame>();
   listaSolicitacaoMedicamento = new Array<SolicitacaoMedicamento>();
   dataAtendimento: any;
