@@ -1,3 +1,4 @@
+import { TimeLineConverter } from './componentes/comum/converter/timeline.converter';
 import { SolicitacaoMedicamentoConverter } from './componentes/modulos/consultas/converter/solicitacaomedicamento.converter';
 import { SolicitacaoExameConverter } from './componentes/modulos/consultas/converter/solicitacaoexame.converter';
 import { AtendimentoConsultaComponent } from './componentes/modulos/consultas/atendimento/atendimentoconsulta.component';
@@ -101,7 +102,7 @@ registerLocaleData(localePt);
   providers: [SegurancaService, UsuarioService, DominioConverter, EnderecoConverter,
     TipoContatoConverter, ContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter, DatePipe,
     EspecialidadeConverter, TipoExameConverter, TipoMedicamentoConverter, SolicitacaoExameConverter,
-    SolicitacaoMedicamentoConverter],
+    SolicitacaoMedicamentoConverter, TimeLineConverter],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

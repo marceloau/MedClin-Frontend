@@ -83,7 +83,8 @@
             </div>
             <!-- Fim Edição das informações -->
             <ul *ngIf="possuiHistoricoClinico">
-              <ul class="timeline timeline-inverse" *ngFor="let timeLine of listaTimeLineHistoricoClinico">
+              <ul class="timeline timeline-inverse">
+                <span class="timeline timeline-inverse" *ngFor="let timeLine of listaTimeLineHistoricoClinico">
                   <!-- timeline time label -->
                   <li class="time-label">
                         <span class="bg-red">
@@ -93,7 +94,7 @@
                   <!-- /.timeline-label -->
                   <!-- timeline item -->
                   <li *ngFor="let consulta of timeLine.objetos">
-                    <i class="fa fa-stethoscope bg-blue"></i>
+                    <i class="fa fa-file-alt bg-blue"></i>
 
                     <div class="timeline-item">
                       <span class="time"><i class="fa fa-clock-o"></i> {{consulta.dataConsulta | date:'shortTime'}}</span>
@@ -109,10 +110,11 @@
                       </div>-->
                     </div>
                   </li>
-                  <!-- END timeline item -->
-                  <li>
-                    <i class="fa fa-clock-o bg-gray"></i>
-                  </li>
+                </span>
+                <!-- END timeline item -->
+                <li *ngIf="possuiHistoricoClinico">
+                  <i class="fa fa-clock-o bg-gray"></i>
+                </li>
               </ul>
             </ul>
           </div>
@@ -164,17 +166,18 @@
                 </span>
               </div>
             </div>
-            <ul *ngIf="consulta.listaSolicitacaoExame.length > 0">
-              <ul class="timeline timeline-inverse" *ngFor="let solicitacaoExame of consulta.listaSolicitacaoExame">
+            <ul *ngIf="possuiSolicitacaoExame">
+              <ul class="timeline timeline-inverse">
+                <span class="timeline timeline-inverse" *ngFor="let timeLine of listaTimeLineSolicitacaoExame">
                   <!-- timeline time label -->
-                  <li class="time-label" *ngIf="possuiSolicitacaoExame">
+                  <li class="time-label">
                         <span class="bg-red">
-                          {{solicitacaoExame.dataSolicitacaoExame | date:'dd/MM/yyyy'}}
+                          {{timeLine.data | date:'dd/MM/yyyy'}}
                         </span>
                   </li>
                   <!-- /.timeline-label -->
                   <!-- timeline item -->
-                  <li *ngIf="possuiSolicitacaoExame">
+                  <li *ngFor="let solicitacaoExame of timeLine.objetos">
                     <i class="fa fa-stethoscope bg-blue"></i>
 
                     <div class="timeline-item">
@@ -192,9 +195,10 @@
                     </div>
                   </li>
                   <!-- END timeline item -->
-                  <li *ngIf="possuiSolicitacaoExame">
-                    <i class="fa fa-clock-o bg-gray"></i>
-                  </li>
+                </span>
+                <li *ngIf="possuiSolicitacaoExame">
+                  <i class="fa fa-clock-o bg-gray"></i>
+                </li>
               </ul>
             </ul>
           </div>
@@ -249,21 +253,22 @@
                 </span>
               </div>
             </div>
-            <ul *ngIf="consulta.listaSolicitacaoMedicamento.length > 0">
-              <ul class="timeline timeline-inverse" *ngFor="let solicitacaoMedicamento of consulta.listaSolicitacaoMedicamento">
+            <ul *ngIf="possuiSolicitacaoMedicamento">
+              <ul class="timeline timeline-inverse">
+                <span class="timeline timeline-inverse" *ngFor="let timeLine of listaTimeLineSolicitacaoMedicamento">
                   <!-- timeline time label -->
-                  <li class="time-label" *ngIf="possuiSolicitacaoMedicamento">
+                  <li class="time-label">
                         <span class="bg-red">
-                          {{solicitacaoMedicamento.dataSolicitacaoMedicamento | date:'dd/MM/yyyy'}}
+                          {{timeLine.data | date:'dd/MM/yyyy'}}
                         </span>
                   </li>
                   <!-- /.timeline-label -->
                   <!-- timeline item -->
-                  <li *ngIf="possuiSolicitacaoMedicamento">
-                    <i class="fa fa-stethoscope bg-blue"></i>
+                  <li *ngFor="let solicitacaoMedicamento of timeLine.objetos">
+                    <i class="fa fa-pills bg-blue"></i>
 
                     <div class="timeline-item">
-                      <span class="time"><i class="fa fa-clock-o"></i> {{solicitacaoMedicamento.dataSolicitacaoMedicamento | date:'shortTime'}}</span>
+                      <span class="time"><i class="fa fa-clock-o"></i> {{solicitacaoMedicamento.dataSolicitacaoMedicamento| date:'shortTime'}}</span>
 
                       <!--<h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>-->
 
@@ -277,9 +282,10 @@
                     </div>
                   </li>
                   <!-- END timeline item -->
-                  <li *ngIf="possuiSolicitacaoMedicamento">
-                    <i class="fa fa-clock-o bg-gray"></i>
-                  </li>
+                </span>
+                <li *ngIf="possuiSolicitacaoMedicamento">
+                  <i class="fa fa-clock-o bg-gray"></i>
+                </li>
               </ul>
             </ul>
           </div>

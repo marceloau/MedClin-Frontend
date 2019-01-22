@@ -1,3 +1,6 @@
+import { TimeLineConverter } from './../../../comum/converter/timeline.converter';
+import { Constantes } from './../../../comum/constantes';
+import { DatePipe } from '@angular/common';
 import { TimeLine } from './../../../../model/comum/timeline.model';
 import { MedicamentoConverter } from './../../cadastro/medicamento/converter/medicamento.converter';
 import { MedicamentoService } from './../../cadastro/medicamento/service/medicamento.service';
@@ -40,7 +43,7 @@ import { ToastrManager } from 'ng6-toastr-notifications';
   templateUrl: './atendimentoconsulta.component.html',
   styleUrls: ['./atendimentoconsulta.component.css'],
   providers: [PacienteConverter, DominioConverter, Excecao, TipoContatoConverter, OperadoraConverter,
-    TipoPlanoSaudeConverter, SolicitacaoExameConverter, SolicitacaoMedicamentoConverter]
+    TipoPlanoSaudeConverter, SolicitacaoExameConverter, SolicitacaoMedicamentoConverter, TimeLineConverter]
 })
 export class AtendimentoConsultaComponent implements OnInit {
 
@@ -82,8 +85,10 @@ export class AtendimentoConsultaComponent implements OnInit {
   // Fim lista de atributos dos compbos de paciente
 
   listaTimeLineHistoricoClinico = new Array<TimeLine>();
+  listaTimeLineSolicitacaoExame = new Array<TimeLine>();
+  listaTimeLineSolicitacaoMedicamento = new Array<TimeLine>();
 
-  constructor(private route: ActivatedRoute,
+  constructor(private route: ActivatedRoute, private timeLineConverter: TimeLineConverter,
     private excecao: Excecao, private consultaService: ConsultaService,
     private consultaConverter: ConsultaConverter,
     private exameService: ExameService,
@@ -113,6 +118,7 @@ export class AtendimentoConsultaComponent implements OnInit {
         this.totalSolicitacoesExame = retorno.totalElements;
         if (this.listaSolicitacaoExame.length > 0) {
           this.possuiSolicitacaoExame = true;
+          this.listaTimeLineSolicitacaoExame = this.timeLineConverter.montarTimeLineSolicitacaoExame(this.listaSolicitacaoExame);
         }
       }, err => {
         this.mensagem = this.excecao.exibirExcecao(err.error);
@@ -125,6 +131,8 @@ export class AtendimentoConsultaComponent implements OnInit {
         this.totalSolicitacoesMedicamento = retorno.totalElements;
         if (this.listaSolicitacaoMedicamento.length > 0) {
           this.possuiSolicitacaoMedicamento = true;
+          this.listaTimeLineSolicitacaoMedicamento = this.timeLineConverter
+          .montarTimeLineSolicitacaoMedicamento(this.listaSolicitacaoMedicamento);
         }
       }, err => {
         this.mensagem = this.excecao.exibirExcecao(err.error);
@@ -137,8 +145,8 @@ export class AtendimentoConsultaComponent implements OnInit {
         this.totalConsultas = retorno.totalElements;
         if (this.listaConsultas.length > 0) {
           this.possuiHistoricoClinico = true;
+          this.listaTimeLineHistoricoClinico = this.timeLineConverter.montarTimeLineHistoricoClinico(this.listaConsultas);
         }
-        this.montarHistoricoClinico(this.listaConsultas);
       }, err => {
         this.mensagem = this.excecao.exibirExcecao(err.error);
       });
@@ -285,33 +293,5 @@ export class AtendimentoConsultaComponent implements OnInit {
     }, err => {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
-  }
-
-  montarHistoricoClinico(listaConsulta: Array<Consulta>) {
-    if (listaConsulta && listaConsulta.length > 0) {
-      const retorno = new Array<TimeLine>();
-      for (const index of listaConsulta) {
-        if (retorno.length > 0) {
-          retorno.forEach(function (timeLine) {
-            if (timeLine.data === index.dataConsulta) {
-              timeLine.objetos.push(index);
-            } else {
-              const timeLineNova = new TimeLine();
-              timeLineNova.data = index.dataConsulta;
-              timeLineNova.objetos = new Array<Consulta>();
-              timeLineNova.objetos.push(index);
-              retorno.push(timeLineNova);
-            }
-          });
-        } else {
-          const timeLineNova = new TimeLine();
-          timeLineNova.data = index.dataConsulta;
-          timeLineNova.objetos = new Array<Consulta>();
-          timeLineNova.objetos.push(index);
-          retorno.push(timeLineNova);
-        }
-      }
-      this.listaTimeLineHistoricoClinico = retorno;
-    }
   }
 }

@@ -27,13 +27,13 @@
 
           <ul class="list-group list-group-unbordered">
             <li class="list-group-item">
-              <b>Consultas</b> <a class="pull-right">1,322</a>
+              <b>Consultas</b> <a class="pull-right">{{totalConsultas ? totalConsultas : 0}}</a>
             </li>
             <li class="list-group-item">
-              <b>Exames</b> <a class="pull-right">543</a>
+              <b>Exames</b> <a class="pull-right">{{totalSolicitacoesExame ? totalSolicitacoesExame : 0}}</a>
             </li>
             <li class="list-group-item">
-              <b>Medicamentos</b> <a class="pull-right">13,287</a>
+              <b>Medicamentos</b> <a class="pull-right">{{totalSolicitacoesMedicamento ? totalSolicitacoesMedicamento : 0}}</a>
             </li>
           </ul>
 
@@ -387,284 +387,117 @@
           </div>
           <div id="historicoClinico" class="tab-pane fade">
             <!-- The timeline -->
-            <ul class="timeline timeline-inverse">
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-red">
-                      10 Feb. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-envelope bg-blue"></i>
+            <ul *ngIf="possuiHistoricoClinico">
+              <ul class="timeline timeline-inverse">
+                <span class="timeline timeline-inverse" *ngFor="let timeLine of listaTimeLineHistoricoClinico">
+                  <!-- timeline time label -->
+                  <li class="time-label">
+                        <span class="bg-red">
+                          {{timeLine.data | date:'dd/MM/yyyy'}}
+                        </span>
+                  </li>
+                  <!-- /.timeline-label -->
+                  <!-- timeline item -->
+                  <li *ngFor="let consulta of timeLine.objetos">
+                    <i class="fa fa-file-alt bg-blue"></i>
 
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+                    <div class="timeline-item">
+                      <span class="time"><i class="fa fa-clock-o"></i> {{consulta.dataConsulta | date:'shortTime'}}</span>
 
-                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+                      <!--<h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>-->
 
-                  <div class="timeline-body">
-                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                    quora plaxo ideeli hulu weebly balihoo...
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-primary btn-xs">Read more</a>
-                    <a class="btn btn-danger btn-xs">Delete</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-user bg-aqua"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-                  <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
-                  </h3>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-comments bg-yellow"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                  <div class="timeline-body">
-                    Take me to your leader!
-                    Switzerland is small and neutral!
-                    We are more like Germany, ambitious and misunderstood!
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-green">
-                      3 Jan. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-camera bg-purple"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                  <div class="timeline-body">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <li>
-                <i class="fa fa-clock-o bg-gray"></i>
-              </li>
+                      <div class="timeline-body">
+                        {{consulta.historicoClinico ? consulta.historicoClinico : 'Consulta agendada mas não foi realizada.'}}
+                      </div>
+                      <div class="timeline-footer">
+                        <a class="btn btn-primary btn-xs" (click)="verConsulta(consulta)" data-toggle="modal"
+                        data-target="#modal-consulta">Visualizar Consulta</a>
+                        <!--<a class="btn btn-danger btn-xs">Delete</a>-->
+                      </div>
+                    </div>
+                  </li>
+                </span>
+                <!-- END timeline item -->
+                <li *ngIf="possuiHistoricoClinico">
+                  <i class="fa fa-clock-o bg-gray"></i>
+                </li>
+              </ul>
             </ul>
           </div>
           <div id="exames" class="tab-pane fade">
             <!-- The timeline -->
-            <ul class="timeline timeline-inverse">
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-red">
-                      10 Feb. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-envelope bg-blue"></i>
+            <ul *ngIf="possuiSolicitacaoExame">
+              <ul class="timeline timeline-inverse">
+                <span class="timeline timeline-inverse" *ngFor="let timeLine of listaTimeLineSolicitacaoExame">
+                  <!-- timeline time label -->
+                  <li class="time-label">
+                        <span class="bg-red">
+                          {{timeLine.data | date:'dd/MM/yyyy'}}
+                        </span>
+                  </li>
+                  <!-- /.timeline-label -->
+                  <!-- timeline item -->
+                  <li *ngFor="let solicitacaoExame of timeLine.objetos">
+                    <i class="fa fa-stethoscope bg-blue"></i>
 
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+                    <div class="timeline-item">
+                      <span class="time"><i class="fa fa-clock-o"></i> {{solicitacaoExame.dataSolicitacaoExame | date:'shortTime'}}</span>
 
-                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+                      <!--<h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>-->
 
-                  <div class="timeline-body">
-                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                    quora plaxo ideeli hulu weebly balihoo...
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-primary btn-xs">Read more</a>
-                    <a class="btn btn-danger btn-xs">Delete</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-user bg-aqua"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-                  <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
-                  </h3>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-comments bg-yellow"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                  <div class="timeline-body">
-                    Take me to your leader!
-                    Switzerland is small and neutral!
-                    We are more like Germany, ambitious and misunderstood!
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-green">
-                      3 Jan. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-camera bg-purple"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                  <div class="timeline-body">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <li>
-                <i class="fa fa-clock-o bg-gray"></i>
-              </li>
+                      <div class="timeline-body">
+                        {{solicitacaoExame.exame.nome}}
+                      </div>
+                      <!--<div class="timeline-footer">
+                        <a class="btn btn-primary btn-xs">Read more</a>
+                        <a class="btn btn-danger btn-xs">Delete</a>
+                      </div>-->
+                    </div>
+                  </li>
+                  <!-- END timeline item -->
+                </span>
+                <li *ngIf="possuiSolicitacaoExame">
+                  <i class="fa fa-clock-o bg-gray"></i>
+                </li>
+              </ul>
             </ul>
           </div>
           <div id="medicamentos" class="tab-pane fade">
             <!-- The timeline -->
-            <ul class="timeline timeline-inverse">
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-red">
-                      10 Feb. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-envelope bg-blue"></i>
+            <ul *ngIf="possuiSolicitacaoMedicamento">
+              <ul class="timeline timeline-inverse">
+                <span class="timeline timeline-inverse" *ngFor="let timeLine of listaTimeLineSolicitacaoMedicamento">
+                  <!-- timeline time label -->
+                  <li class="time-label">
+                        <span class="bg-red">
+                          {{timeLine.data | date:'dd/MM/yyyy'}}
+                        </span>
+                  </li>
+                  <!-- /.timeline-label -->
+                  <!-- timeline item -->
+                  <li *ngFor="let solicitacaoMedicamento of timeLine.objetos">
+                    <i class="fa fa-pills bg-blue"></i>
 
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+                    <div class="timeline-item">
+                      <span class="time"><i class="fa fa-clock-o"></i> {{solicitacaoMedicamento.dataSolicitacaoMedicamento| date:'shortTime'}}</span>
 
-                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+                      <!--<h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>-->
 
-                  <div class="timeline-body">
-                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                    quora plaxo ideeli hulu weebly balihoo...
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-primary btn-xs">Read more</a>
-                    <a class="btn btn-danger btn-xs">Delete</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-user bg-aqua"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-                  <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
-                  </h3>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-comments bg-yellow"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                  <div class="timeline-body">
-                    Take me to your leader!
-                    Switzerland is small and neutral!
-                    We are more like Germany, ambitious and misunderstood!
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-green">
-                      3 Jan. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-camera bg-purple"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                  <div class="timeline-body">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <li>
-                <i class="fa fa-clock-o bg-gray"></i>
-              </li>
+                      <div class="timeline-body">
+                        {{solicitacaoMedicamento.medicamento.nome}}
+                      </div>
+                      <!--<div class="timeline-footer">
+                        <a class="btn btn-primary btn-xs">Read more</a>
+                        <a class="btn btn-danger btn-xs">Delete</a>
+                      </div>-->
+                    </div>
+                  </li>
+                  <!-- END timeline item -->
+                </span>
+                <li *ngIf="possuiSolicitacaoMedicamento">
+                  <i class="fa fa-clock-o bg-gray"></i>
+                </li>
+              </ul>
             </ul>
           </div>
           <!-- /.tab-pane -->
@@ -676,6 +509,96 @@
     <!-- /.col -->
   </div>
   <!-- /.row -->
+
+  <div class="modal fade" id="modal-consulta">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" id="fecharModal" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{ 'Visualizar Consulta' }}</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#abaHistoriaClinica">História Clinica</a></li>
+              <li><a data-toggle="tab" href="#abaSolicitacaoExame">Exames Solicitados</a></li>
+              <li><a data-toggle="tab" href="#abaSolicitacaoMedicamento">Medicamentos Prescritos</a></li>
+            </ul>
+            <div class="tab-content">
+              <div id="abaHistoriaClinica" class="tab-pane fade in active">
+                <div class="col-md-12">
+                  <div class="box box-solid">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                      <textarea id="historicoClinico" [(ngModel)]="modalConsulta.historicoClinico"
+                      #historicoClinico="ngModel" name="historicoClinico" rows="20" style="width: 100%;" disabled>
+                      </textarea>
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+                </div>
+              </div>
+              <div id="abaSolicitacaoExame" class="tab-pane fade in">
+                <div class="col-md-12">
+                  <div class="box box-solid">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                      <table class="table table-bordered">
+                        <tr>
+                          <th>Nome</th>
+                          <th>Tipo</th>
+                          <th>Descrição</th>
+                        </tr>
+                        <tr *ngFor="let solicitacaoExame of modalConsulta.listaSolicitacaoExame">
+                          <td>{{solicitacaoExame.exame.nome}}</td>
+                          <td>{{solicitacaoExame.exame.tipoExame.nome}}</td>
+                          <td>{{solicitacaoExame.exame.descricao}}</td>
+                        </tr>
+                      </table>
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+                  <!-- /.box -->
+                </div>
+              </div>
+              <div id="abaSolicitacaoMedicamento" class="tab-pane fade in">
+                <div class="col-md-12">
+                  <div class="box box-solid">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                      <table class="table table-bordered">
+                        <tr>
+                          <th>Nome</th>
+                          <th>Tipo</th>
+                          <th>Uso</th>
+                          <th>Descrição</th>
+                        </tr>
+                        <tr *ngFor="let solicitacaoMedicamento of modalConsulta.listaSolicitacaoMedicamento">
+                          <td>{{solicitacaoMedicamento.medicamento.nome}}</td>
+                          <td>{{solicitacaoMedicamento.medicamento.tipoMedicamento.nome}}</td>
+                          <td>{{solicitacaoMedicamento.medicamento.usoMedicamento.nome}}</td>
+                          <td>{{solicitacaoMedicamento.medicamento.descricao}}</td>
+                        </tr>
+                      </table>
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+                  <!-- /.box -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="closeModal">Fechar</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
 
 </section>
 <!-- /.content -->

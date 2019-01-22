@@ -1,3 +1,14 @@
+import { ConsultaService } from './../consultas/service/consulta.service';
+import { ConsultaConverter } from './../consultas/converter/consulta.converter';
+import { SolicitacaoMedicamentoService } from './../consultas/service/solicitacaomedicamento.service';
+import { SolicitacaoExameService } from './../consultas/service/solicitacaoexame.service';
+import { TimeLine } from './../../../model/comum/timeline.model';
+import { SolicitacaoMedicamento } from './../../../model/solicitacaomedicamento.model';
+import { SolicitacaoExame } from './../../../model/solicitacaoexame.model';
+import { Consulta } from './../../../model/consulta.model';
+import { TimeLineConverter } from './../../comum/converter/timeline.converter';
+import { SolicitacaoMedicamentoConverter } from './../consultas/converter/solicitacaomedicamento.converter';
+import { SolicitacaoExameConverter } from './../consultas/converter/solicitacaoexame.converter';
 import { NgForm } from '@angular/forms';
 import { Estado } from './../../../model/estado.model';
 import { Mensagem } from './../../../model/mensagem';
@@ -28,7 +39,8 @@ import { Pagina } from '../../../model/comum/pagina.model';
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css'],
-  providers: [PacienteConverter, DominioConverter, Excecao, TipoContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter]
+  providers: [PacienteConverter, DominioConverter, Excecao, TipoContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter,
+    SolicitacaoExameConverter, SolicitacaoMedicamentoConverter, TimeLineConverter, ConsultaConverter]
 })
 export class PerfilComponent implements OnInit {
 
@@ -50,12 +62,36 @@ export class PerfilComponent implements OnInit {
   listaComboTipoPlanoSaude = new Array<TipoPlanoSaude>();
   // Fim lista de atributos dos compbos de paciente
 
+  modalConsulta = new Consulta();
+
+  totalConsultas: number;
+  totalSolicitacoesExame: number;
+  totalSolicitacoesMedicamento: number;
+
+  possuiHistoricoClinico = false;
+  possuiSolicitacaoExame = false;
+  possuiSolicitacaoMedicamento = false;
+
+  listaConsultas = new Array<Consulta>();
+  listaSolicitacaoExame = new Array<SolicitacaoExame>();
+  listaSolicitacaoMedicamento = new Array<SolicitacaoMedicamento>();
+
+  listaTimeLineHistoricoClinico = new Array<TimeLine>();
+  listaTimeLineSolicitacaoExame = new Array<TimeLine>();
+  listaTimeLineSolicitacaoMedicamento = new Array<TimeLine>();
+
   constructor(private route: ActivatedRoute, private pacienteService: PacienteService, private pacienteConverter: PacienteConverter,
     private dominioService: DominioService, private dominioConverter: DominioConverter,
     private excecao: Excecao, private tipoContatoService: TipoContatoService, private tipoContatoConverter: TipoContatoConverter,
     private operadoraService: OperadoraService, private operadoraConverter: OperadoraConverter,
     private tipoPlanoSaudeService: TipoPlanoSaudeService, private tipoPlanoSaudeConverter: TipoPlanoSaudeConverter,
-    private router: Router) { }
+    private router: Router, private solicitacaoExameService: SolicitacaoExameService,
+    private solicitacaoExameConverter: SolicitacaoExameConverter,
+    private solicitacaoMedicamentoService: SolicitacaoMedicamentoService,
+    private solicitacaoMedicamentoConverter: SolicitacaoMedicamentoConverter,
+    private consultaService: ConsultaService,
+    private consultaConverter: ConsultaConverter,
+    private timeLineConverter: TimeLineConverter) { }
 
   ngOnInit() {
     this.route.params.subscribe(
@@ -64,7 +100,50 @@ export class PerfilComponent implements OnInit {
       }
     );
     this.inicializarCombos();
-    this.buscarPorCodigo(this.paciente.codigo);
+    this.pacienteService.buscarPorCodigo(this.paciente.codigo).subscribe((paciente: PacienteEBO) => {
+      this.paciente = this.pacienteConverter.converterParaFrontend(paciente);
+      // Listar solicitacoes de exame do paciente.
+      this.solicitacaoExameService.listarRegistrosCodigoPaciente(0, 100, this.paciente.codigo)
+      .subscribe((retorno: Pagina) => {
+        this.listaSolicitacaoExame = this.solicitacaoExameConverter.converterListaParaFrontend(retorno.content);
+        this.totalSolicitacoesExame = retorno.totalElements;
+        if (this.listaSolicitacaoExame.length > 0) {
+          this.possuiSolicitacaoExame = true;
+          this.listaTimeLineSolicitacaoExame = this.timeLineConverter.montarTimeLineSolicitacaoExame(this.listaSolicitacaoExame);
+        }
+      }, err => {
+        this.mensagem = this.excecao.exibirExcecao(err.error);
+      });
+
+      // Listar solicitacoes de medicamento do paciente.
+      this.solicitacaoMedicamentoService.listarRegistrosCodigoPaciente(0, 100, this.paciente.codigo)
+      .subscribe((retorno: Pagina) => {
+        this.listaSolicitacaoMedicamento = this.solicitacaoMedicamentoConverter.converterListaParaFrontend(retorno.content);
+        this.totalSolicitacoesMedicamento = retorno.totalElements;
+        if (this.listaSolicitacaoMedicamento.length > 0) {
+          this.possuiSolicitacaoMedicamento = true;
+          this.listaTimeLineSolicitacaoMedicamento = this.timeLineConverter
+          .montarTimeLineSolicitacaoMedicamento(this.listaSolicitacaoMedicamento);
+        }
+      }, err => {
+        this.mensagem = this.excecao.exibirExcecao(err.error);
+      });
+
+      // Listando consultas do paciente.
+      this.consultaService.buscar(0, 100, null, null, null, this.paciente.codigo)
+      .subscribe((retorno: Pagina) => {
+        this.listaConsultas = this.consultaConverter.converterListaParaFrontend(retorno.content);
+        this.totalConsultas = retorno.totalElements;
+        if (this.listaConsultas.length > 0) {
+          this.possuiHistoricoClinico = true;
+          this.listaTimeLineHistoricoClinico = this.timeLineConverter.montarTimeLineHistoricoClinico(this.listaConsultas);
+        }
+      }, err => {
+        this.mensagem = this.excecao.exibirExcecao(err.error);
+      });
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
   }
 
   buscarPorCodigo(codigo: number) {
@@ -139,5 +218,9 @@ export class PerfilComponent implements OnInit {
     }, err => {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
+  }
+
+  verConsulta(consulta: Consulta) {
+    this. modalConsulta = consulta;
   }
 }
