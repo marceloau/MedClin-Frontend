@@ -1,12 +1,12 @@
-<app-login *ngIf="!usuarioLogado"></app-login>
+<app-login *ngIf="mostrarMenu"></app-login>
 
-<app-header *ngIf="usuarioLogado"></app-header>
-<app-menu *ngIf="usuarioLogado"></app-menu>
+<app-header [hidden]="!mostrarMenu"></app-header>
+<app-menu [hidden]="!mostrarMenu"></app-menu>
 <!-- Conteúdo da página -->
-<div class="content-wrapper" *ngIf="usuarioLogado">
+<div class="content-wrapper" *ngIf="mostrarMenu">
   <router-outlet></router-outlet>
 </div>
 
 <!-- Fim Conteúdo da página -->
-<app-footer *ngIf="usuarioLogado"></app-footer>
-<app-configuracoes *ngIf="usuarioLogado"></app-configuracoes>
+<app-footer *ngIf="mostrarMenu"></app-footer>
+<app-configuracoes [hidden]="!mostrarMenu"></app-configuracoes>

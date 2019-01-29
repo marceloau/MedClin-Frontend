@@ -1,3 +1,5 @@
+import { AuthService } from './componentes/seguranca/auth.service';
+import { SessionStorageService } from './componentes/seguranca/session-storage.service';
 import { SegurancaService } from './componentes/seguranca/seguranca.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -9,17 +11,20 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'MedClin';
 
-  usuarioLogado: boolean;
+  mostrarMenu: boolean = false;
   public seguranca: SegurancaService;
 
-  constructor() {
+  constructor(private storage: SessionStorageService, private authServuce: AuthService) {
     this.seguranca = SegurancaService.getInstancia();
-    this.usuarioLogado = true;
+    this.mostrarMenu = false;
   }
 
   ngOnInit() {
-    this.seguranca.usuarioLogado.subscribe(
-      show => this.usuarioLogado = show
-    );
+    const usuario = this.storage.get('logged');
+    if (usuario && usuario.token) {
+      this.authServuce.mostrarMenuEmitter.subscribe(
+        mostrar => this.mostrarMenu = mostrar
+      );
+    }
   }
 }

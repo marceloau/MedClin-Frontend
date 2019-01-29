@@ -1,3 +1,6 @@
+import { TipoExameComponent } from './componentes/modulos/cadastro/tipoExame/tipoexame.component';
+import { ErrorInterceptor } from './componentes/seguranca/erro-interceptor.service';
+import { TokenInterceptor } from './componentes/seguranca/token-interceptor.service';
 import { TimeLineConverter } from './componentes/comum/converter/timeline.converter';
 import { SolicitacaoMedicamentoConverter } from './componentes/modulos/consultas/converter/solicitacaomedicamento.converter';
 import { SolicitacaoExameConverter } from './componentes/modulos/consultas/converter/solicitacaoexame.converter';
@@ -13,11 +16,11 @@ import { PerfilMedicoComponent } from './componentes/modulos/medicos/perfil/perf
 import { EspecialidadeConverter } from './componentes/modulos/cadastro/especialidade/converter/especialidade.converter';
 import { DominioConverter } from './componentes/comum/converter/dominio.converter';
 import { TipoContatoComponent } from './componentes/modulos/cadastro/tipoContato/tipocontato.component';
-import { routes } from './app.routes';
+import { AppRouterModule } from './app.routes';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './componentes/comum/header/header.component';
@@ -53,7 +56,6 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
-import { TipoExameComponent } from './componentes/modulos/cadastro/tipoExame/tipoexame.component';
 // Fim import calendário.
 
 registerLocaleData(localePt);
@@ -97,12 +99,14 @@ registerLocaleData(localePt);
       useFactory: adapterFactory
     }),
     // Fim imports do calendario
-    routes
+    AppRouterModule
   ],
   providers: [SegurancaService, UsuarioService, DominioConverter, EnderecoConverter,
     TipoContatoConverter, ContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter, DatePipe,
     EspecialidadeConverter, TipoExameConverter, TipoMedicamentoConverter, SolicitacaoExameConverter,
-    SolicitacaoMedicamentoConverter, TimeLineConverter],
+    SolicitacaoMedicamentoConverter, TimeLineConverter,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

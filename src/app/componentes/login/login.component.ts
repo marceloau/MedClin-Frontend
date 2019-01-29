@@ -1,9 +1,9 @@
-import { UsuarioService } from './../comum/services/usuario.service';
+import { SessionStorageService } from './../seguranca/session-storage.service';
+import { AuthService } from './../seguranca/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../model/usuario.model';
 import { SegurancaService } from '../seguranca/seguranca.service';
 import { Router } from '@angular/router';
-import { UsuarioAtual } from '../../model/usuario-atual.model';
 
 @Component({
   selector: 'app-login',
@@ -16,11 +16,19 @@ export class LoginComponent implements OnInit {
   seguranca: SegurancaService;
   mensagem: string;
 
-  constructor( private usuarioService: UsuarioService, private router: Router ) {
+  constructor( private authService: AuthService, private router: Router, private storage: SessionStorageService) {
     this.seguranca = SegurancaService.getInstancia();
   }
 
   ngOnInit() {
+    const usuarioSession = this.storage.get('logged');
+
+    if (usuarioSession && usuarioSession.token) {
+      this.authService.mostrarMenuEmitter.emit(true);
+      this.router.navigate(['/']);
+    } else{
+      this.authService.mostrarMenuEmitter.emit(false);
+    }
   }
 
   /**
@@ -28,20 +36,7 @@ export class LoginComponent implements OnInit {
    */
   login() {
     this.mensagem = '';
-    // this.usuarioService.login(this.usuario).subscribe(( usuarioAtenticado: UsuarioAtual) => {
-    //   this.seguranca.token = usuarioAtenticado.token;
-    //   this.seguranca.usuario = usuarioAtenticado.usuario;
-    //   this.seguranca.usuario.perfis = this.seguranca.usuario.perfis.substring(5);
-    //   this.seguranca.usuarioLogado.emit(true);
-    //   this.router.navigate(['/']);
-    // }, err => {
-    //   this.seguranca.token = null;
-    //   this.seguranca.usuario = null;
-    //   this.seguranca.usuarioLogado.emit(false);
-    //   this.mensagem = 'Não foi possível logar no sistema.';
-    // });
-    this.seguranca.usuarioLogado.emit(true);
-    this.router.navigate(['/']);
+    this.authService.login({email: this.usuario.email, senha: this.usuario.senha});
   }
 
   /**

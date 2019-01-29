@@ -1,3 +1,4 @@
+import { GuardService } from './componentes/seguranca/guard.service';
 import { AtendimentoConsultaComponent } from './componentes/modulos/consultas/atendimento/atendimentoconsulta.component';
 import { MedicamentoComponent } from './componentes/modulos/cadastro/medicamento/medicamento.component';
 import { TipoMedicamentoComponent } from './componentes/modulos/cadastro/tipoMedicamento/tipomedicamento.component';
@@ -12,8 +13,8 @@ import { PacientesComponent } from './componentes/modulos/pacientes/pacientes.co
 import { HomeComponent } from './componentes/home/home.component';
 import { LoginComponent } from './componentes/login/login.component';
 
-import { Routes, RouterModule } from '@angular/router';
-import { ModuleWithProviders } from '@angular/core';
+import { Routes, RouterModule, CanActivate } from '@angular/router';
+import { NgModule } from '@angular/core';
 import { TipoPlanoSaudeComponent } from './componentes/modulos/cadastro/tipoPlanoSaude/tipoplanosaude.component';
 import { TipoExameComponent } from './componentes/modulos/cadastro/tipoExame/tipoexame.component';
 import { ExameComponent } from './componentes/modulos/cadastro/exame/exame.component';
@@ -21,7 +22,8 @@ import { ExameComponent } from './componentes/modulos/cadastro/exame/exame.compo
 export const ROUTES: Routes = [
   {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'login',
@@ -29,61 +31,84 @@ export const ROUTES: Routes = [
   },
   {
     path: 'pacientes',
-    component: PacientesComponent
+    component: PacientesComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'paciente/perfil/:codigo',
-    component: PerfilComponent
+    component: PerfilComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'configuracoes/cadastro/especialidade',
-    component: EspecialidadeComponent
+    component: EspecialidadeComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'configuracoes/cadastro/operadora',
-    component: OperadoraComponent
+    component: OperadoraComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'configuracoes/cadastro/tipo-plano-saude',
-    component: TipoPlanoSaudeComponent
+    component: TipoPlanoSaudeComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'configuracoes/cadastro/tipo-contato',
-    component: TipoContatoComponent
+    component: TipoContatoComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'configuracoes/cadastro/tipo-exame',
-    component: TipoExameComponent
+    component: TipoExameComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'configuracoes/cadastro/tipo-medicamento',
-    component: TipoMedicamentoComponent
+    component: TipoMedicamentoComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'configuracoes/cadastro/exame',
-    component: ExameComponent
+    component: ExameComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'configuracoes/cadastro/medicamento',
-    component: MedicamentoComponent
+    component: MedicamentoComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'configuracoes/medicos',
-    component: MedicoComponent
+    component: MedicoComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'medico/perfil/:codigo',
-    component: PerfilMedicoComponent
+    component: PerfilMedicoComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'agendamentos/consultas',
-    component: ConsultaComponent
+    component: ConsultaComponent,
+    canActivate: [GuardService]
   },
   {
     path: 'agendamentos/consulta/:codigo',
-    component: AtendimentoConsultaComponent
+    component: AtendimentoConsultaComponent,
+    canActivate: [GuardService]
   },
 
 ];
+@NgModule({
+  imports: [
+    RouterModule.forRoot(ROUTES, {
+      enableTracing: false
+    })
+  ],
+  exports: [RouterModule]
+})
+export class AppRouterModule {
 
-export const routes: ModuleWithProviders = RouterModule.forRoot(ROUTES);
+}
