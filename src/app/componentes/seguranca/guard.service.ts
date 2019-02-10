@@ -29,6 +29,7 @@ export class GuardService implements CanLoad, CanActivate {
 
   public async canActivate( next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     if (this.isLogged()) {
+      this.authService.mostrarMenuEmitter.emit(true);
       return true;
     } else {
       this.authService.mostrarMenuEmitter.emit(false);

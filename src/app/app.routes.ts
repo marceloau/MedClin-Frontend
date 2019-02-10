@@ -21,9 +21,10 @@ import { ExameComponent } from './componentes/modulos/cadastro/exame/exame.compo
 
 export const ROUTES: Routes = [
   {
-    path: '',
+    path: 'painel',
     component: HomeComponent,
-    canActivate: [GuardService]
+    canActivate: [GuardService],
+    canLoad: [GuardService]
   },
   {
     path: 'login',

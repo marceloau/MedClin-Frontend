@@ -4,7 +4,7 @@
     Agendamento de Consultas
   </h1>
   <ol class="breadcrumb">
-    <li><a [routerLink]="['/']"><i class="fa fa-tachometer-alt"></i> Home</a></li>
+    <li><a [routerLink]="['/painel']"><i class="fa fa-tachometer-alt"></i> Home</a></li>
     <li><i class="fa fa-calendar-alt"></i> Agendamentos</li>
     <li class="active">Consultas</li>
   </ol>
@@ -359,8 +359,8 @@
                 <div class="col-md-12">
                   <div class="input-group col-md-12 pull-left">
                     <div class="input-group col-md-12 pull-left">
-                      <input type="text" class="form-control" id="nome" name="nome" value="consulta.paciente.nome" [(ngModel)]="consulta.paciente.nome"
-                      #nome="ngModel" placeholder="Informe o nome do paciente.">
+                      <input type="text" class="form-control" id="nome" name="nome" value="consulta.medico.nome" [(ngModel)]="consulta.medico.nome"
+                      #nome="ngModel" placeholder="Informe o nome do médico.">
                       <span class="input-group-btn">
                         <button type="button" (click)="buscarMedicoConsulta()" class="btn btn-primary btn-flat">Buscar</button>
                       </span>

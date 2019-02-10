@@ -1,9 +1,10 @@
 import { SessionStorageService } from './../seguranca/session-storage.service';
 import { AuthService } from './../seguranca/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Usuario } from '../../model/usuario.model';
 import { SegurancaService } from '../seguranca/seguranca.service';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,10 @@ export class LoginComponent implements OnInit {
   seguranca: SegurancaService;
   mensagem: string;
 
+  jwtHelper: JwtHelperService = new JwtHelperService();
+
+  mostrarMenuEmitter = new EventEmitter<boolean>();
+
   constructor( private authService: AuthService, private router: Router, private storage: SessionStorageService) {
     this.seguranca = SegurancaService.getInstancia();
   }
@@ -25,7 +30,7 @@ export class LoginComponent implements OnInit {
 
     if (usuarioSession && usuarioSession.token) {
       this.authService.mostrarMenuEmitter.emit(true);
-      this.router.navigate(['/']);
+      this.router.navigate(['/painel']);
     } else{
       this.authService.mostrarMenuEmitter.emit(false);
     }
@@ -36,7 +41,17 @@ export class LoginComponent implements OnInit {
    */
   login() {
     this.mensagem = '';
-    this.authService.login({email: this.usuario.email, senha: this.usuario.senha});
+    this.authService.login({email: this.usuario.email, senha: this.usuario.senha}).subscribe(data => {
+      const logged: any = {
+        email: this.jwtHelper.decodeToken(data.headers.get('Authorization')).sub,
+        token: data.headers.get('Authorization')
+      };
+      this.authService.startSession(logged);
+      this.router.navigate(['/painel']);
+    },
+      error => {
+        console.log(error);
+    });
   }
 
   /**

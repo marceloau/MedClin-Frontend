@@ -1,4 +1,4 @@
-<app-login *ngIf="mostrarMenu"></app-login>
+<app-login *ngIf="!mostrarMenu"></app-login>
 
 <app-header [hidden]="!mostrarMenu"></app-header>
 <app-menu [hidden]="!mostrarMenu"></app-menu>

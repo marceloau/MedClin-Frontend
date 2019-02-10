@@ -2,10 +2,10 @@
 <section class="content-header">
     <h1>
       Dashboard
-      <small>Version 1.0</small>
+      <small>Version 0.1</small>
     </h1>
     <ol class="breadcrumb">
-      <li><a [routerLink]="['/']"><i class="fa fa-tachometer-alt"></i> Home</a></li>
+      <li><a [routerLink]="['/painel']"><i class="fa fa-tachometer-alt"></i> Home</a></li>
       <li class="active">Dashboard</li>
     </ol>
   </section>
@@ -46,7 +46,7 @@
     <!-- Main row -->
     <div class="row">
       <!-- Left col -->
-      <div class="col-md-8">
+      <div class="col-md-12">
         <!-- TABLE: LATEST ORDERS -->
         <div class="box box-info">
           <div class="box-header with-border">
@@ -55,76 +55,62 @@
             <div class="box-tools pull-right">
               <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
               </button>
-              <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
             </div>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
             <div class="table-responsive">
-              <table class="table no-margin">
+              <table id="tabelaConsultasDia" lass="table no-margin">
                 <thead>
                 <tr>
                   <th>Código</th>
-                  <th>Nome</th>
-                  <th>Telefone</th>
-                  <th>Ordem Chegada</th>
+                  <th>Nome do Paciente</th>
+                  <th>Status</th>
+                  <th>Confirmada?</th>
+                  <th>Primeira Consulta?</th>
+                  <th>Ordem de Chegada</th>
+                  <th>Ações</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td><a href="pages/examples/invoice.html">OR9842</a></td>
-                  <td>Call of Duty IV</td>
-                  <td><span class="label label-success">Shipped</span></td>
-                  <td>
-                    <div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
+                <tr *ngFor="let consulta of listaConsultaDia">
+                  <td>{{ consulta.codigo }}</td>
+                  <td>{{ consulta.paciente.nome }}</td>
+                  <td>{{ StatusConsulta[consulta.codigoStatusConsulta] }}</td>
+                  <td>{{ consulta.flagConfirmada === 'S' ? 'Sim' : 'Não' }}</td>
+                  <td>{{ consulta.flagPrimeiraConsulta === 'S' ? 'Sim' : 'Não' }}</td>
+                  <!-- Inicio coluna de ordem de chegada -->
+                  <td *ngIf="!habilitarBotaoSalvarOrdemChegada">
+                    {{ consulta.ordemChegada }}
                   </td>
-                </tr>
-                <tr>
-                  <td><a href="pages/examples/invoice.html">OR1848</a></td>
-                  <td>Samsung Smart TV</td>
-                  <td><span class="label label-warning">Pending</span></td>
-                  <td>
-                    <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
+                  <td *ngIf="habilitarBotaoSalvarOrdemChegada">
+                    <div class="input-group col-md-4 pull-left">
+                      <input type="text" #box class="form-control" value="consulta.ordemChegada" [(ngModel)]="consulta.ordemChegada"
+                        #ordemChegada="ngModel">
+                    </div>
                   </td>
-                </tr>
-                <tr>
-                  <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                  <td>iPhone 6 Plus</td>
-                  <td><span class="label label-danger">Delivered</span></td>
+                  <!--<td *ngIf="consulta.ordemChegada != null">{{consulta.ordemChegada}}</td>-->
+                  <!-- Fim conluna ordem de chegada -->
                   <td>
-                    <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                  <td>Samsung Smart TV</td>
-                  <td><span class="label label-info">Processing</span></td>
-                  <td>
-                    <div class="sparkbar" data-color="#00c0ef" data-height="20">90,80,-90,70,-61,83,63</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><a href="pages/examples/invoice.html">OR1848</a></td>
-                  <td>Samsung Smart TV</td>
-                  <td><span class="label label-warning">Pending</span></td>
-                  <td>
-                    <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                  <td>iPhone 6 Plus</td>
-                  <td><span class="label label-danger">Delivered</span></td>
-                  <td>
-                    <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><a href="pages/examples/invoice.html">OR9842</a></td>
-                  <td>Call of Duty IV</td>
-                  <td><span class="label label-success">Shipped</span></td>
-                  <td>
-                    <div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
+                    <div class="btn-group">
+                      <a class="btn btn-app" (click)="confirmarConsulta(consulta)">
+                        <i class="fa fa-play"></i> Confirmar
+                      </a>
+                      <a class="btn btn-app" (click)="iniciarAtendimento(consulta.codigo)">
+                        <i class="fa fa-play"></i> Atendimento
+                      </a>
+                      <!--<button type="button" (click)="confirmarConsulta(consulta)" class="btn btn-default">
+                        <i class="fa fa-check-double" title="Confirmar Consulta"></i>
+                      </button>
+                      <button type="button" (click)="iniciarAtendimento(consulta.codigo)" class="btn btn-default">
+                        <i class="fa fa-check-double" title="Iniciar Atendimento"></i>
+                        Iniciar Atendimento
+                      </button>-->
+                    </div>
+                    <!--<a class="btn-group">
+                    </a>
+                    <a class="btn-group">
+                    </a>-->
                   </td>
                 </tr>
                 </tbody>
@@ -134,8 +120,10 @@
           </div>
           <!-- /.box-body -->
           <div class="box-footer clearfix">
-            <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Novo Agendamento</a>
-            <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">Ver todos</a>
+            <a [routerLink]="['/agendamentos/consultas']" class="btn btn-sm btn-info btn-flat pull-left margin">Novo Agendamento</a>
+            <a *ngIf="!habilitarBotaoSalvarOrdemChegada" (click)="habilitarCamposEdicaoOrdemChegada()" class="btn btn-sm btn-info btn-flat pull-left margin">Atualizar Ordem de Chegada</a>
+            <a *ngIf="habilitarBotaoSalvarOrdemChegada" (click)="salvarAlteracoesOrdemChegada()" class="btn btn-sm btn-info btn-flat pull-left margin">Salvar Ordem de Chegada</a>
+            <a [routerLink]="['/agendamentos/consultas']" class="btn btn-sm btn-default btn-flat pull-right margin">Ver todas</a>
           </div>
           <!-- /.box-footer -->
         </div>

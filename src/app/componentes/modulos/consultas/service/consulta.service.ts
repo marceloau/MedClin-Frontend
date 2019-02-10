@@ -66,6 +66,22 @@ export class ConsultaService {
   /**
    *
    */
+  confirmarConsulta( codigo: number ) {
+    const endereco = this.enderecoBase + this.pathBase + '/confirmar/' + codigo;
+    return this.http.get(endereco);
+  }
+
+  /**
+   *
+   */
+  atualizarOrdemChegada(codigoConsulta, numeroOrdemChegada) {
+    const endereco = this.enderecoBase + this.pathBase + '/ordem-chegada/' + codigoConsulta + '/' + numeroOrdemChegada;
+    return this.http.get(endereco);
+  }
+
+  /**
+   *
+   */
   listarRegistros(pagina: number, total: number) {
     const endereco = this.enderecoBase + this.pathBase + '/' + pagina + '/' + total;
     return this.http.get(endereco);

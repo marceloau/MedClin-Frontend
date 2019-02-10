@@ -51,17 +51,6 @@ export class AuthService {
       {
         observe: 'response',
         responseType: 'text'
-      }).subscribe(data => {
-        const logged: any = {
-          email: this.jwtHelper.decodeToken(data.headers.get('Authorization')).sub,
-          token: data.headers.get('Authorization')
-        };
-        this.startSession(logged);
-        this.mostrarMenuEmitter.emit(true);
-        this.router.navigate(['/']);
-      },
-        error => {
-          console.log(error);
       });
   }
 
@@ -71,7 +60,7 @@ export class AuthService {
     this.mostrarMenuEmitter.emit(false);
   }
 
-  private startSession(data: any) {
+  public startSession(data: any) {
     this.storage.set("logged", data);
   }
 }
