@@ -130,7 +130,7 @@ export class PerfilComponent implements OnInit {
       });
 
       // Listando consultas do paciente.
-      this.consultaService.buscar(0, 100, null, null, null, this.paciente.codigo)
+      this.consultaService.buscar(0, 100, null, null, null, this.paciente.codigo, null)
       .subscribe((retorno: Pagina) => {
         this.listaConsultas = this.consultaConverter.converterListaParaFrontend(retorno.content);
         this.totalConsultas = retorno.totalElements;

@@ -77,4 +77,12 @@ export class PacienteService {
     const endereco = this.enderecoBase + this.pathBase + '/' + pagina + '/' + total;
     return this.http.get(endereco);
   }
+
+  /**
+   *
+   */
+  totalPacientes() {
+    const endereco = this.enderecoBase + this.pathBase + '/total-pacientes';
+    return this.http.get(endereco);
+  }
 }

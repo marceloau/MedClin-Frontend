@@ -9,7 +9,7 @@
       </div>
       <div class="pull-left info">
         <p>Marcelo Aurino</p>
-        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        <a><i class="fa fa-circle text-success"></i> Online</a>
       </div>
     </div>
     <!-- /.search form -->
@@ -25,24 +25,15 @@
         <i class="fa fa-user-injured"></i> <span>Pacientes</span></a>
       </li>
       <li class="treeview">
-        <a href=""><i class="fa fa-heartbeat"></i> <span>Atendimento</span>
+        <a href=""><i class="fa fa-stethoscope"></i> Consultas
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
-          </span>
-        </a>
+          </span></a>
         <ul class="treeview-menu">
-          <li class="treeview">
-            <a href=""><i class="fa fa-calendar-alt"></i>Agendamentos
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-            </a>
-            <ul class="treeview-menu">
-              <li><a [routerLink]="['/agendamentos/consultas']"><i class="fa fa-stethoscope"></i> Consultas</a></li>
-            </ul>
-          </li>
-          <li><a href=""><i class="fa fa-file-alt"></i>Solicitação de Exames</a></li>
-          <li><a href=""><i class="fa fa-eyedropper"></i>Prescrição de Medicamentos</a></li>
+          <li><a [routerLink]="['/consultas/agendamentos']"><i class="fa fa-calendar-alt"></i>Agendamentos</a></li>
+          <li><a [routerLink]="['/consultas/atendimento']"><i class="fa fa-heartbeat"></i> <span>Atendimento</span></a></li>
+          <!--<li><a href=""><i class="fa fa-file-alt"></i>Solicitação de Exames</a></li>
+          <li><a href=""><i class="fa fa-eyedropper"></i>Prescrição de Medicamentos</a></li>-->
         </ul>
       </li>
       <li class="treeview">
@@ -71,7 +62,7 @@
             </ul>
           </li>
           <li><a [routerLink]="['/configuracoes/medicos']"><i class="fa fa-user-md"></i>Médicos</a></li>
-          <li><a href=""><i class="fa fa-eyedropper"></i>Prescrição de Medicamentos</a></li>
+          <!--<li><a href=""><i class="fa fa-eyedropper"></i>Prescrição de Medicamentos</a></li>-->
         </ul>
         <ul class="treeview-menu">
 

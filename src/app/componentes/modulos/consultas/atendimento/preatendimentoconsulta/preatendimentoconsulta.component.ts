@@ -1,17 +1,17 @@
-import { PacienteService } from './../modulos/pacientes/service/paciente.service';
-import { ConsultaEBO } from './../modulos/consultas/ebo/consultaebo';
-import { Consulta } from './../../model/consulta.model';
-import { StatusConsulta } from './../modulos/consultas/statusconsulta.enum';
+import { ConsultaEBO } from './../../ebo/consultaebo';
+import { Consulta } from './../../../../../model/consulta.model';
+import { Pagina } from './../../../../../model/comum/pagina.model';
+import { ConsultaService } from './../../service/consulta.service';
+import { PacienteService } from './../../../pacientes/service/paciente.service';
+import { ConsultaConverter } from './../../converter/consulta.converter';
+import { AuthService } from './../../../../seguranca/auth.service';
+import { SessionStorageService } from './../../../../seguranca/session-storage.service';
+import { Mensagem } from './../../../../../model/mensagem';
+import { StatusConsulta } from './../../statusconsulta.enum';
+import { Constantes } from './../../../../comum/constantes';
+import { SegurancaService } from './../../../../seguranca/seguranca.service';
+import { Excecao } from './../../../../comum/excecao/excecao';
 import { DatePipe } from '@angular/common';
-import { Constantes } from '..//comum/constantes';
-import { Mensagem } from './../../model/mensagem';
-import { Pagina } from './../../model/comum/pagina.model';
-import { Excecao } from '../comum/excecao/excecao';
-import { ConsultaConverter } from '../modulos/consultas/converter/consulta.converter';
-import { ConsultaService } from '../modulos/consultas/service/consulta.service';
-import { AuthService } from '../seguranca/auth.service';
-import { SessionStorageService } from '../seguranca/session-storage.service';
-import { SegurancaService } from '../seguranca/seguranca.service';
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrManager } from 'ng6-toastr-notifications';
@@ -19,15 +19,17 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  selector: 'app-preatendimentoconsulta',
+  templateUrl: './preatendimentoconsulta.component.html',
+  styleUrls: ['./preatendimentoconsulta.component.css'],
   providers: [Excecao]
 })
-export class HomeComponent implements OnInit {
+export class PreAtendimentoConsultaComponent implements OnInit {
 
   // Decorator wires up blockUI instance
   @BlockUI() blockUI: NgBlockUI;
+
+  pagina: Pagina;
 
   mostrarMenu: boolean = false;
   public seguranca: SegurancaService;
@@ -62,8 +64,9 @@ export class HomeComponent implements OnInit {
       this.authService.mostrarMenuEmitter.emit(true);
     }
 
-    this.consultaService.buscar(0, 10, null, this.dataHoje.toString(), null, null, null).subscribe((retorno: Pagina) => {
+    this.consultaService.listarConsultasAtendimento(0, 10, this.dataHoje.toString()).subscribe((retorno: Pagina) => {
       if (retorno) {
+        this.pagina = retorno;
         this.listaConsultaDia = this.consultaConverter.converterListaParaFrontend(retorno.content);
         if(this.listaConsultaDia && this.listaConsultaDia.length > 0){
           this.exibirTabelaConsultasDia = true;
@@ -75,26 +78,16 @@ export class HomeComponent implements OnInit {
       this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
-
-    this.buscarTotalPacientes();
-    this.buscarTotalConsultas();
-
   }
 
-  buscarTotalPacientes() {
+  listarConsultasAtendimento(pagina, total) {
     this.blockUI.start('Carregando...');
-    this.pacienteService.totalPacientes().subscribe((totalPacientes: number) => {
-      this.totalPacientes = totalPacientes;
-    }, err => {
-      this.blockUI.stop();
-      this.mensagem = this.excecao.exibirExcecao(err.error);
-    });
-  }
-
-  buscarTotalConsultas() {
-    this.blockUI.start('Carregando...');
-    this.consultaService.totalConsultas().subscribe((totalConsultas: number) => {
-      this.totalConsultas = totalConsultas;
+    this.consultaService.listarConsultasAtendimento(pagina, total, this.dataHoje.toString()).subscribe((retorno: Pagina) => {
+      this.pagina = retorno;
+      if (retorno) {
+        this.listaConsultaDia = this.consultaConverter.converterListaParaFrontend(retorno.content);
+        this.blockUI.stop();
+      }
     }, err => {
       this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
@@ -209,6 +202,10 @@ export class HomeComponent implements OnInit {
         'autoWidth'   : false
       }), 0
     );
+  }
+
+  changePage(event) {
+      this.listarConsultasAtendimento(event.page, event.size);
   }
 
 }

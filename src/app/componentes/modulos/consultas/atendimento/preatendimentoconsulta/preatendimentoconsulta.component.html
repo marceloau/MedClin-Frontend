@@ -6,43 +6,13 @@
     </h1>
     <ol class="breadcrumb">
       <li><a [routerLink]="['/painel']"><i class="fa fa-tachometer-alt"></i> Home</a></li>
+      <li><a [routerLink]="['/consultas/agendamentos']"><i class="fa fa-stethoscope"></i> Consultas</a></li>
       <li class="active">Dashboard</li>
     </ol>
   </section>
 
   <!-- Main content -->
   <section class="content">
-    <!-- Info boxes -->
-    <div class="row">
-      <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box">
-          <span class="info-box-icon bg-blue"><i class="ion ion-ios-people-outline"></i></span>
-
-          <div class="info-box-content">
-            <span class="info-box-text">Pacientes</span>
-            <span class="info-box-number">{{totalPacientes}}</span>
-          </div>
-          <!-- /.info-box-content -->
-        </div>
-        <!-- /.info-box -->
-      </div>
-      <!-- /.col -->
-      <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box">
-          <span class="info-box-icon bg-aqua"><i class="ion ion ion-ios-pulse"></i></span>
-
-          <div class="info-box-content">
-            <span class="info-box-text">Atendimentos</span>
-            <span class="info-box-number">{{totalConsultas}}</span>
-          </div>
-          <!-- /.info-box-content -->
-        </div>
-        <!-- /.info-box -->
-      </div>
-      <!-- /.col -->
-    </div>
-    <!-- /.row -->
-
     <!-- Main row -->
     <div class="row">
       <!-- Left col -->
@@ -50,7 +20,7 @@
         <!-- TABLE: LATEST ORDERS -->
         <div class="box box-info">
           <div class="box-header with-border">
-            <h3 class="box-title">Agendamentos do Dia</h3>
+            <h3 class="box-title">Atendimentos do Dia</h3>
 
             <div class="box-tools pull-right">
               <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -91,22 +61,19 @@
                   <!-- Fim conluna ordem de chegada -->
                   <td>
                     <div class="btn-group">
-                      <button type="button" (click)="confirmarConsulta(consulta)" class="btn btn-default">Confirmar Consulta</button>
                       <button type="button" (click)="iniciarAtendimento(consulta.codigo)" class="btn btn-default">Iniciar Atendimento</button>
-                      <button type="button" class="btn btn-default">Cancelar</button>
+                      <!--<button type="button" class="btn btn-default">Cancelar</button>-->
                     </div>
                   </td>
                 </tr>
                 </tbody>
               </table>
+              <app-paginacao [page]="pagina" (paginationEvent)=changePage($event)></app-paginacao>
             </div>
             <!-- /.table-responsive -->
           </div>
           <!-- /.box-body -->
           <div class="box-footer clearfix">
-            <a [routerLink]="['/consultas/agendamentos']" class="btn btn-sm btn-info btn-flat pull-left margin">Novo Agendamento</a>
-            <a *ngIf="!habilitarBotaoSalvarOrdemChegada && exibirTabelaConsultasDia" (click)="habilitarCamposEdicaoOrdemChegada()" class="btn btn-sm btn-info btn-flat pull-left margin">Atualizar Ordem de Chegada</a>
-            <a *ngIf="habilitarBotaoSalvarOrdemChegada && exibirTabelaConsultasDia" (click)="salvarAlteracoesOrdemChegada()" class="btn btn-sm btn-info btn-flat pull-left margin">Salvar Ordem de Chegada</a>
             <a [routerLink]="['/consultas/agendamentos']" class="btn btn-sm btn-default btn-flat pull-right margin">Ver todos</a>
           </div>
           <!-- /.box-footer -->

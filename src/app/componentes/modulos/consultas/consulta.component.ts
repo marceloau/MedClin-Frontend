@@ -214,7 +214,7 @@ export class ConsultaComponent implements OnInit {
   }
 
   inicializarCalendario() {
-    this.consultaService.buscar(0, 100, null, null, this.viewDate.toString(), null).subscribe((consultaEBO: Pagina) => {
+    this.consultaService.buscar(0, 100, null, null, this.viewDate.toString(), null, null).subscribe((consultaEBO: Pagina) => {
       this.listaConsultaCalendario = this.consultaConverter.converterListaParaFrontend(consultaEBO.content);
       if (consultaEBO && consultaEBO.content && consultaEBO.content.length > 0) {
         const consultas: CalendarEvent[] = [];
@@ -310,7 +310,7 @@ export class ConsultaComponent implements OnInit {
   }
 
   buscar() {
-    this.consultaService.buscar(0, 10, this.consulta.paciente.nome, null, null, null).subscribe((retorno: Pagina) => {
+    this.consultaService.buscar(0, 10, this.consulta.paciente.nome, null, null, null, null).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       if (retorno) {
         this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);
@@ -387,7 +387,7 @@ export class ConsultaComponent implements OnInit {
   }
 
   buscarPorNomePaginacao(pagina: number, total: number, nome: string) {
-    this.consultaService.buscar(pagina, total, nome, null, null, null).subscribe((retorno: Pagina) => {
+    this.consultaService.buscar(pagina, total, nome, null, null, null, null).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       if (retorno) {
         this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);

@@ -1,3 +1,4 @@
+import { PreAtendimentoConsultaComponent } from './componentes/modulos/consultas/atendimento/preatendimentoconsulta/preatendimentoconsulta.component';
 import { TipoExameComponent } from './componentes/modulos/cadastro/tipoExame/tipoexame.component';
 import { ErrorInterceptor } from './componentes/seguranca/erro-interceptor.service';
 import { TokenInterceptor } from './componentes/seguranca/token-interceptor.service';
@@ -45,6 +46,7 @@ import { OperadoraConverter } from './componentes/modulos/cadastro/operadora/con
 import { TipoPlanoSaudeConverter } from './componentes/modulos/cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
 import { DatePipe, CommonModule } from '@angular/common';
 import { MedicoComponent } from './componentes/modulos/medicos/medico.component';
+import { BlockUIModule } from 'ng-block-ui';
 
 // Inicio import notificações temporarias
 import { ToastrModule } from 'ng6-toastr-notifications';
@@ -84,7 +86,8 @@ registerLocaleData(localePt);
     ExameComponent,
     TipoMedicamentoComponent,
     MedicamentoComponent,
-    AtendimentoConsultaComponent
+    AtendimentoConsultaComponent,
+    PreAtendimentoConsultaComponent
   ],
   imports: [
     BrowserModule,
@@ -99,7 +102,8 @@ registerLocaleData(localePt);
       useFactory: adapterFactory
     }),
     // Fim imports do calendario
-    AppRouterModule
+    AppRouterModule,
+    BlockUIModule.forRoot()
   ],
   providers: [SegurancaService, UsuarioService, DominioConverter, EnderecoConverter,
     TipoContatoConverter, ContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter, DatePipe,

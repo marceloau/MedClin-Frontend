@@ -1,29 +1,27 @@
-import { TimeLineConverter } from './../../../comum/converter/timeline.converter';
-import { Constantes } from './../../../comum/constantes';
-import { DatePipe } from '@angular/common';
-import { TimeLine } from './../../../../model/comum/timeline.model';
-import { MedicamentoConverter } from './../../cadastro/medicamento/converter/medicamento.converter';
-import { MedicamentoService } from './../../cadastro/medicamento/service/medicamento.service';
-import { Medicamento } from './../../../../model/medicamento.model';
-import { Pagina } from './../../../../model/comum/pagina.model';
-import { ExameConverter } from './../../cadastro/exame/converter/exame.converter';
-import { ExameService } from './../../cadastro/exame/service/exame.service';
-import { Exame } from './../../../../model/exame.model';
-import { SolicitacaoMedicamento } from './../../../../model/solicitacaomedicamento.model';
-import { SolicitacaoMedicamentoConverter } from './../converter/solicitacaomedicamento.converter';
-import { SolicitacaoMedicamentoService } from './../service/solicitacaomedicamento.service';
-import { SolicitacaoExame } from './../../../../model/solicitacaoexame.model';
-import { SolicitacaoExameConverter } from './../converter/solicitacaoexame.converter';
-import { SolicitacaoExameService } from './../service/solicitacaoexame.service';
-import { ConsultaEBO } from './../ebo/consultaebo';
-import { ConsultaConverter } from './../converter/consulta.converter';
-import { ConsultaService } from './../service/consulta.service';
+import { TimeLineConverter } from '../../../comum/converter/timeline.converter';
+import { TimeLine } from '../../../../model/comum/timeline.model';
+import { MedicamentoConverter } from '../../cadastro/medicamento/converter/medicamento.converter';
+import { MedicamentoService } from '../../cadastro/medicamento/service/medicamento.service';
+import { Medicamento } from '../../../../model/medicamento.model';
+import { Pagina } from '../../../../model/comum/pagina.model';
+import { ExameConverter } from '../../cadastro/exame/converter/exame.converter';
+import { ExameService } from '../../cadastro/exame/service/exame.service';
+import { Exame } from '../../../../model/exame.model';
+import { SolicitacaoMedicamento } from '../../../../model/solicitacaomedicamento.model';
+import { SolicitacaoMedicamentoConverter } from '../converter/solicitacaomedicamento.converter';
+import { SolicitacaoMedicamentoService } from '../service/solicitacaomedicamento.service';
+import { SolicitacaoExame } from '../../../../model/solicitacaoexame.model';
+import { SolicitacaoExameConverter } from '../converter/solicitacaoexame.converter';
+import { SolicitacaoExameService } from '../service/solicitacaoexame.service';
+import { ConsultaEBO } from '../ebo/consultaebo';
+import { ConsultaConverter } from '../converter/consulta.converter';
+import { ConsultaService } from '../service/consulta.service';
 import { NgForm } from '@angular/forms';
-import { Estado } from './../../../../model/estado.model';
-import { Mensagem } from './../../../../model/mensagem';
-import { TipoPlanoSaudeConverter } from './../../cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
-import { OperadoraConverter } from './../../cadastro/operadora/converter/operadora.converter';
-import { Excecao } from './../../../comum/excecao/excecao';
+import { Estado } from '../../../../model/estado.model';
+import { Mensagem } from '../../../../model/mensagem';
+import { TipoPlanoSaudeConverter } from '../../cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
+import { OperadoraConverter } from '../../cadastro/operadora/converter/operadora.converter';
+import { Excecao } from '../../../comum/excecao/excecao';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Paciente } from '../../../../model/paciente.model';
@@ -139,7 +137,7 @@ export class AtendimentoConsultaComponent implements OnInit {
       });
 
       // Listando consultas do paciente.
-      this.consultaService.buscar(0, 100, null, null, null, this.consulta.paciente.codigo)
+      this.consultaService.buscar(0, 100, null, null, null, this.consulta.paciente.codigo, null)
       .subscribe((retorno: Pagina) => {
         this.listaConsultas = this.consultaConverter.converterListaParaFrontend(retorno.content);
         this.totalConsultas = retorno.totalElements;

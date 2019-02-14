@@ -4,6 +4,9 @@
 <app-menu [hidden]="!mostrarMenu"></app-menu>
 <!-- Conteúdo da página -->
 <div class="content-wrapper" *ngIf="mostrarMenu">
+  <block-ui>
+    <!-- Your app markup here -->
+  </block-ui>
   <router-outlet></router-outlet>
 </div>
 

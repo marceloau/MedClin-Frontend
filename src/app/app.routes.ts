@@ -1,3 +1,4 @@
+import { PreAtendimentoConsultaComponent } from './componentes/modulos/consultas/atendimento/preatendimentoconsulta/preatendimentoconsulta.component';
 import { GuardService } from './componentes/seguranca/guard.service';
 import { AtendimentoConsultaComponent } from './componentes/modulos/consultas/atendimento/atendimentoconsulta.component';
 import { MedicamentoComponent } from './componentes/modulos/cadastro/medicamento/medicamento.component';
@@ -91,13 +92,18 @@ export const ROUTES: Routes = [
     canActivate: [GuardService]
   },
   {
-    path: 'agendamentos/consultas',
+    path: 'consultas/agendamentos',
     component: ConsultaComponent,
     canActivate: [GuardService]
   },
   {
-    path: 'agendamentos/consulta/:codigo',
+    path: 'consultas/atendimento/:codigo',
     component: AtendimentoConsultaComponent,
+    canActivate: [GuardService]
+  },
+  {
+    path: 'consultas/atendimento',
+    component: PreAtendimentoConsultaComponent,
     canActivate: [GuardService]
   },
 
