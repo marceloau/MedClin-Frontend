@@ -72,8 +72,8 @@ export class PreAtendimentoConsultaComponent implements OnInit {
           this.exibirTabelaConsultasDia = true;
           this.inicializarTableModalConsulta();
         }
-        this.blockUI.stop();
       }
+      this.blockUI.stop();
     }, err => {
       this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
@@ -86,8 +86,8 @@ export class PreAtendimentoConsultaComponent implements OnInit {
       this.pagina = retorno;
       if (retorno) {
         this.listaConsultaDia = this.consultaConverter.converterListaParaFrontend(retorno.content);
-        this.blockUI.stop();
       }
+      this.blockUI.stop();
     }, err => {
       this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
@@ -104,9 +104,9 @@ export class PreAtendimentoConsultaComponent implements OnInit {
             item = retornoConsultaConfirmada;
             return;
           }
-          this.blockUI.stop();
         });
       }
+      this.blockUI.stop();
     }, err => {
       this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
@@ -128,10 +128,10 @@ export class PreAtendimentoConsultaComponent implements OnInit {
             item = retornoConsultaConfirmada;
             return;
           }
-          this.blockUI.stop();
           this.toastr.successToastr('Ordem de chegada atualizada com sucesso.', 'Sucesso!', { position: 'top-center', toastTimeout: (5000) });
         });
       }
+      this.blockUI.stop();
     }, err => {
       this.blockUI.stop();
       if(err && err.error && err.error.mensagem) {
@@ -170,11 +170,11 @@ export class PreAtendimentoConsultaComponent implements OnInit {
                 item = retornoConsultaConfirmada;
                 return;
               }
-              this.blockUI.stop();
               this.toastr.successToastr('Ordem de chegada do paciente ' + index.paciente.nome + ', atualizada com sucesso.',
               'Sucesso!', { position: 'top-center', toastTimeout: (5000) });
             });
           }
+          this.blockUI.stop();
         }, err => {
           this.blockUI.stop();
           if(err && err.error && err.error.mensagem) {

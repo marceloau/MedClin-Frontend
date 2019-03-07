@@ -1,3 +1,4 @@
+import { EventEmitterService } from './../comum/util/eventemitter.service';
 import { SessionStorageService } from './../seguranca/session-storage.service';
 import { AuthService } from './../seguranca/auth.service';
 import { Component, OnInit, EventEmitter } from '@angular/core';
@@ -44,9 +45,12 @@ export class LoginComponent implements OnInit {
     this.authService.login({email: this.usuario.email, senha: this.usuario.senha}).subscribe(data => {
       const logged: any = {
         email: this.jwtHelper.decodeToken(data.headers.get('Authorization')).sub,
+        nome: this.jwtHelper.decodeToken(data.headers.get('Authorization')).nome,
+        perfis: this.jwtHelper.decodeToken(data.headers.get('Authorization')).perfis,
         token: data.headers.get('Authorization')
       };
       this.authService.startSession(logged);
+      EventEmitterService.get('perfis').emit(true);
       this.router.navigate(['/painel']);
     },
       error => {

@@ -69,8 +69,8 @@ export class HomeComponent implements OnInit {
           this.exibirTabelaConsultasDia = true;
           this.inicializarTableModalConsulta();
         }
-        this.blockUI.stop();
       }
+      this.blockUI.stop();
     }, err => {
       this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
@@ -85,6 +85,7 @@ export class HomeComponent implements OnInit {
     this.blockUI.start('Carregando...');
     this.pacienteService.totalPacientes().subscribe((totalPacientes: number) => {
       this.totalPacientes = totalPacientes;
+      this.blockUI.stop();
     }, err => {
       this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
@@ -95,6 +96,7 @@ export class HomeComponent implements OnInit {
     this.blockUI.start('Carregando...');
     this.consultaService.totalConsultas().subscribe((totalConsultas: number) => {
       this.totalConsultas = totalConsultas;
+      this.blockUI.stop();
     }, err => {
       this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
@@ -111,9 +113,9 @@ export class HomeComponent implements OnInit {
             item = retornoConsultaConfirmada;
             return;
           }
-          this.blockUI.stop();
         });
       }
+      this.blockUI.stop();
     }, err => {
       this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
@@ -135,10 +137,10 @@ export class HomeComponent implements OnInit {
             item = retornoConsultaConfirmada;
             return;
           }
-          this.blockUI.stop();
           this.toastr.successToastr('Ordem de chegada atualizada com sucesso.', 'Sucesso!', { position: 'top-center', toastTimeout: (5000) });
         });
       }
+      this.blockUI.stop();
     }, err => {
       this.blockUI.stop();
       if(err && err.error && err.error.mensagem) {
@@ -177,11 +179,11 @@ export class HomeComponent implements OnInit {
                 item = retornoConsultaConfirmada;
                 return;
               }
-              this.blockUI.stop();
               this.toastr.successToastr('Ordem de chegada do paciente ' + index.paciente.nome + ', atualizada com sucesso.',
               'Sucesso!', { position: 'top-center', toastTimeout: (5000) });
             });
           }
+          this.blockUI.stop();
         }, err => {
           this.blockUI.stop();
           if(err && err.error && err.error.mensagem) {

@@ -9,7 +9,6 @@
       </div>
       <div class="pull-left info">
         <p>Marcelo Aurino</p>
-        <a><i class="fa fa-circle text-success"></i> Online</a>
       </div>
     </div>
     <!-- /.search form -->
@@ -25,18 +24,18 @@
         <i class="fa fa-user-injured"></i> <span>Pacientes</span></a>
       </li>
       <li class="treeview">
-        <a href=""><i class="fa fa-stethoscope"></i> Consultas
+        <a href=""><i class="fa fa-stethoscope"></i> <span>Consultas</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span></a>
         <ul class="treeview-menu">
-          <li><a [routerLink]="['/consultas/agendamentos']"><i class="fa fa-calendar-alt"></i>Agendamentos</a></li>
-          <li><a [routerLink]="['/consultas/atendimento']"><i class="fa fa-heartbeat"></i> <span>Atendimento</span></a></li>
+          <li *ngIf="PRF_ADMIN"><a [routerLink]="['/consultas/agendamentos']"><i class="fa fa-calendar-alt"></i>Agendamentos</a></li>
+          <li *ngIf="PRF_MEDICO"><a [routerLink]="['/consultas/atendimento']"><i class="fa fa-heartbeat"></i> <span>Atendimento</span></a></li>
           <!--<li><a href=""><i class="fa fa-file-alt"></i>Solicitação de Exames</a></li>
           <li><a href=""><i class="fa fa-eyedropper"></i>Prescrição de Medicamentos</a></li>-->
         </ul>
       </li>
-      <li class="treeview">
+      <li class="treeview" *ngIf="PRF_ADMIN">
         <a href="">
           <i class="fa fa-gears"></i> <span>Configurações</span>
           <span class="pull-right-container">
