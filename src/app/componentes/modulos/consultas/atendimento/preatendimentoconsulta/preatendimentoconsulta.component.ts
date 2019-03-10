@@ -128,7 +128,8 @@ export class PreAtendimentoConsultaComponent implements OnInit {
             item = retornoConsultaConfirmada;
             return;
           }
-          this.toastr.successToastr('Ordem de chegada atualizada com sucesso.', 'Sucesso!', { position: 'top-center', toastTimeout: (5000) });
+          this.toastr.successToastr('Ordem de chegada atualizada com sucesso.', 'Sucesso!',
+          { position: 'top-center', toastTimeout: (5000) });
         });
       }
       this.blockUI.stop();
@@ -144,7 +145,13 @@ export class PreAtendimentoConsultaComponent implements OnInit {
   }
 
   iniciarAtendimento (codigoConsulta) {
-    this.router.navigate(['/consultas/atendimento/' + codigoConsulta]);
+    this.consultaService.iniciarAtendimento(codigoConsulta).subscribe((retorno: Pagina) => {
+      this.blockUI.stop();
+      this.router.navigate(['/consultas/atendimento/' + codigoConsulta]);
+    }, err => {
+      this.blockUI.stop();
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
   }
 
   habilitarCamposEdicaoOrdemChegada() {

@@ -8,7 +8,7 @@
         <img src="assets/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
       </div>
       <div class="pull-left info">
-        <p>Marcelo Aurino</p>
+        <p>{{ nomeUsuario }}</p>
       </div>
     </div>
     <!-- /.search form -->
@@ -23,19 +23,22 @@
       <li><a [routerLink]="['/pacientes']">
         <i class="fa fa-user-injured"></i> <span>Pacientes</span></a>
       </li>
-      <li class="treeview">
+      <li *ngIf="existePerfilMedico"><a [routerLink]="['/consultas/atendimento']">
+        <i class="fa fa-stethoscope"></i> <span>Consultas</span></a>
+      </li>
+      <li class="treeview" *ngIf="existePerfilAdmin || existePerfilRecep">
         <a href=""><i class="fa fa-stethoscope"></i> <span>Consultas</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span></a>
         <ul class="treeview-menu">
-          <li *ngIf="PRF_ADMIN"><a [routerLink]="['/consultas/agendamentos']"><i class="fa fa-calendar-alt"></i>Agendamentos</a></li>
-          <li *ngIf="PRF_MEDICO"><a [routerLink]="['/consultas/atendimento']"><i class="fa fa-heartbeat"></i> <span>Atendimento</span></a></li>
+          <li><a [routerLink]="['/consultas/agendamentos']"><i class="fa fa-calendar-alt"></i>Agendamentos</a></li>
+          <li><a [routerLink]="['/consultas/atendimento']"><i class="fa fa-heartbeat"></i> <span>Atendimento</span></a></li>
           <!--<li><a href=""><i class="fa fa-file-alt"></i>Solicitação de Exames</a></li>
           <li><a href=""><i class="fa fa-eyedropper"></i>Prescrição de Medicamentos</a></li>-->
         </ul>
       </li>
-      <li class="treeview" *ngIf="PRF_ADMIN">
+      <li class="treeview" *ngIf="existePerfilAdmin">
         <a href="">
           <i class="fa fa-gears"></i> <span>Configurações</span>
           <span class="pull-right-container">

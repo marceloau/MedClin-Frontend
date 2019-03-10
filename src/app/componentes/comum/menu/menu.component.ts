@@ -1,6 +1,7 @@
+import { Utils } from './../util/utils';
 import { EventEmitterService } from './../util/eventemitter.service';
 import { SessionStorageService } from './../../seguranca/session-storage.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-menu',
@@ -10,28 +11,46 @@ import { Component, OnInit } from '@angular/core';
 export class MenuComponent implements OnInit {
 
   usuarioSession = this.storage.get('logged');
-  PRF_ADMIN = false;
-  PRF_RECEP = false;
-  PRF_MEDICO = false;
+  existePerfilAdmin = false;
+  existePerfilRecep = false;
+  existePerfilMedico = false;
+  nomeUsuario: String = '';
 
-  constructor(private storage: SessionStorageService) {
-    EventEmitterService.get('perfis').subscribe(data => {this.validarExibicao()});
+  constructor(private storage: SessionStorageService, private utils: Utils,
+    private cdRef: ChangeDetectorRef, private eventEmitterService: EventEmitterService) {
+    this.eventEmitterService.perfilEmmiter.subscribe(data => {this.validarExibicao()});
   }
 
 
   ngOnInit() {
     this.usuarioSession = this.storage.get('logged');
+    if (this.usuarioSession && this.usuarioSession.nome) {
+      this.nomeUsuario = this.utils.retornarNomeUsuarioResumido(this.usuarioSession.nome);
+    }
+    this.validarExibicao();
+  }
+
+  ngAfterViewChecked() {
+    // check if it change, tell CD update view
+    if (this.existePerfilAdmin || this.existePerfilRecep || this.existePerfilMedico) {
+      this.validarExibicao()
+      this.cdRef.detectChanges();
+    }
   }
 
   validarExibicao() {
-    if(this.usuarioSession.perfis) {
+    this.usuarioSession = this.storage.get('logged');
+    this.existePerfilAdmin = false;
+    this.existePerfilRecep = false;
+    this.existePerfilMedico = false;
+    if (this.usuarioSession && this.usuarioSession.perfis) {
       for (const obj of this.usuarioSession.perfis) {
         if(obj === 'PRF_ADMIN') {
-          this.PRF_ADMIN = true;
+          this.existePerfilAdmin = true;
         } else if (obj === 'PRF_RECEP') {
-          this.PRF_RECEP = true;
+          this.existePerfilRecep = true;
         } else if (obj === 'PRF_MEDICO') {
-          this.PRF_MEDICO = true;
+          this.existePerfilMedico = true;
         }
       }
     }

@@ -22,7 +22,8 @@ export class LoginComponent implements OnInit {
 
   mostrarMenuEmitter = new EventEmitter<boolean>();
 
-  constructor( private authService: AuthService, private router: Router, private storage: SessionStorageService) {
+  constructor( private authService: AuthService, private router: Router, private storage: SessionStorageService,
+    private eventEmitterService: EventEmitterService) {
     this.seguranca = SegurancaService.getInstancia();
   }
 
@@ -50,7 +51,7 @@ export class LoginComponent implements OnInit {
         token: data.headers.get('Authorization')
       };
       this.authService.startSession(logged);
-      EventEmitterService.get('perfis').emit(true);
+      this.eventEmitterService.perfilEmmiter.emit(null);
       this.router.navigate(['/painel']);
     },
       error => {

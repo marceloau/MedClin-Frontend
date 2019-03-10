@@ -1,3 +1,4 @@
+import { Utils } from './componentes/comum/util/utils';
 import { PreAtendimentoConsultaComponent } from './componentes/modulos/consultas/atendimento/preatendimentoconsulta/preatendimentoconsulta.component';
 import { TipoExameComponent } from './componentes/modulos/cadastro/tipoExame/tipoexame.component';
 import { ErrorInterceptor } from './componentes/seguranca/erro-interceptor.service';
@@ -108,7 +109,7 @@ registerLocaleData(localePt);
   providers: [SegurancaService, UsuarioService, DominioConverter, EnderecoConverter,
     TipoContatoConverter, ContatoConverter, OperadoraConverter, TipoPlanoSaudeConverter, DatePipe,
     EspecialidadeConverter, TipoExameConverter, TipoMedicamentoConverter, SolicitacaoExameConverter,
-    SolicitacaoMedicamentoConverter, TimeLineConverter,
+    SolicitacaoMedicamentoConverter, TimeLineConverter, Utils,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
   bootstrap: [AppComponent]

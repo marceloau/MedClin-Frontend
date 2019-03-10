@@ -86,6 +86,14 @@ export class ConsultaService {
   /**
    *
    */
+  iniciarAtendimento( codigo: number ) {
+    const endereco = this.enderecoBase + this.pathBase + '/iniciar-atendimento/' + codigo;
+    return this.http.get(endereco);
+  }
+
+  /**
+   *
+   */
   atualizarOrdemChegada(codigoConsulta, numeroOrdemChegada) {
     const endereco = this.enderecoBase + this.pathBase + '/ordem-chegada/' + codigoConsulta + '/' + numeroOrdemChegada;
     return this.http.get(endereco);
