@@ -64,7 +64,7 @@ export class PreAtendimentoConsultaComponent implements OnInit {
       this.authService.mostrarMenuEmitter.emit(true);
     }
 
-    this.consultaService.listarConsultasAtendimento(0, 10, this.dataHoje.toString()).subscribe((retorno: Pagina) => {
+    this.consultaService.listarConsultasAtendimento(0, 10, this.dataHoje.toString(), 'S').subscribe((retorno: Pagina) => {
       if (retorno) {
         this.pagina = retorno;
         this.listaConsultaDia = this.consultaConverter.converterListaParaFrontend(retorno.content);
@@ -82,7 +82,7 @@ export class PreAtendimentoConsultaComponent implements OnInit {
 
   listarConsultasAtendimento(pagina, total) {
     this.blockUI.start('Carregando...');
-    this.consultaService.listarConsultasAtendimento(pagina, total, this.dataHoje.toString()).subscribe((retorno: Pagina) => {
+    this.consultaService.listarConsultasAtendimento(pagina, total, this.dataHoje.toString(), 'S').subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       if (retorno) {
         this.listaConsultaDia = this.consultaConverter.converterListaParaFrontend(retorno.content);
@@ -164,7 +164,7 @@ export class PreAtendimentoConsultaComponent implements OnInit {
     }
   }
 
-  salvarAlteracoesOrdemChegada(){
+  salvarAlteracoesOrdemChegada() {
     this.blockUI.start('Carregando...');
     for (const index of this.listaConsultaDia) {
       if(index.ordemChegada) {

@@ -33,7 +33,8 @@ export class ConsultaService {
   /**
    *
    */
-  buscar( pagina: number, total: number, nome: string , dataConsulta: string, mesConsulta: string, codigoPaciente: number, codigoStatusConsulta: number) {
+  buscar( pagina: number, total: number, nome: string , dataConsulta: string, mesConsulta: string,
+    codigoPaciente: number, codigoStatusConsulta: number) {
     let endereco = this.enderecoBase + this.pathBase + '/buscarConsulta' + '/' + pagina + '/' + total + '?';
 
     if (nome) {
@@ -62,8 +63,9 @@ export class ConsultaService {
   /**
    *
    */
-  listarConsultasAtendimento( pagina: number, total: number, dataConsulta: string) {
-    let endereco = this.enderecoBase + this.pathBase + '/listarConsultasAtendimento' + '/' + pagina + '/' + total + '?' + '&dataConsulta=' + dataConsulta;
+  listarConsultasAtendimento( pagina: number, total: number, dataConsulta: string, flagConfirmada: string) {
+    let endereco = this.enderecoBase + this.pathBase + '/listarConsultasAtendimento' + '/'
+    + pagina + '/' + total + '?' + '&dataConsulta=' + dataConsulta + '&flagConfirmada=' + flagConfirmada;
     return this.http.get(endereco);
   }
 
