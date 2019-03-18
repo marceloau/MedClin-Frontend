@@ -61,7 +61,11 @@ export class TipoMedicamentoComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhum tipo de medicamento encontrado',
+          'infoEmpty': 'Nenhum tipo de medicamento encontrado'
+        },
       }), 0
     );
   }

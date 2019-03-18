@@ -61,7 +61,11 @@ export class TipoExameComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhum tipo de exame encontrado',
+          'infoEmpty': 'Nenhum tipo de exame encontrado'
+        },
       }), 0
     );
   }

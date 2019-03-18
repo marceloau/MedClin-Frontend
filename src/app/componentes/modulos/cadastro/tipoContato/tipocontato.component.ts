@@ -61,7 +61,11 @@ export class TipoContatoComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhum tipo de contato encontrado',
+          'infoEmpty': 'Nenhum tipo de contato encontrado'
+        },
       }), 0
     );
   }

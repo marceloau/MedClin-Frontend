@@ -48,7 +48,11 @@ export class EspecialidadeComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhuma especialidade encontrada',
+          'infoEmpty': 'Nenhuma especialidade encontrada'
+        },
       }), 0
       );
     }, err => {

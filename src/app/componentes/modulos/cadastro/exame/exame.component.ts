@@ -66,7 +66,11 @@ export class ExameComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhum exame encontrado',
+          'infoEmpty': 'Nenhum exame encontrado'
+        },
       }), 0
     );
   }

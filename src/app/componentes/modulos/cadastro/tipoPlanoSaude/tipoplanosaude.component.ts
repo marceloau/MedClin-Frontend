@@ -61,7 +61,11 @@ export class TipoPlanoSaudeComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhum tipo de plano de saúde encontrado',
+          'infoEmpty': 'Nenhum tipo de plano de saúde encontrado'
+        },
       }), 0
     );
   }

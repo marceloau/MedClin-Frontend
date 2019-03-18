@@ -73,7 +73,11 @@ export class MedicamentoComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhum medicamento encontrado',
+          'infoEmpty': 'Nenhum medicamento encontrado'
+        },
       }), 0
     );
   }

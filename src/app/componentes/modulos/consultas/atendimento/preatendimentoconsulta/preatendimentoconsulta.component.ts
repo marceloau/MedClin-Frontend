@@ -198,15 +198,19 @@ export class PreAtendimentoConsultaComponent implements OnInit {
 
   inicializarTableModalConsulta() {
     const table: any = $('#tabelaConsultasDia');
-    //table.DataTable().destroy();
+    // table.DataTable().destroy();
     setTimeout(() =>
       table.DataTable({
         'paging'      : false,
         'lengthChange': false,
         'searching'   : false,
-        'order': [[ 5, "asc" ]],
+        'order': [[ 5, 'asc' ]],
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhuma consulta encontrada',
+          'infoEmpty': 'Nenhuma consulta encontrada'
+        },
       }), 0
     );
   }

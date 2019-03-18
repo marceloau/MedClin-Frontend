@@ -29,6 +29,8 @@ import { AgendaMedico } from '../../../model/agendamedico.model';
 import { Paciente } from '../../../model/paciente.model';
 // Fim Import Calendario
 
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+
 @Component({
   selector: 'app-consulta',
   templateUrl: './consulta.component.html',
@@ -39,6 +41,9 @@ export class ConsultaComponent implements OnInit {
 
   @ViewChild('form')
   form: NgForm;
+
+  // Decorator wires up blockUI instance
+  @BlockUI() blockUI: NgBlockUI;
 
   pagina: Pagina;
 
@@ -141,6 +146,7 @@ export class ConsultaComponent implements OnInit {
     private medicoConverter: MedicoConverter, private medicoService: MedicoService) { }
 
   ngOnInit() {
+    this.blockUI.start('Carregando...');
     this.inicializarCalendario();
     this.consultaService.listarRegistros(0, 10).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
@@ -148,7 +154,9 @@ export class ConsultaComponent implements OnInit {
         this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);
       }
       this.inicializarTable();
+      this.blockUI.stop();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
@@ -178,7 +186,11 @@ export class ConsultaComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhuma consulta encontrada',
+          'infoEmpty': 'Nenhum consulta encontrada'
+        },
       }), 0
     );
   }
@@ -193,7 +205,11 @@ export class ConsultaComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhum paciente encontrado(a)',
+          'infoEmpty': 'Nenhum paciente encontrado(a)'
+        },
       }), 0
     );
   }
@@ -208,7 +224,11 @@ export class ConsultaComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhum médico(a) encontrado(a)',
+          'infoEmpty': 'Nenhum médico(a) encontrado(a)'
+        },
       }), 0
     );
   }
@@ -245,10 +265,13 @@ export class ConsultaComponent implements OnInit {
   }
 
   listarRegistros(pagina, total) {
+    this.blockUI.start('Carregando...');
     this.consultaService.listarRegistros(pagina, total).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);
+      this.blockUI.stop();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
@@ -271,17 +294,22 @@ export class ConsultaComponent implements OnInit {
   }
 
   buscarPorCodigo(codigo: number) {
+    this.blockUI.start('Carregando...');
     this.consultaService.buscarPorCodigo(codigo).subscribe((consulta: ConsultaEBO) => {
+      this.blockUI.stop();
       this.consulta = this.consultaConverter.converterParaFrontend(consulta);
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
 
   salvar() {
+    this.blockUI.start('Carregando...');
     const objetoAtualizado: ConsultaEBO = this.consultaConverter.converterParaBackend(this.consulta);
     if (objetoAtualizado.codigoConsulta) {
       this.consultaService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: ConsultaEBO) => {
+        this.blockUI.stop();
         this.mensagem.codigoTipo = 0;
         this.mensagem.titulo = 'Sucesso';
         this.mensagem.texto = 'Consulta atualizada com sucesso.';
@@ -291,10 +319,12 @@ export class ConsultaComponent implements OnInit {
         this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
         this.listarRegistros(0, 10);
       }, err => {
+        this.blockUI.stop();
         this.mensagem = this.excecao.exibirExcecao(err.error);
       });
     } else {
       this.consultaService.salvar(objetoAtualizado).subscribe(( objetoSalvo: ConsultaEBO) => {
+        this.blockUI.stop();
         this.mensagem.codigoTipo = 0;
         this.mensagem.titulo = 'Sucesso';
         this.mensagem.texto = 'Consulta marcada com sucesso.';
@@ -304,24 +334,30 @@ export class ConsultaComponent implements OnInit {
         this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
         this.listarRegistros(0, 10);
       }, err => {
+        this.blockUI.stop();
         this.mensagem = this.excecao.exibirExcecao(err.error);
       });
     }
   }
 
   buscar() {
+    this.blockUI.start('Carregando...');
     this.consultaService.buscar(0, 10, this.consulta.paciente.nome, null, null, null, null).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       if (retorno) {
         this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);
       }
+      this.blockUI.stop();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
 
   buscarPacienteConsulta() {
+    this.blockUI.start('Carregando...');
     this.pacienteService.buscar(0, 10, this.consulta.paciente.nome, null, null, null, null, null, null).subscribe((retorno: Pagina) => {
+      this.blockUI.stop();
       this.paginaPaciente = retorno;
       if (retorno) {
         this.listaPacienteModal = this.pacienteConverter.converterListaParaFrontend(retorno.content);
@@ -330,12 +366,15 @@ export class ConsultaComponent implements OnInit {
       }
       this.inicializarTableModalConsulta();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
 
   buscarMedicoConsulta() {
+    this.blockUI.start('Carregando...');
     this.medicoService.buscar(0, 10, this.consulta.medico.nome).subscribe((retorno: Pagina) => {
+      this.blockUI.stop();
       this.paginaMedico = retorno;
       if (retorno) {
         this.listaMedicoModal = this.medicoConverter.converterListaParaFrontend(retorno.content);
@@ -344,6 +383,7 @@ export class ConsultaComponent implements OnInit {
       }
       this.inicializarTableModalConsultaMedico();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
@@ -387,12 +427,15 @@ export class ConsultaComponent implements OnInit {
   }
 
   buscarPorNomePaginacao(pagina: number, total: number, nome: string) {
+    this.blockUI.start('Carregando...');
     this.consultaService.buscar(pagina, total, nome, null, null, null, null).subscribe((retorno: Pagina) => {
+      this.blockUI.stop();
       this.pagina = retorno;
       if (retorno) {
         this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);
       }
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }

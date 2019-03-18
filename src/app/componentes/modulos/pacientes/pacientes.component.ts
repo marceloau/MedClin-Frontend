@@ -24,6 +24,9 @@ import { Operadora } from '../../../model/operadora.model';
 import { TipoPlanoSaudeConverter } from '../cadastro/tipoPlanoSaude/converter/tipoplanosaude.converter';
 import { PacienteConverter } from './converter/paciente.converter';
 
+// Import BlockUI decorator & optional NgBlockUI type
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+
 @Component({
   selector: 'app-pacientes',
   templateUrl: './pacientes.component.html',
@@ -41,6 +44,9 @@ export class PacientesComponent implements OnInit {
 
   @ViewChild('form')
   form: NgForm;
+
+  // Decorator wires up blockUI instance
+  @BlockUI() blockUI: NgBlockUI;
 
   habilitarEdicao = true;
 
@@ -61,7 +67,9 @@ export class PacientesComponent implements OnInit {
   pagina: Pagina;
 
   ngOnInit() {
+    this.blockUI.start('Carregando...');
     this.pacienteService.listarRegistros(0, 10).subscribe((retorno: Pagina) => {
+      this.blockUI.stop();
       this.listaPacientes = this.pacienteConverter.converterListaParaFrontend(retorno.content);
       this.pagina = retorno;
       const table: any = $('#tabelaPacientes');
@@ -72,10 +80,15 @@ export class PacientesComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhum paciente encontrado',
+          'infoEmpty': 'Nenhum paciente encontrado'
+        },
       }), 0
       );
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
     this.inicializarCombos();
@@ -135,16 +148,21 @@ export class PacientesComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhum paciente encontrado',
+          'infoEmpty': 'Nenhum paciente encontrado'
+        },
       }), 0
     );
   }
 
   salvar() {
     const objetoSalvar: PacienteEBO = this.pacienteConverter.converterParaBackend(this.paciente);
-
     if (this.paciente && !this.paciente.codigo) {
+      this.blockUI.start('Carregando...');
       this.pacienteService.salvar(objetoSalvar).subscribe(( objetoSalvo: PacienteEBO) => {
+        this.blockUI.stop();
         this.mensagem.codigoTipo = 0;
         this.mensagem.titulo = 'Sucesso';
         this.mensagem.texto = 'Paciente salvo com sucesso.';
@@ -154,6 +172,7 @@ export class PacientesComponent implements OnInit {
         this.inicializarTable();
         this.listarRegistros(0, 10);
       }, err => {
+        this.blockUI.stop();
         this.mensagem = this.excecao.exibirExcecao(err.error);
       });
     } else {
@@ -163,7 +182,9 @@ export class PacientesComponent implements OnInit {
 
   atualizar() {
     const objetoAtualizado: PacienteEBO = this.pacienteConverter.converterParaBackend(this.paciente);
+    this.blockUI.start('Carregando...');
     this.pacienteService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: PacienteEBO) => {
+      this.blockUI.stop();
       this.mensagem.codigoTipo = 0;
       this.mensagem.titulo = 'Sucesso';
       this.mensagem.texto = 'Paciente atualizado com sucesso.';
@@ -172,15 +193,19 @@ export class PacientesComponent implements OnInit {
       this.listarRegistros(0, 10);
       this.limparCampos();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
 
   listarRegistros(pagina, total) {
+    this.blockUI.start('Carregando...');
     this.pacienteService.listarRegistros(pagina, total).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       this.listaPacientes = this.pacienteConverter.converterListaParaFrontend(retorno.content);
+      this.blockUI.stop();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
@@ -197,9 +222,12 @@ export class PacientesComponent implements OnInit {
   }
 
   buscarPorCodigo(codigo: number) {
+    this.blockUI.start('Carregando...');
     this.pacienteService.buscarPorCodigo(codigo).subscribe((paciente: PacienteEBO) => {
       this.paciente = this.pacienteConverter.converterParaFrontend(paciente);
+      this.blockUI.stop();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
@@ -217,27 +245,33 @@ export class PacientesComponent implements OnInit {
   }
 
   buscar() {
+    this.blockUI.start('Carregando...');
     const codigoTipoPlanoSaude = (this.paciente.planoSaude.tipoPlanoSaude.codigo ?
       this.paciente.planoSaude.tipoPlanoSaude.codigo.toString() : undefined);
     this.pacienteService.buscar(0, 10, this.paciente.nome, this.paciente.nomeMae, this.paciente.rg, this.paciente.cpf,
       this.paciente.numeroCartaoSUS, codigoTipoPlanoSaude, this.paciente.contato.textoContato
       ).subscribe((retorno: Pagina) => {
+      this.blockUI.stop();
       this.pagina = retorno;
       this.listaPacientes = this.pacienteConverter.converterListaParaFrontend(retorno.content);
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
 
   buscarPorNomePaginacao(pagina: number, total: number, nome: string) {
+    this.blockUI.start('Carregando...');
     const codigoTipoPlanoSaude = (this.paciente.planoSaude.tipoPlanoSaude.codigo ?
       this.paciente.planoSaude.tipoPlanoSaude.codigo.toString() : null);
     this.pacienteService.buscar(0, 10, this.paciente.nome, this.paciente.nomeMae, this.paciente.rg, this.paciente.cpf,
       this.paciente.numeroCartaoSUS, codigoTipoPlanoSaude, this.paciente.contato.textoContato
       ).subscribe((retorno: Pagina) => {
+      this.blockUI.stop();
       this.pagina = retorno;
       this.listaPacientes = this.pacienteConverter.converterListaParaFrontend(retorno.content);
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }

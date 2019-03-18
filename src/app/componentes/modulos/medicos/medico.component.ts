@@ -20,6 +20,7 @@ import { TipoContatoService } from '../cadastro/tipoContato/service/tipocontato.
 import { TipoContatoConverter } from '../cadastro/tipoContato/converter/tipocontato.converter';
 import { MedicoConverter } from './converter/medico.converter';
 import { EspecialidadeConverter } from '../cadastro/especialidade/converter/especialidade.converter';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-medico',
@@ -36,6 +37,9 @@ export class MedicoComponent implements OnInit {
 
   @ViewChild('form')
   form: NgForm;
+
+  // Decorator wires up blockUI instance
+  @BlockUI() blockUI: NgBlockUI;
 
   habilitarEdicao = true;
 
@@ -55,6 +59,7 @@ export class MedicoComponent implements OnInit {
   pagina: Pagina;
 
   ngOnInit() {
+    this.blockUI.start('Carregando...');
     this.medicoService.listarRegistros(0, 10).subscribe((retorno: Pagina) => {
       this.listaMedicos = this.medicoConverter.converterListaParaFrontend(retorno.content);
       this.pagina = retorno;
@@ -66,10 +71,16 @@ export class MedicoComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhum médico encontrado',
+          'infoEmpty': 'Nenhum médico encontrado'
+        },
       }), 0
       );
+      this.blockUI.stop();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
     this.inicializarCombos();
@@ -123,14 +134,18 @@ export class MedicoComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhum médico encontrado',
+          'infoEmpty': 'Nenhum médico encontrado'
+        },
       }), 0
     );
   }
 
   salvar() {
     const objetoSalvar: MedicoEBO = this.medicoConverter.converterParaBackend(this.medico);
-
+    this.blockUI.start('Carregando...');
     if (this.medico && !this.medico.codigo) {
       this.medicoService.salvar(objetoSalvar).subscribe(( objetoSalvo: MedicoEBO) => {
         this.mensagem.codigoTipo = 0;
@@ -141,7 +156,9 @@ export class MedicoComponent implements OnInit {
         this.limparCampos();
         this.inicializarTable();
         this.listarRegistros(0, 10);
+        this.blockUI.stop();
       }, err => {
+        this.blockUI.stop();
         this.mensagem = this.excecao.exibirExcecao(err.error);
       });
     } else {
@@ -150,6 +167,7 @@ export class MedicoComponent implements OnInit {
   }
 
   atualizar() {
+    this.blockUI.start('Carregando...');
     const objetoAtualizado: MedicoEBO = this.medicoConverter.converterParaBackend(this.medico);
     this.medicoService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: MedicoEBO) => {
       this.mensagem.codigoTipo = 0;
@@ -159,16 +177,21 @@ export class MedicoComponent implements OnInit {
       modal.click();
       this.listarRegistros(0, 10);
       this.limparCampos();
+      this.blockUI.stop();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
 
   listarRegistros(pagina, total) {
+    this.blockUI.start('Carregando...');
     this.medicoService.listarRegistros(pagina, total).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       this.listaMedicos = this.medicoConverter.converterListaParaFrontend(retorno.content);
+      this.blockUI.stop();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
@@ -185,9 +208,12 @@ export class MedicoComponent implements OnInit {
   }
 
   buscarPorCodigo(codigo: number) {
+    this.blockUI.start('Carregando...');
     this.medicoService.buscarPorCodigo(codigo).subscribe((medico: MedicoEBO) => {
       this.medico = this.medicoConverter.converterParaFrontend(medico);
+      this.blockUI.stop();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
@@ -205,19 +231,25 @@ export class MedicoComponent implements OnInit {
   }
 
   buscar() {
+    this.blockUI.start('Carregando...');
     this.medicoService.buscar(0, 10, this.medico.nome).subscribe((retorno: Pagina) => {
       this.pagina = retorno;
       this.listaMedicos = this.medicoConverter.converterListaParaFrontend(retorno.content);
+      this.blockUI.stop();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
 
   buscarPorNomePaginacao(pagina: number, total: number) {
+    this.blockUI.start('Carregando...');
     this.medicoService.buscar(pagina, total, this.medico.nome).subscribe((retorno: Pagina) => {
      this.pagina = retorno;
      this.listaMedicos = this.medicoConverter.converterListaParaFrontend(retorno.content);
+     this.blockUI.stop();
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }

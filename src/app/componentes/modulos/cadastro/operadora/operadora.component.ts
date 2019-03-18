@@ -48,7 +48,11 @@ export class OperadoraComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhuma operadora encontrada',
+          'infoEmpty': 'Nenhuma operadora encontrada'
+        },
       }), 0
       );
     }, err => {

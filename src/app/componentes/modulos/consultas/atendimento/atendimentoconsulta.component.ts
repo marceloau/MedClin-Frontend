@@ -200,7 +200,11 @@ export class AtendimentoConsultaComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhuma solicitação de exame encontrada',
+          'infoEmpty': 'Nenhuma solicitação de exame encontrada'
+        },
       }), 0
     );
   }
@@ -263,7 +267,11 @@ export class AtendimentoConsultaComponent implements OnInit {
         'searching'   : false,
         'ordering'    : true,
         'info'        : false,
-        'autoWidth'   : false
+        'autoWidth'   : false,
+        'language': {
+          'zeroRecords': 'Nenhuma solicitação de medicamento encontrada',
+          'infoEmpty': 'Nenhuma solicitação de medicamento encontrada'
+        },
       }), 0
     );
   }
