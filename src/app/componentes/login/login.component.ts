@@ -1,11 +1,12 @@
 import { EventEmitterService } from './../comum/util/eventemitter.service';
 import { SessionStorageService } from './../seguranca/session-storage.service';
 import { AuthService } from './../seguranca/auth.service';
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import { Usuario } from '../../model/usuario.model';
 import { SegurancaService } from '../seguranca/seguranca.service';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,9 @@ export class LoginComponent implements OnInit {
   usuario = new Usuario();
   seguranca: SegurancaService;
   mensagem: string;
+
+  @ViewChild('form')
+  form: NgForm;
 
   jwtHelper: JwtHelperService = new JwtHelperService();
 
@@ -41,12 +45,13 @@ export class LoginComponent implements OnInit {
   /**
    * Entrar no sistema.
    */
-  login() {
+  entrar() {
     this.mensagem = '';
-    this.authService.login({email: this.usuario.email, senha: this.usuario.senha}).subscribe(data => {
+    this.authService.login({login: this.usuario.login, senha: this.usuario.senha}).subscribe(data => {
       const logged: any = {
-        email: this.jwtHelper.decodeToken(data.headers.get('Authorization')).sub,
+        login: this.jwtHelper.decodeToken(data.headers.get('Authorization')).sub,
         nome: this.jwtHelper.decodeToken(data.headers.get('Authorization')).nome,
+        email: this.jwtHelper.decodeToken(data.headers.get('Authorization')).email,
         perfis: this.jwtHelper.decodeToken(data.headers.get('Authorization')).perfis,
         token: data.headers.get('Authorization')
       };
@@ -76,5 +81,4 @@ export class LoginComponent implements OnInit {
       'has-success': !isInvalid && isDirty
     };
   }
-
 }

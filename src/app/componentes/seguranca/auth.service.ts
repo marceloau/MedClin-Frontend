@@ -41,9 +41,9 @@ export class AuthService {
     return this.storage.get("logged");
   }
 
-  public login(params: { email: string; senha: string }) {
+  public login(params: { login: string; senha: string }) {
     const param = {
-      email: params.email,
+      login: params.login,
       senha: params.senha
     };
     return this.http.post(this.enderecoBase + '/login',
