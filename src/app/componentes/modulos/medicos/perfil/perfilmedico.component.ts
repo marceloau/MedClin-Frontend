@@ -13,7 +13,7 @@ import { OperadoraConverter } from './../../cadastro/operadora/converter/operado
 import { Excecao } from './../../../comum/excecao/excecao';
 import { DominioService } from './../../../comum/services/dominio.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { DominioConverter } from '../../../comum/converter/dominio.converter';
 import { TipoContatoService } from '../../cadastro/tipoContato/service/tipocontato.service';
 import { TipoContatoConverter } from '../../cadastro/tipoContato/converter/tipocontato.converter';
@@ -93,8 +93,8 @@ export class PerfilMedicoComponent implements OnInit {
   constructor(private route: ActivatedRoute, private medicoService: MedicoService, private medicoConverter: MedicoConverter,
     private dominioService: DominioService, private dominioConverter: DominioConverter,
     private excecao: Excecao, private tipoContatoService: TipoContatoService, private tipoContatoConverter: TipoContatoConverter,
-    private router: Router, private especialidadeService: EspecialidadeService, private especialidadeConverter: EspecialidadeConverter,
-    private agendaMedicoConverter: AgendaMedicoConverter, private datePipe: DatePipe) { }
+    private especialidadeService: EspecialidadeService, private especialidadeConverter: EspecialidadeConverter,
+    private agendaMedicoConverter: AgendaMedicoConverter) { }
 
   ngOnInit() {
     this.route.params.subscribe(
