@@ -17,6 +17,7 @@ export class Consulta {
   listaSolicitacaoMedicamento = new Array<SolicitacaoMedicamento>();
   dataAtendimento: any;
   dataConsulta: any;
+  dataUltimaConsulta: any;
   flagAtivo: string;
   usuarioUltimaAlteracao: string;
   dataUltimaAlteracao: Date;

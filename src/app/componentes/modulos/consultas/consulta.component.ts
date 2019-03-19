@@ -373,19 +373,35 @@ export class ConsultaComponent implements OnInit {
 
   buscarMedicoConsulta() {
     this.blockUI.start('Carregando...');
-    this.medicoService.buscar(0, 10, this.consulta.medico.nome).subscribe((retorno: Pagina) => {
-      this.blockUI.stop();
-      this.paginaMedico = retorno;
-      if (retorno) {
-        this.listaMedicoModal = this.medicoConverter.converterListaParaFrontend(retorno.content);
-      } else {
-        this.listaMedicoModal = [];
-      }
-      this.inicializarTableModalConsultaMedico();
-    }, err => {
-      this.blockUI.stop();
-      this.mensagem = this.excecao.exibirExcecao(err.error);
-    });
+    if (this.consulta.medico.nome) {
+      this.medicoService.buscar(0, 10, this.consulta.medico.nome).subscribe((retorno: Pagina) => {
+        this.blockUI.stop();
+        this.paginaMedico = retorno;
+        if (retorno) {
+          this.listaMedicoModal = this.medicoConverter.converterListaParaFrontend(retorno.content);
+        } else {
+          this.listaMedicoModal = [];
+        }
+        this.inicializarTableModalConsultaMedico();
+      }, err => {
+        this.blockUI.stop();
+        this.mensagem = this.excecao.exibirExcecao(err.error);
+      });
+    } else {
+      this.medicoService.listarRegistros(0, 10).subscribe((retorno: Pagina) => {
+        this.blockUI.stop();
+        this.paginaMedico = retorno;
+        if (retorno) {
+          this.listaMedicoModal = this.medicoConverter.converterListaParaFrontend(retorno.content);
+        } else {
+          this.listaMedicoModal = [];
+        }
+        this.inicializarTableModalConsultaMedico();
+      }, err => {
+        this.blockUI.stop();
+        this.mensagem = this.excecao.exibirExcecao(err.error);
+      });
+    }
   }
 
   abrirModalAtualizar(codigo: number) {

@@ -13,6 +13,7 @@ export class ConsultaEBO {
   historicoClinico: string;
   dataAtendimento: any;
   dataConsulta: any;
+  dataUltimaConsulta: any;
   ordemChegada: number;
   listaSolicitacaoExame = new Array<SolicitacaoExameEBO>();
   listaSolicitacaoMedicamento = new Array<SolicitacaoMedicamentoEBO>();

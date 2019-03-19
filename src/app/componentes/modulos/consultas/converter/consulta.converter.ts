@@ -79,6 +79,9 @@ export class ConsultaConverter {
     if (consultaEBO.dataConsulta) {
       consultaRetorno.dataConsulta = this.datePipe.transform(consultaEBO.dataConsulta, Constantes.FORMATO_DATA_FRONTEND_COMBO);
     }
+    if (consultaEBO.dataUltimaConsulta) {
+      consultaRetorno.dataUltimaConsulta = this.datePipe.transform(consultaEBO.dataUltimaConsulta, Constantes.FORMATO_DATA_FRONTEND_PADRAO);
+    }
     if (consultaEBO.listaSolicitacaoExame && consultaEBO.listaSolicitacaoExame.length > 0) {
       consultaRetorno.listaSolicitacaoExame = this.solicitacaoExameConverter.converterListaParaFrontend(consultaEBO.listaSolicitacaoExame);
     } else {

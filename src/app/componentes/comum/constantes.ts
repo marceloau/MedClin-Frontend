@@ -15,6 +15,7 @@ export class Constantes {
   static readonly FORMATO_DATA_BACKEND_DATE = 'yyyy-MM-dd';
   static readonly FORMATO_TIME_FRONTEND = 'h:mm';
   static readonly FORMATO_DATA_FRONTEND = 'yyyy-MM-dd';
+  static readonly FORMATO_DATA_FRONTEND_PADRAO = 'dd/MM/yyyy';
   static readonly FORMATO_DATA_FRONTEND_COMBO = 'yyyy-MM-ddTHH:mm:ss';
   // Fim códigos de error retorno servico
 

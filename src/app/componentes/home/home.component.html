@@ -67,8 +67,8 @@
                   <th>Código</th>
                   <th>Nome do Paciente</th>
                   <th>Status</th>
-                  <th>Confirmada?</th>
                   <th>Primeira Consulta?</th>
+                  <th>Ultima Consulta</th>
                   <th>Ordem de Chegada</th>
                   <th>Ações</th>
                 </tr>
@@ -78,8 +78,8 @@
                   <td>{{ consulta.codigo }}</td>
                   <td>{{ consulta.paciente.nome }}</td>
                   <td>{{ StatusConsulta[consulta.codigoStatusConsulta] }}</td>
-                  <td>{{ consulta.flagConfirmada === 'S' ? 'Sim' : 'Não' }}</td>
                   <td>{{ consulta.flagPrimeiraConsulta === 'S' ? 'Sim' : 'Não' }}</td>
+                  <td>{{ consulta.dataUltimaConsulta }}</td>
                   <!-- Inicio coluna de ordem de chegada -->
                   <td>
                     {{ !habilitarBotaoSalvarOrdemChegada ? consulta.ordemChegada : ''}}
