@@ -142,7 +142,7 @@
                         <td>{{solicitacaoExame.exame.descricao}}</td>
                         <td>
                           <div class="btn-group">
-                            <button type="button" (click)="selecionarExame(solicitacaoExame)" class="btn btn-default">
+                            <button type="button" class="btn btn-default" disabled>
                               <i class="fa fa-print" title="Imprimir"></i>
                             </button>
                             <button type="button" (click)="removerSolicitacaoExame(solicitacaoExame)" class="btn btn-default">
@@ -162,7 +162,7 @@
                   <button type="button" (click)="buscarExame()" class="btn btn-primary btn-flat" data-toggle="modal"
                   data-target="#modal-solicitacao-exame">Adicionar Solicitação de Exame</button>
                   <button type="button" *ngIf="consulta.listaSolicitacaoExame.length > 0"
-                  class="btn btn-default btn-flat">Imprimir Todos</button>
+                  class="btn btn-default btn-flat" disabled>Imprimir Todos</button>
                 </span>
               </div>
             </div>
@@ -229,7 +229,7 @@
                         <td>{{solicitacaoMedicamento.medicamento.descricao}}</td>
                         <td>
                           <div class="btn-group">
-                            <button type="button" (click)="selecionarMedicamento(solicitacaoMedicamento)" class="btn btn-default">
+                            <button type="button" class="btn btn-default" disabled>
                               <i class="fa fa-print" title="Imprimir"></i>
                             </button>
                             <button type="button" (click)="removerSolicitacaoMedicamento(solicitacaoMedicamento)" class="btn btn-default">
@@ -249,7 +249,7 @@
                   <button type="button" (click)="buscarMedicamento()" class="btn btn-primary btn-flat" data-toggle="modal"
                   data-target="#modal-solicitacao-medicamento">Prescrever Medicamento</button>
                   <button type="button" *ngIf="consulta.listaSolicitacaoMedicamento.length > 0"
-                  class="btn btn-default btn-flat">Imprimir Todos</button>
+                  class="btn btn-default btn-flat" disabled>Imprimir Todos</button>
                 </span>
               </div>
             </div>
@@ -374,6 +374,9 @@
             </div>
           </form>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="closeModal">Fechar</button>
+        </div>
       </div>
       <!-- /.modal-content -->
     </div>
@@ -458,6 +461,9 @@
               </div>
             </div>
           </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="closeModal">Fechar</button>
         </div>
       </div>
       <!-- /.modal-content -->
