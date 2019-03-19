@@ -28,6 +28,7 @@ import { MedicoService } from '../service/medico.service';
 import { CalendarEvent, DAYS_OF_WEEK } from 'angular-calendar';
 import { setHours, setMinutes, setDay } from 'date-fns';
 import { AgendaMedico } from '../../../../model/agendamedico.model';
+import { DatePipe } from '@angular/common';
 // Fim Import Calendario
 
 @Component({
@@ -93,7 +94,7 @@ export class PerfilMedicoComponent implements OnInit {
     private dominioService: DominioService, private dominioConverter: DominioConverter,
     private excecao: Excecao, private tipoContatoService: TipoContatoService, private tipoContatoConverter: TipoContatoConverter,
     private router: Router, private especialidadeService: EspecialidadeService, private especialidadeConverter: EspecialidadeConverter,
-    private agendaMedicoConverter: AgendaMedicoConverter) { }
+    private agendaMedicoConverter: AgendaMedicoConverter, private datePipe: DatePipe) { }
 
   ngOnInit() {
     this.route.params.subscribe(
@@ -117,7 +118,9 @@ export class PerfilMedicoComponent implements OnInit {
           horaInicio = index.horaInicioAtendimento.split(':');
           horaFim = index.horaFinalAtendimento.split(':');
           evento = {
-            title: index.horaInicioAtendimento + ' - ' + index.horaFinalAtendimento,
+            title: (index.observacao ? index.observacao + ' - ' : '')
+            + horaInicio[0] + ':' + horaInicio[1]
+            + ' - ' + horaFim[0] + ':' + horaFim[1],
             start: setDay(setHours(setMinutes(new Date(), horaInicio[1]), horaInicio[0]), (index.diaSemana - 1)),
             end: setDay(setHours(setMinutes(new Date(), horaFim[1]), horaFim[0]), (index.diaSemana - 1)),
             color: this.cores.blue,
