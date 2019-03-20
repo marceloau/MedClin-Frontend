@@ -153,15 +153,19 @@ export class MedicamentoComponent implements OnInit {
   }
 
   buscar() {
-    this.medicamentoService.buscarPorNome(0, 10, this.medicamento.nome).subscribe((retorno: Pagina) => {
-      this.pagina = retorno;
-      this.listaMedicamento = this.medicamentoConverter.converterListaParaFrontend(retorno.content);
-    }, err => {
-      // @TODO colocar para retornar exceção do util exceção.
-      this.mensagem.codigoTipo = 1;
-      this.mensagem.titulo = 'Erro';
-      this.mensagem.texto = 'Nenhum registro encontrado para o nome do medicamento.';
-    });
+    if (this.medicamento.nome) {
+      this.medicamentoService.buscarPorNome(0, 10, this.medicamento.nome).subscribe((retorno: Pagina) => {
+        this.pagina = retorno;
+        this.listaMedicamento = this.medicamentoConverter.converterListaParaFrontend(retorno.content);
+      }, err => {
+        // @TODO colocar para retornar exceção do util exceção.
+        this.mensagem.codigoTipo = 1;
+        this.mensagem.titulo = 'Erro';
+        this.mensagem.texto = 'Nenhum registro encontrado para o nome do medicamento.';
+      });
+    } else {
+      this.listarRegistros(0, 10);
+    }
   }
 
   buscarPorNomePaginacao(pagina: number, total: number, nome: string) {
