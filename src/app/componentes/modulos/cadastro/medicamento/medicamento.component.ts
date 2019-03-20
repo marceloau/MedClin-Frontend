@@ -115,9 +115,9 @@ export class MedicamentoComponent implements OnInit {
         this.mensagem.texto = 'Medicamento salvo com sucesso.';
         const modal: any = $('#fecharModal');
         modal.click();
+        this.listarRegistros(0, 10);
         this.limparCampos();
         this.inicializarTable();
-        this.listarRegistros(0, 10);
       }, err => {
         this.mensagem = this.excecao.exibirExcecao(err.error);
       });
