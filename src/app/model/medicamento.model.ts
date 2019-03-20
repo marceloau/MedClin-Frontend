@@ -10,6 +10,7 @@ export class Medicamento {
   posologia: string;
   composicao: string;
   flagAtivo: string;
+  flagEspecial: string;
   usuarioUltimaAlteracao: string;
   dataUltimaAlteracao: Date;
   dataCriacao: Date;

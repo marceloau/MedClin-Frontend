@@ -24,6 +24,7 @@ export class MedicamentoConverter {
     medicamentoEBO.composicao = medicamento.composicao;
     medicamentoEBO.posologia = medicamento.posologia;
     medicamentoEBO.flagAtivo = medicamento.flagAtivo;
+    medicamentoEBO.flagEspecial = medicamento.flagEspecial;
 
     return medicamentoEBO;
 
@@ -48,6 +49,7 @@ export class MedicamentoConverter {
     medicamentoRetorno.composicao = medicamentoEBO.composicao;
     medicamentoRetorno.posologia = medicamentoEBO.posologia;
     medicamentoRetorno.flagAtivo = medicamentoEBO.flagAtivo;
+    medicamentoRetorno.flagEspecial = medicamentoEBO.flagEspecial;
     medicamentoRetorno.dataCriacao = medicamentoEBO.dataCriacao;
     medicamentoRetorno.dataUltimaAlteracao = medicamentoEBO.dataUltimaAlteracao;
     medicamentoRetorno.usuarioUltimaAlteracao = medicamentoEBO.usuarioUltimaAlteracao;

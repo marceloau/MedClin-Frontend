@@ -87,22 +87,33 @@
                                 <option value="N">Inativo</option>
                               </select>
                             </div>
+                            <div class="form-group col-md-6">
+                              <label>Medicamento Especial?</label>
+                              <select class="form-control" [(ngModel)]="medicamento.flagEspecial" #flagEspecial="ngModel" id="flagEspecial" name="flagEspecial" [disabled]='!habilitarEdicao'>
+                                <option value="">Selecione...</option>
+                                <option value="S">Sim</option>
+                                <option value="N">Não</option>
+                              </select>
+                            </div>
                           </div>
                           <div class="col-md-12">
                             <div class="box-body pad">
-                              <textarea id="composicao" [(ngModel)]="medicamento.composicao" #composicao="ngModel" name="composicao" rows="10" cols="138" placeholder="Composição do medicamento" [disabled]='!habilitarEdicao'>
+                            <label>Composição do medicamento</label>
+                              <textarea id="composicao" [(ngModel)]="medicamento.composicao" #composicao="ngModel" name="composicao" rows="10" cols="138" placeholder="Informe a composição do medicamento" [disabled]='!habilitarEdicao'>
                               </textarea>
                             </div>
                           </div>
                           <div class="col-md-12">
                             <div class="box-body pad">
-                              <textarea id="posologia" [(ngModel)]="medicamento.posologia" #posologia="ngModel" name="posologia" rows="10" cols="138" placeholder="Posologia do medicamento" [disabled]='!habilitarEdicao'>
+                            <label>Posologia do medicamento</label>
+                              <textarea id="posologia" [(ngModel)]="medicamento.posologia" #posologia="ngModel" name="posologia" rows="10" cols="138" placeholder="Informe a posologia do medicamento" [disabled]='!habilitarEdicao'>
                               </textarea>
                             </div>
                           </div>
                           <div class="col-md-12">
                             <div class="box-body pad">
-                              <textarea id="descricao" [(ngModel)]="medicamento.descricao" #descricao="ngModel" name="descricao" rows="10" cols="138" placeholder="Descrição do medicamento" [disabled]='!habilitarEdicao'>
+                            <label>Descrição do medicamento</label>
+                              <textarea id="descricao" [(ngModel)]="medicamento.descricao" #descricao="ngModel" name="descricao" rows="10" cols="138" placeholder="Informe a descrição do medicamento" [disabled]='!habilitarEdicao'>
                               </textarea>
                             </div>
                           </div>
