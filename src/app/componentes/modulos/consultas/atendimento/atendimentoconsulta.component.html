@@ -162,7 +162,7 @@
                   <button type="button" (click)="buscarExame()" class="btn btn-primary btn-flat" data-toggle="modal"
                   data-target="#modal-solicitacao-exame">Adicionar Solicitação de Exame</button>
                   <button type="button" *ngIf="consulta.listaSolicitacaoExame.length > 0"
-                  class="btn btn-default btn-flat" disabled>Imprimir Todos</button>
+                  class="btn btn-default btn-flat">Imprimir Todos</button>
                 </span>
               </div>
             </div>
@@ -248,8 +248,8 @@
                 <span class="input-group-btn">
                   <button type="button" (click)="buscarMedicamento()" class="btn btn-primary btn-flat" data-toggle="modal"
                   data-target="#modal-solicitacao-medicamento">Prescrever Medicamento</button>
-                  <button type="button" *ngIf="consulta.listaSolicitacaoMedicamento.length > 0"
-                  class="btn btn-default btn-flat" disabled>Imprimir Todos</button>
+                  <button type="button" (click)="imprimirTodasSolicitacoesMedicamento()" *ngIf="consulta.listaSolicitacaoMedicamento.length > 0"
+                  class="btn btn-default btn-flat">Imprimir Todos</button>
                 </span>
               </div>
             </div>

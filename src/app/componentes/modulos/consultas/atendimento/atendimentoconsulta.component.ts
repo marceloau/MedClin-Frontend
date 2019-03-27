@@ -1,3 +1,5 @@
+import { GerenciadorArquivosImpressaoS3Service } from './../../comum/service/gerenciadorarquivosimpressaos3.service';
+import { ImpressaoService } from './../../comum/service/impressao.service';
 import { TimeLineConverter } from '../../../comum/converter/timeline.converter';
 import { TimeLine } from '../../../../model/comum/timeline.model';
 import { MedicamentoConverter } from '../../cadastro/medicamento/converter/medicamento.converter';
@@ -91,9 +93,12 @@ export class AtendimentoConsultaComponent implements OnInit {
     private consultaConverter: ConsultaConverter,
     private exameService: ExameService,
     private exameConverter: ExameConverter,
-    private solicitacaoExameService: SolicitacaoExameService, private solicitacaoExameConverter: SolicitacaoExameConverter,
+    private solicitacaoExameService: SolicitacaoExameService,
+    private solicitacaoExameConverter: SolicitacaoExameConverter,
     private solicitacaoMedicamentoService: SolicitacaoMedicamentoService,
     private solicitacaoMedicamentoConverter: SolicitacaoMedicamentoConverter,
+    private impressaoService: ImpressaoService,
+    private gerenciadorArquivosS3Service: GerenciadorArquivosImpressaoS3Service,
     private medicamentoService: MedicamentoService,
     private medicamentoConverter: MedicamentoConverter,
     public toastr: ToastrManager) { }
@@ -296,6 +301,22 @@ export class AtendimentoConsultaComponent implements OnInit {
       this.mensagem.texto = 'Consulta finalizada com sucesso.';
       this.habilitarEdicao = false;
       this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+  }
+
+  imprimirTodasSolicitacoesMedicamento () {
+    let solicitacoesMedicamentosImprimir = '';
+    for (const index of this.consulta.listaSolicitacaoMedicamento) {
+      solicitacoesMedicamentosImprimir = index.medicamento.codigo + ',';
+    }
+    this.impressaoService.imprimirSolicitacaoMedicamento(this.consulta.codigo, solicitacoesMedicamentosImprimir)
+    .subscribe(( impressao: any) => {
+      console.log(impressao);
+      if (impressao && impressao.nomeArquivo) {
+        this.gerenciadorArquivosS3Service.baixarImpressao(impressao.nomeArquivo);
+      }
     }, err => {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
