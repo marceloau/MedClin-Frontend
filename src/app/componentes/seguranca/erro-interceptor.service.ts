@@ -27,7 +27,8 @@ export class ErrorInterceptor implements HttpInterceptor {
                   error: {
                     codigo: err.status,
                     mensagem: err.error.msg,
-                    data: err.error.timeStamp
+                    data: err.error.timeStamp,
+                    erros: err.error.erros
                   }
                 };
                 // `Error Code: ${err.status}\nMessage: ${err.message}`;

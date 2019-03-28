@@ -16,6 +16,11 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
+        <div *ngIf="mensagem && mensagem.codigoTipo === 1" class="alert alert-danger alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <h4><i class="icon fa fa-check"></i> {{mensagem.titulo}}</h4>
+          {{mensagem.texto}}
+        </div>
         <!-- /.box-header -->
         <div class="box-body">
             <div *ngIf="mensagem && mensagem.codigoTipo === 0" class="alert alert-success alert-dismissible">
@@ -119,21 +124,48 @@
                         <div id="abaDadosPessoais" class="tab-pane fade in active">
                           <div class="col-md-12">
                             <div class="form-group col-md-6">
-                              <label>Nome Completo</label>
+                              <label>Nome Completo *</label>
                               <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="paciente.nome"
-                              #nome="ngModel" placeholder="Nome">
+                              #nome="ngModel" placeholder="Nome" required>
                             </div>
                             <!-- Date -->
                             <div class="form-group col-md-6">
-                              <label>Data de Nascimento</label>
+                              <label>Data de Nascimento *</label>
                               <input type="date" class="form-control pull-right" [(ngModel)]="paciente.dataNascimento"
                               #dataNascimento="ngModel"
-                              (ngModelChange)="paciente.dataNascimento = $event" name="dataNascimento" id="dataNascimento">
+                              (ngModelChange)="paciente.dataNascimento = $event" name="dataNascimento" id="dataNascimento" required>
                               <!-- /.input group -->
                             </div>
                           </div>
                           <div class="col-md-12">
-                            <!-- radio -->
+                            <div class="form-group col-md-6">
+                              <label>Nome da Mãe *</label>
+                              <input type="text" class="form-control" id="nomeMae" [(ngModel)]="paciente.nomeMae"
+                              #nomeMae="ngModel" name="nomeMae" placeholder="Nome da Mãe" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Estado Civil</label>
+                              <select class="form-control" [(ngModel)]="paciente.estadoCivil.codigo" #codigo="ngModel" id="estadoCivil" name="estadoCivil">
+                                <option>Selecione...</option>
+                                <option *ngFor="let estadoCivil of listaComboEstadoCivil" [value]="estadoCivil.codigo" >{{ estadoCivil.nome }}</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>CPF</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.cpf" #cpf="ngModel" id="cpf" name="cpf" placeholder="CPF">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>RG</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.rg" #rg="ngModel" id="rg" name="rg" placeholder="Identidade">
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                              <label>Órgão Emissor</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.orgaoEmissor" #orgaoEmissor="ngModel" name="orgaoEmissor" id="orgaoEmissor" placeholder="Órgão Emissor ">
+                            </div>
                             <div class="form-group col-md-6">
                               <label>Sexo</label>
                               <select class="form-control" [(ngModel)]="paciente.sexo" #sexo="ngModel" id="sexo" name="sexo">
@@ -142,23 +174,15 @@
                                 <option value="F">Feminino</option>
                               </select>
                             </div>
+                          </div>
+                          <div class="col-md-12">
                             <div class="form-group col-md-6">
                               <label>Nome do Pai</label>
                               <input type="text" class="form-control" id="nomePai" [(ngModel)]="paciente.nomePai" #nomePai="ngModel" name="nomePai" placeholder="Nome do Pai">
                             </div>
-                          </div>
-                          <div class="col-md-12">
                             <div class="form-group col-md-6">
-                              <label>Nome da Mãe</label>
-                              <input type="text" class="form-control" id="nomeMae" [(ngModel)]="paciente.nomeMae"
-                              #nomeMae="ngModel" name="nomeMae" placeholder="Nome da Mãe">
-                            </div>
-                            <div class="form-group col-md-6">
-                              <label>Estado Civil</label>
-                              <select class="form-control" [(ngModel)]="paciente.estadoCivil.codigo" #codigo="ngModel" id="estadoCivil" name="estadoCivil">
-                                <option>Selecione...</option>
-                                <option *ngFor="let estadoCivil of listaComboEstadoCivil" [value]="estadoCivil.codigo" >{{ estadoCivil.nome }}</option>
-                              </select>
+                              <label>Número Cartão SUS</label>
+                              <input type="text" class="form-control" [(ngModel)]="paciente.numeroCartaoSUS" #numeroCartaoSUS="ngModel" name="numeroCartaoSUS" id="numeroCartaoSUS" placeholder="Número do Cartão do SUS">
                             </div>
                           </div>
                           <div class="col-md-12">
@@ -178,26 +202,7 @@
                               <label>Profissão</label>
                               <input type="text" class="form-control" [(ngModel)]="paciente.profissao" #profissao="ngModel" name="profissao" id="profissao" placeholder="Profissão">
                             </div>
-                            <div class="form-group col-md-6">
-                              <label>CPF</label>
-                              <input type="text" class="form-control" [(ngModel)]="paciente.cpf" #cpf="ngModel" id="cpf" name="cpf" placeholder="CPF">
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group col-md-6">
-                              <label>RG</label>
-                              <input type="text" class="form-control" [(ngModel)]="paciente.rg" #rg="ngModel" id="rg" name="rg" placeholder="Identidade">
-                            </div>
-                            <div class="form-group col-md-6">
-                              <label>Órgão Emissor</label>
-                              <input type="text" class="form-control" [(ngModel)]="paciente.orgaoEmissor" #orgaoEmissor="ngModel" name="orgaoEmissor" id="orgaoEmissor" placeholder="Órgão Emissor ">
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group col-md-6">
-                              <label>Número Cartão SUS</label>
-                              <input type="text" class="form-control" [(ngModel)]="paciente.numeroCartaoSUS" #numeroCartaoSUS="ngModel" name="numeroCartaoSUS" id="numeroCartaoSUS" placeholder="Número do Cartão do SUS">
-                            </div>
+
                           </div>
                         </div>
                         <div id="abaEndereco" class="tab-pane fade">
