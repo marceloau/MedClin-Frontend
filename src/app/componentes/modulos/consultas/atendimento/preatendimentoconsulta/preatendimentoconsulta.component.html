@@ -46,7 +46,11 @@
                 <tr *ngFor="let consulta of listaConsultaDia">
                   <td>{{ consulta.codigo }}</td>
                   <td>{{ consulta.paciente.nome }}</td>
-                  <td>{{ StatusConsulta[consulta.codigoStatusConsulta] }}</td>
+                  <td [ngStyle]="{'background-color': consulta.codigoStatusConsulta == 5 ? '#E91E63' : '#4CAF50'}"
+                    [style.color]="'#FFFFFF'"
+                    [style.font-weight]="'bold'">
+                    {{ StatusConsulta[consulta.codigoStatusConsulta] }}
+                  </td>
                   <td>{{ consulta.flagConfirmada === 'S' ? 'Sim' : 'Não' }}</td>
                   <td>{{ consulta.flagPrimeiraConsulta === 'S' ? 'Sim' : 'Não' }}</td>
                   <!-- Inicio coluna de ordem de chegada -->
