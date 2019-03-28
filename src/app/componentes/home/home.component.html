@@ -83,7 +83,7 @@
                   <!-- Inicio coluna de ordem de chegada -->
                   <td>
                     {{ !habilitarBotaoSalvarOrdemChegada ? consulta.ordemChegada : ''}}
-                    <div class="input-group col-md-4 pull-left" *ngIf="habilitarBotaoSalvarOrdemChegada">
+                    <div class="input-group col-md-6 pull-left" *ngIf="habilitarBotaoSalvarOrdemChegada">
                       <input type="text" #box class="form-control" value="consulta.ordemChegada" [(ngModel)]="consulta.ordemChegada"
                         #ordemChegada="ngModel">
                     </div>

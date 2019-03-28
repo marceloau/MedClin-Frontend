@@ -1,3 +1,4 @@
+import { Constantes } from './../../../comum/constantes';
 import { GerenciadorArquivosImpressaoS3Service } from './../../comum/service/gerenciadorarquivosimpressaos3.service';
 import { ImpressaoService } from './../../comum/service/impressao.service';
 import { TimeLineConverter } from '../../../comum/converter/timeline.converter';
@@ -25,7 +26,7 @@ import { TipoPlanoSaudeConverter } from '../../cadastro/tipoPlanoSaude/converter
 import { OperadoraConverter } from '../../cadastro/operadora/converter/operadora.converter';
 import { Excecao } from '../../../comum/excecao/excecao';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Paciente } from '../../../../model/paciente.model';
 import { PacienteConverter } from '../../pacientes/converter/paciente.converter';
 import { DominioConverter } from '../../../comum/converter/dominio.converter';
@@ -101,7 +102,8 @@ export class AtendimentoConsultaComponent implements OnInit {
     private gerenciadorArquivosS3Service: GerenciadorArquivosImpressaoS3Service,
     private medicamentoService: MedicamentoService,
     private medicamentoConverter: MedicamentoConverter,
-    public toastr: ToastrManager) { }
+    public toastr: ToastrManager,
+    private router: Router) { }
 
   ngOnInit() {
     this.route.params.subscribe(
@@ -294,6 +296,7 @@ export class AtendimentoConsultaComponent implements OnInit {
 
   finalizarConsulta() {
     this.consulta.dataAtendimento = new Date();
+    this.consulta.codigoStatusConsulta = Constantes.STATUS_CONSULTA_FINALIZADA;
     const objetoAtualizado: ConsultaEBO = this.consultaConverter.converterParaBackend(this.consulta);
     this.consultaService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: ConsultaEBO) => {
       this.mensagem.codigoTipo = 0;
@@ -301,6 +304,7 @@ export class AtendimentoConsultaComponent implements OnInit {
       this.mensagem.texto = 'Consulta finalizada com sucesso.';
       this.habilitarEdicao = false;
       this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
+      this.router.navigate(['/consultas/atendimento']);
     }, err => {
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });

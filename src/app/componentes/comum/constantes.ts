@@ -19,4 +19,13 @@ export class Constantes {
   static readonly FORMATO_DATA_FRONTEND_COMBO = 'yyyy-MM-ddTHH:mm:ss';
   // Fim códigos de error retorno servico
 
+  // inicio códigos de status da consulta
+  static readonly STATUS_CONSULTA_ABERTA = 1;
+  static readonly STATUS_CONSULTA_CONFIRMADA = 2;
+  static readonly STATUS_CONSULTA_AGUARDANDO_ATENDIMENTO = 3;
+  static readonly STATUS_CONSULTA_EM_ATENDIMENTO = 4;
+  static readonly STATUS_CONSULTA_FINALIZADA = 5;
+  static readonly STATUS_CONSULTA_CANCELADA = 6;
+  // Fim códigos de status da consulta
+
 }
