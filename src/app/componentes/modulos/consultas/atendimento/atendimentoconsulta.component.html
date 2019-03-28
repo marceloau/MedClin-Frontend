@@ -57,9 +57,9 @@
       </div>
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-          <li class="active"><a data-toggle="tab" href="#abaProntuarioMedico">Prontuário Médico</a></li>
-          <li><a data-toggle="tab" href="#abaSolicitacaoExame">Solicitação de Exames</a></li>
-          <li><a data-toggle="tab" href="#abaSolicitacaoMedicamento">Prescrever Medicamentos</a></li>
+          <li class="active"><a (click)="salvar()" data-toggle="tab" href="#abaProntuarioMedico">Prontuário Médico</a></li>
+          <li><a (click)="salvar()" data-toggle="tab" href="#abaSolicitacaoExame">Solicitação de Exames</a></li>
+          <li><a (click)="salvar()" data-toggle="tab" href="#abaSolicitacaoMedicamento">Prescrever Medicamentos</a></li>
         </ul>
         <div class="tab-content">
           <div id="abaProntuarioMedico" class="tab-pane fade in active">
@@ -73,7 +73,7 @@
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
-                    <textarea id="historicoClinico" [(ngModel)]="consulta.historicoClinico"
+                    <textarea id="historicoClinico" [(ngModel)]="consulta.historicoClinico" (blur)="salvar('blur')"
                     #historicoClinico="ngModel" name="historicoClinico" rows="20" style="width: 100%;">
                     </textarea>
                   </div>

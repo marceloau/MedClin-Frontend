@@ -39,6 +39,9 @@ import { TipoPlanoSaude } from '../../../../model/tipoplanosaude.model';
 import { Consulta } from '../../../../model/consulta.model';
 import { ToastrManager } from 'ng6-toastr-notifications';
 
+// Import BlockUI decorator & optional NgBlockUI type
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+
 @Component({
   selector: 'app-atendimentoconsulta',
   templateUrl: './atendimentoconsulta.component.html',
@@ -50,6 +53,9 @@ export class AtendimentoConsultaComponent implements OnInit {
 
   @ViewChild('form')
   form: NgForm;
+
+  // Decorator wires up blockUI instance
+  @BlockUI() blockUI: NgBlockUI;
 
   habilitarEdicao = false;
 
@@ -310,13 +316,31 @@ export class AtendimentoConsultaComponent implements OnInit {
     });
   }
 
+  salvar(tipo: string) {
+    const objetoAtualizado: ConsultaEBO = this.consultaConverter.converterParaBackend(this.consulta);
+    this.blockUI.start('Carregando...');
+    this.consultaService.atualizar(objetoAtualizado).subscribe(( objetoSalvo: ConsultaEBO) => {
+      this.blockUI.stop();
+      if (tipo !== 'blur') {
+      this.mensagem.codigoTipo = 0;
+      this.mensagem.titulo = 'Sucesso';
+      this.mensagem.texto = 'Consulta salva com sucesso.';
+      this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
+      }
+    }, err => {
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+  }
+
   imprimirTodasSolicitacoesMedicamento () {
     let solicitacoesMedicamentosImprimir = '';
     for (const index of this.consulta.listaSolicitacaoMedicamento) {
       solicitacoesMedicamentosImprimir = index.medicamento.codigo + ',';
     }
+    this.blockUI.start('Carregando...');
     this.impressaoService.imprimirSolicitacaoMedicamento(this.consulta.codigo, solicitacoesMedicamentosImprimir)
     .subscribe(( impressao: any) => {
+      this.blockUI.stop();
       console.log(impressao);
       if (impressao && impressao.nomeArquivo) {
         this.gerenciadorArquivosS3Service.baixarImpressao(impressao.nomeArquivo);
