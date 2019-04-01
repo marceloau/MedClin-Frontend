@@ -264,6 +264,43 @@ export class ConsultaComponent implements OnInit {
     });
   }
 
+  atualizarCalendarioEventos() {
+    this.blockUI.start('Carregando...');
+    this.consultaService.listarRegistros(0, 10).subscribe((retorno: Pagina) => {
+      this.blockUI.stop();
+      this.pagina = retorno;
+      if (retorno) {
+        this.listaConsulta = this.consultaConverter.converterListaParaFrontend(retorno.content);
+      }
+      if (retorno && retorno.content && retorno.content.length > 0) {
+        const consultas: CalendarEvent[] = [];
+        let evento: any = {};
+        for (const index of this.listaConsulta) {
+          evento = {
+            title: index.paciente.nome + ' - ' + new Date(index.dataConsulta).getHours() + ':'
+            + (new Date(index.dataConsulta).getMinutes() === 0 ? '00hrs' : new Date(index.dataConsulta).getMinutes()) + ' - '
+            + StatusConsulta[index.codigoStatusConsulta] + (index.flagPrimeiraConsulta === 'S' ? ' - Primeira Consulta' : ''),
+            start : new Date(index.dataConsulta),
+            end : new Date(index.dataConsulta),
+            color: StatusConsulta[index.codigoStatusConsulta] === 'Confirmado' ? this.cores.azul
+            : (StatusConsulta[index.codigoStatusConsulta] === 'Aberto' ? this.cores.amarelo
+            : (StatusConsulta[index.codigoStatusConsulta] === 'Cancelada' ? this.cores.vermelho
+            : (StatusConsulta[index.codigoStatusConsulta] === 'Finalizada' ? this.cores.verde
+            : (StatusConsulta[index.codigoStatusConsulta] === 'Aguardando Atendimento' ? this.cores.azulMarinho
+            : (StatusConsulta[index.codigoStatusConsulta] === 'Em Atendimento' ? this.cores.preto : this.cores.cinza))))),
+            actions: this.actions,
+            data: index
+          };
+          consultas.push(evento);
+        }
+        this.events = consultas;
+      }
+    }, err => {
+      this.blockUI.stop();
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
+  }
+
   listarRegistros(pagina, total) {
     this.blockUI.start('Carregando...');
     this.consultaService.listarRegistros(pagina, total).subscribe((retorno: Pagina) => {
@@ -313,11 +350,11 @@ export class ConsultaComponent implements OnInit {
         this.mensagem.codigoTipo = 0;
         this.mensagem.titulo = 'Sucesso';
         this.mensagem.texto = 'Consulta atualizada com sucesso.';
+        this.atualizarCalendarioEventos();
         this.limparCamposConsulta();
         const modal: any = $('#fecharModal');
         modal.click();
         this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
-        this.listarRegistros(0, 10);
       }, err => {
         this.blockUI.stop();
         this.mensagem = this.excecao.exibirExcecao(err.error);
@@ -328,11 +365,11 @@ export class ConsultaComponent implements OnInit {
         this.mensagem.codigoTipo = 0;
         this.mensagem.titulo = 'Sucesso';
         this.mensagem.texto = 'Consulta marcada com sucesso.';
+        this.atualizarCalendarioEventos();
         this.limparCamposConsulta();
         const modal: any = $('#fecharModal');
         modal.click();
         this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
-        this.listarRegistros(0, 10);
       }, err => {
         this.blockUI.stop();
         this.mensagem = this.excecao.exibirExcecao(err.error);
