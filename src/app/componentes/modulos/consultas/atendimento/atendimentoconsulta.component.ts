@@ -328,6 +328,7 @@ export class AtendimentoConsultaComponent implements OnInit {
       this.consulta = this.consultaConverter.converterParaFrontend(objetoSalvo);
       }
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
@@ -335,17 +336,17 @@ export class AtendimentoConsultaComponent implements OnInit {
   imprimirTodasSolicitacoesMedicamento () {
     let solicitacoesMedicamentosImprimir = '';
     for (const index of this.consulta.listaSolicitacaoMedicamento) {
-      solicitacoesMedicamentosImprimir = index.medicamento.codigo + ',';
+      solicitacoesMedicamentosImprimir = solicitacoesMedicamentosImprimir + index.medicamento.codigo + ',';
     }
     this.blockUI.start('Carregando...');
     this.impressaoService.imprimirSolicitacaoMedicamento(this.consulta.codigo, solicitacoesMedicamentosImprimir)
     .subscribe(( impressao: any) => {
       this.blockUI.stop();
-      console.log(impressao);
       if (impressao && impressao.nomeArquivo) {
         this.gerenciadorArquivosS3Service.baixarImpressao(impressao.nomeArquivo);
       }
     }, err => {
+      this.blockUI.stop();
       this.mensagem = this.excecao.exibirExcecao(err.error);
     });
   }
