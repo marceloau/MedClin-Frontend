@@ -70,4 +70,9 @@ export class ImpressaoService {
     + solExames + '&codigoConsulta=' + codigoConsulta;
     return this.http.get(endereco);
   }
+
+  imprimirHistoricoClinico(codigoPaciente: number) {
+    const endereco = this.enderecoBase + this.pathBase + '/historico-clinico' + '/?&codigoPaciente=' + codigoPaciente;
+    return this.http.get(endereco);
+  }
 }

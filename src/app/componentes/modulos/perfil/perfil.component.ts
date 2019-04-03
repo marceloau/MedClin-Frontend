@@ -1,3 +1,5 @@
+import { GerenciadorArquivosImpressaoS3Service } from './../comum/service/gerenciadorarquivosimpressaos3.service';
+import { ImpressaoService } from './../comum/service/impressao.service';
 import { ConsultaService } from './../consultas/service/consulta.service';
 import { ConsultaConverter } from './../consultas/converter/consulta.converter';
 import { SolicitacaoMedicamentoService } from './../consultas/service/solicitacaomedicamento.service';
@@ -35,6 +37,9 @@ import { TipoPlanoSaude } from '../../../model/tipoplanosaude.model';
 import { Constantes } from '../../comum/constantes';
 import { Pagina } from '../../../model/comum/pagina.model';
 
+// Import BlockUI decorator & optional NgBlockUI type
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
@@ -46,6 +51,9 @@ export class PerfilComponent implements OnInit {
 
   @ViewChild('form')
   form: NgForm;
+
+  // Decorator wires up blockUI instance
+  @BlockUI() blockUI: NgBlockUI;
 
   habilitarEdicao = false;
 
@@ -91,7 +99,9 @@ export class PerfilComponent implements OnInit {
     private solicitacaoMedicamentoConverter: SolicitacaoMedicamentoConverter,
     private consultaService: ConsultaService,
     private consultaConverter: ConsultaConverter,
-    private timeLineConverter: TimeLineConverter) { }
+    private timeLineConverter: TimeLineConverter,
+    private impressaoService: ImpressaoService,
+    private gerenciadorArquivosS3Service: GerenciadorArquivosImpressaoS3Service) { }
 
   ngOnInit() {
     this.route.params.subscribe(
@@ -222,5 +232,19 @@ export class PerfilComponent implements OnInit {
 
   verConsulta(consulta: Consulta) {
     this. modalConsulta = consulta;
+  }
+
+  imprimirHistoricoClinico () {
+    this.blockUI.start('Carregando...');
+    this.impressaoService.imprimirHistoricoClinico(this.paciente.codigo)
+    .subscribe(( impressao: any) => {
+      this.blockUI.stop();
+      if (impressao && impressao.nomeArquivo) {
+        this.gerenciadorArquivosS3Service.baixarImpressao(impressao.nomeArquivo);
+      }
+    }, err => {
+      this.blockUI.stop();
+      this.mensagem = this.excecao.exibirExcecao(err.error);
+    });
   }
 }
